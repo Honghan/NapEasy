@@ -1,0 +1,207 @@
+2	Cortex of left parahippocampal gyrus
+3	left medial thalmus
+4	right middle orbito frontal gyrus
+5	left middle orbito frontal gyrus
+6	right inferior orbito-frontal gyrus
+9	right medial temporal lobe
+13	Right Anterior Temporal Cortex
+14	left primary motor cortex
+16	right calcarine cortex
+20	right dorsolateral prefrontal cortex
+23	left posterior parietal cortex
+30	left lateral frontal cortex
+31	right lateral frontal cortex
+32	left inferior frontal lobe
+35	Right Middle Temporal Cortex
+36	Intermediate reticular zone medulla oblongata
+37	Caudal raphe nuclei medulla oblongata
+38	gigantocellular reticular nucleus medulla oblongata
+39	coeruleus–subcoeruleus complex medulla oblongata
+40	pars compacta of the substantia nigra
+41	Temporal mesocortex
+42	Basal prosencephalon
+43	Sensory association areas of the neocortex
+45	Sensory association area of prefrontal neocortex
+47	First order sensory association areas of the neocortex
+48	first order sensory association areas of premotor areas
+49	Primary motor field
+50	Primary sensory areas
+51	Left inferior lateral ventricle
+52	Right inferior lateral ventricle
+53	right culmen
+54	left rectal gyrus
+55	right posterior parietal cortex
+56	left middle cingulate cortex
+57	Right Cortex of Middle Occipital Gyrus
+64	Region15
+67	Region88
+68	left dorsolateral prefrontal cortex
+70	left planum temporale
+71	Right caudal middle frontal gyrus
+72	left caudal middle frontal gyrus
+73	Left rostral medial temporal cortex
+74	Right rostral medial temporal cortex
+75	Left medial orbito-frontal region
+76	Right medial orbito-frontal region
+77	right medial thalmus
+80	Right middle cingulate cortex
+83	left premotor area
+84	right premotor area
+97	Dorsal motor nucleus medulla oblongata
+98	Region28A
+100	Region79C
+101	left rostral region of prefrontal cortex
+102	left ventral section of the cingulate cortex
+103	left primary visual cortex
+104	right primary visual cortex
+106	Right secondary visual cortex
+107	right lingual cortex
+111	Left olfactory sulcus
+112	Right olfactory sulcus
+113	left gyrus rectus
+114	right gyrus rectus
+115	right medial frontal cortex
+116	right temporal gyrus
+117	left medial frontal cortex
+118	ventral medial prefrontal cortex
+119	right cingulum tract
+121	left lateral temporal cortex
+122	Left cuneus
+124	left cingulum tract
+125	left middle temporal cortex
+126	Left Pars Triangularis
+127	Right pars triangularis
+128	Right Middle Anterior Region of the Temporal Cortex
+129	Left Middle Anterior Region of the Temporal Cortex
+130	Right Rectal Gyrus
+134	Frontal horn of left lateral ventricle
+135	Frontal horn of right lateral ventricle
+136	Right primary motor cortex
+137	Left Superior longitudinal fasciculus
+138	Right superior longitudinal fasciculus
+139	right inferior fronto-occipital fasciculus
+140	left inferior fronto-occipital fasciculus
+142	right anterior temporal lobe
+143	right posterior superior temporal lobe
+149	Left lingual gyrus
+150	Cortex of of Right Parahippocampul Gyrus
+151	Left Calcarine Cortex
+154	Cortex of left middle frontal gyrus
+157	Cortex of left rectal gyrus
+158	Cortex of right rectal gyrus
+159	Cortex of left olfactory gyrus
+160	Cortex of right olfactory gyrus
+163	Left superior frontal cortex
+164	Right pedunculopontine Nucleus
+165	right superior frontal cortex
+166	Left middle frontal cortex
+167	right middle frontal cortex
+170	cortex of left inferior frontal gyrus (anterior region)
+171	Cortex of left inferior frontal gyrus (anterior region)
+172	cortex of left inferior frontal gyrus (middle region)
+177	Cortex of right inferior frontal gyrus (posterior region)
+183	Left ventral premotor cortex
+191	Right superior temporal gyrus
+192	Anterior region of right Hippocampus
+193	Left precunues
+194	Right nucleus accumbens
+195	Left supramarginal gyrus
+196	Left inferior parietal gyrus
+197	Left superior parietal gyrus
+198	Left inferior parietal lobe
+199	Left postcentral gyrus
+200	Left angular gyrus
+201	Right inferior parietal cortex
+202	Right inferior parietal lobe
+203	Right inferior parietal gyrus
+204	Right precuneus
+205	Left pedunculopontine Nucleus
+206	Right superior parietal gyrus
+207	Right supramarginal gyrus
+208	Right posterior putamen
+211	right ventral rostral putamen
+212	right dorsal rostral putamen
+214	Right prefrontal cortex
+217	Right paracentral cortex
+218	left paracentral cortex
+219	Left medial temporal cortex
+221	Left inferior temporal cortex
+223	Left posterior region of middle temporal cortex
+226	Right Pons
+228	Left cortex of fusiform gyrus
+229	Left anterior region of the hippocampus
+230	right dorsal caudal putamen
+232	Right angular gyrus
+233	left posterior thalamus
+234	left anterior thalamus
+235	right anterior thalamus
+236	right posterior thalamus
+237	right inferior frontal cortex
+239	Right cingulate cortex
+241	Right subgenual gingulate cortex
+244	Right anterior cingulate gyrus
+245	Right dorsal posterior cingulate gyrus
+247	Cortex of left posterior middle temporal gyrus
+253	Right posterior cingulate
+254	Left posterior cingulate
+255	Right cerebellum
+256	Left cerebellum
+270	Right Locus Coeruleus /Subcoeruleus Complex
+281	Left Pons
+303	Left Locus Coeruleus /Subcoeruleus Complex
+391	Left prefrontal cortex
+402	left inferior frontal cortex
+467	Right Cerebellum
+478	Left Cerebellum
+489	Left thalamus
+500	Right thalamus
+552	Left insula
+563	Right insula
+574	Left amygdala
+585	Right amygdala
+607	Left orbitofrontal cortex
+618	left orbitofrontal gyrus
+640	left middle frontal cortex
+662	Right Globus pallidus
+663	right orbitofrontal cortex
+674	right orbitofrontal gyrus
+696	Right precentral gyrus
+729	Right Temporal cortex
+771	Right Inferior Temporal Cortex
+782	Right Lateral Temporal Cortex
+793	Right Medial Temporal Cortex
+804	Right Hippocampus
+826	Right Parahippocampal Cortex
+837	Right Entorhinal Cortex
+848	Right Cortex of Fusiform Gyrus
+870	Right Parietal Cortex
+881	Right Caudate nucleus
+893	left parahippocampal cortex
+904	Right Occipital cortex
+915	Right cuneus
+937	Right cortex of lingual gyrus
+939	Right calcarine gyrus
+941	left inferior frontal gyrus
+942	right inferior frontal gyrus
+943	right rectus gyrus
+944	Left rectus gyrus
+945	right posterior cingulate cortex
+946	left posterior cingulate cortex
+969	Left supplementary motor area
+970	Right supplementary motor area
+973	Cortex of right anterior cingulate gyrus
+974	Cortex of left anterior cingulate gyrus
+977	right middle occipital gyrus
+978	left middle occipital gyrus
+979	right superior temporal pole
+980	left superior temporal pole
+981	Left medial fusiform gyrus
+984	Cortex of right hippocampus
+987	Right Inferior Parietal Cortex
+998	Right Superior Parietal Cortex
+1009	Left Parietal Cortex
+1020	Left Inferior Parietal Cortex
+1031	Left Superior Parietal Cortex
+1042	Left Temporal cortex
+1064	Left anterior temporal cortex
+1086	left entorhinal cortex
