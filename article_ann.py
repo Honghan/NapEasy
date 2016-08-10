@@ -13,7 +13,7 @@ import os
 import math
 
 
-ontologies = 'FMA,DOID,ADO,ICD10,PDON' # PATO, NIFSTD
+ontologies = 'FMA,ADO,ICD10,PDON' # PATO, NIFSTD, DOID
 onto_name = {
     'Alzheimer_Ontology': 'http://scai.fraunhofer.de/AlzheimerOntology',
     'FMA': 'http://purl.org/sig/ont/fma/',
@@ -60,16 +60,17 @@ def convert_NCBO_BRAT(ncbo_ann, orginal_text, ann_file_path):
     index = 1
     for ncbo in ncbo_ann:
         entity_type = getEntityType(ncbo['annotatedClass']['@id'])
-        for loc in ncbo['annotations']:
-            anns += ('T{index}\t{type} {start} {end}\t{text}\n'.format(**{
-                'index': index,
-                'type': entity_type,
-                'start': loc[u'from'] - 1,
-                'end': loc[u'to'],
-                'text': orginal_text[loc['from']-1:loc['to']]
-            }))
-            anns += ('#{0}\tAnnotatorNotes T{0}	{1}\n'.format(index, ncbo['annotatedClass']['@id']))
-            index += 1
+        if entity_type != 'Entity':
+            for loc in ncbo['annotations']:
+                anns += ('T{index}\t{type} {start} {end}\t{text}\n'.format(**{
+                    'index': index,
+                    'type': entity_type,
+                    'start': loc[u'from'] - 1,
+                    'end': loc[u'to'],
+                    'text': orginal_text[loc['from']-1:loc['to']]
+                }))
+                anns += ('#{0}\tAnnotatorNotes T{0}	{1}\n'.format(index, ncbo['annotatedClass']['@id']))
+                index += 1
     with open(ann_file_path, 'w') as outfile:
         outfile.write(anns)
 
