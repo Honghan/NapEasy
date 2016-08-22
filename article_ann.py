@@ -12,6 +12,8 @@ from bs4 import BeautifulSoup
 import os
 import math
 import codecs
+import xml.etree.ElementTree as ET
+from xlrd import open_workbook
 
 
 ontologies = 'FMA,GO,HP,PATO'
@@ -26,8 +28,8 @@ onto_name = {
     'HPO': 'http://purl.obolibrary.org/obo/HP_',
     'GO': 'http://purl.obolibrary.org/obo/GO_'
 }
-article_path = "./data/"
-output_folder = "./data/"
+article_path = "./anns/"
+output_folder = "./anns/"
 
 
 def annotate_data(path):
@@ -94,5 +96,204 @@ def convert_NCBO_BRAT(ncbo_ann, orginal_text, ann_file_path):
     with codecs.open(ann_file_path, 'w', encoding='utf-8') as outfile:
         outfile.write(anns)
 
-annotate_data(article_path)
-print('all done')
+
+def parse_sepienta(file_path):
+    tree = ET.parse(file_path)
+    root = tree.getroot()
+
+    sentences = []
+    sentence_lst = root.findall(".//s")
+    parent_map = {c: p for p in tree.iter() for c in p}
+    t2f = {}
+    full_text = ''
+    for s in sentence_lst:
+        so = {'sid': s.attrib['sid'], 'text': s.text}
+        if so['text'] is None:
+            tlist = s.findall('./text')
+            if tlist is not None and len(tlist) > 0:
+                so['text'] = "".join([x for t in tlist for x in t.itertext()])
+                #' '.join(['' if tnode.text is None else tnode.text for tnode in tlist])
+        if so['text'] is not None:
+            # get page number
+            page = find_page_number(s, parent_map)
+            if page is not None:
+                so['page'] = page
+
+            # get core concept of the sentence
+            sc_list = s.findall('./CoreSc1')
+            if sc_list is not None and len(sc_list) > 0:
+                so['CoreSc'] = sc_list[0].attrib['type']
+            if 'CoreSc' in so:
+                t2f[so['CoreSc']] = 1 if so['CoreSc'] not in t2f else 1 + t2f[so['CoreSc']]
+
+            # get the structure label of the sentence
+            struct_info = find_sensible_struct_info(s, parent_map)
+            if struct_info is not None:
+                so['struct'] = struct_info
+
+            # save to full text
+            so['start'] = len(full_text)
+            so['end'] = so['start'] + len(so['text'])
+            full_text += so['text'] + '\n'
+            sentences.append(so)
+        else:
+            print(so['sid'])
+    return full_text, sentences
+
+
+def find_page_number(elem, parent_map):
+    if elem in parent_map:
+        p = parent_map[elem]
+        if 'page' in p.attrib:
+            return p.attrib['page']
+        else:
+            find_page_number(p, parent_map)
+    return None
+
+
+# find the sensible structure information for current sentence
+def find_sensible_struct_info(elem, parent_map):
+    """
+    look for a meaningful section information in current element's ancestors
+    Args:
+        elem:
+        parent_map:
+
+    Returns: the class of the nearest meaningful ancestor
+
+    """
+    if elem in parent_map:
+        p = parent_map[elem]
+        if 'class' in p.attrib \
+            and 'unknown' != p.attrib['class'] \
+            and 'DoCO:Section' != p.attrib['class'] \
+            and 'DoCO:TextChunk' != p.attrib['class']:
+            return p.attrib['class']
+        else:
+            return find_sensible_struct_info(p, parent_map)
+    return None
+
+
+def merge_NCBO_ann(ncbo_file, ann):
+    ncbo = None
+    with codecs.open(ncbo_file, encoding='utf-8') as read_file:
+        ncbo = json.load(read_file)
+
+    for n in ncbo:
+        for n_ann in n['annotations']:
+            s = binarySearch(ann, n_ann['from'], n_ann['to'])
+            if s is not None:
+                ano = {'uri': n['annotatedClass']['@id'], 'annotation': n_ann}
+                if 'ncbo' in s:
+                    s['ncbo'].append(ano)
+                else:
+                    s['ncbo'] = [ano]
+    return ann
+
+
+def normalise_highlighted_text(ht_text):
+    ht_text = ht_text.strip().replace('- ', '')
+    ht_text = ht_text.replace(u'\ufb01', 'fi')
+    return ht_text
+
+
+def merge_highlights(ann, ht):
+    matched = 0
+    total = 0
+    last_matched_page = 1
+    for page in ht:
+        total += len(ht[page])
+        for ht_text in ht[page]:
+            ht_text = normalise_highlighted_text(ht_text)
+            b_matched = False
+            for a in ann:
+                if 'page' in a:
+                    # if int(a['page'])>=last_matched_page:
+                    if a['text'].find(ht_text) >=0:
+                        if 'marked' in a:
+                            a['marked'].append(ht_text)
+                        else:
+                            a['marked'] = [ht_text]
+                        matched += 1
+                        last_matched_page = int(a['page'])
+                        b_matched = True
+                        break
+            if not b_matched:
+                print(page, ht_text)
+                    # elif int(a['page'])>int(page):
+                    #     # not found in this page
+                    #     print(page, ht_text)
+                    #     break
+    print ('total {0}, mateched {1}'.format(total, matched))
+
+def binarySearch(sents, start, end):
+    if len(sents) > 0:
+        idx = int(math.ceil(len(sents)/2))
+        if sents[idx]['start'] >= end:
+            return binarySearch(sents[:idx], start, end)
+        elif sents[idx]['end'] < start:
+            return binarySearch(sents[idx+1:], start, end)
+        elif sents[idx]['start'] <= start and sents[idx]['end'] >= end:
+            return sents[idx]
+        else:
+            print(
+                """
+                annotation cross sentences...s.start {0}, s.end {1}, a.start {2}, a.end {3}
+                sentence {4}
+                """
+                  .format(sents[idx]['start'], sents[idx]['end'], start, end, sents[idx]))
+            return None
+    else:
+        return None
+
+
+def read_highlights_json(json_file):
+    with codecs.open(json_file, encoding='utf-8') as data_file:
+        return json.load(data_file)
+
+
+def read_highlights(xls_file):
+    wb = open_workbook(xls_file)
+    sheet = wb.sheets()[0]
+    number_of_rows = sheet.nrows
+    number_of_columns = 2
+    ht = {}
+    for row in range(1, number_of_rows):
+        ln = sheet.cell(row, 0).value
+        txt = sheet.cell(row, 1).value
+        txt = txt.replace('\n', ' ')
+        if ln in ht:
+            ht[ln].append(txt)
+        else:
+            ht[ln] = [txt]
+    return ht
+
+
+def main():
+
+    text, sentence = parse_sepienta('./anns/t_annotated.xml')
+    with codecs.open('./anns/t_fulltext.txt', 'w', encoding='utf-8') as text_file:
+        text_file.write(text)
+    with codecs.open('./anns/t_ann.json', 'w', encoding='utf-8') as ann_file:
+        json.dump(sentence, ann_file, encoding='utf-8')
+
+    annotate_data(article_path)
+
+    ht_file = './anns/t_ht.json'
+    ann_file = './anns/t_ann.json'
+    ann = None
+    with codecs.open(ann_file, encoding='utf-8') as read_file:
+        ann = json.load(read_file)
+    merge_NCBO_ann('./anns/t_fulltext.ncbo', ann)
+
+    ht = read_highlights_json(ht_file)
+    merge_highlights(ann, ht)
+
+    with codecs.open(ann_file, 'w', encoding='utf-8') as write_file:
+        json.dump(ann, write_file)
+
+    # print
+
+if __name__ == "__main__":
+    main()
+
