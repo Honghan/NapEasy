@@ -14,6 +14,7 @@ import math
 import codecs
 import xml.etree.ElementTree as ET
 from xlrd import open_workbook
+import ann_analysor as aa
 
 
 ontologies = 'FMA,GO,HP,PATO'
@@ -24,7 +25,7 @@ onto_name = {
     'Human_Disease_Ontology': 'http://purl.obolibrary.org/obo/DOID_',
     'ICD10': 'http://purl.bioontology.org/ontology/ICD10/',
     'Parkinsons_Disease_Ontology': 'http://protegeuserexample#',
-    'PATO': 'http://bioportal.bioontology.org/ontologies/PATO',
+    'PATO': 'http://purl.obolibrary.org/obo/PATO_',
     'HPO': 'http://purl.obolibrary.org/obo/HP_',
     'GO': 'http://purl.obolibrary.org/obo/GO_'
 }
@@ -136,8 +137,8 @@ def parse_sepienta(file_path):
             so['end'] = so['start'] + len(so['text'])
             full_text += so['text'] + '\n'
             sentences.append(so)
-        else:
-            print(so['sid'])
+        # else:
+        #     print(so['sid'])
     return full_text, sentences
 
 
@@ -269,30 +270,43 @@ def read_highlights(xls_file):
     return ht
 
 
-def main():
-
-    text, sentence = parse_sepienta('./anns/t_annotated.xml')
-    with codecs.open('./anns/t_fulltext.txt', 'w', encoding='utf-8') as text_file:
+def ann_article(path, file_name):
+    text, sentence = parse_sepienta(os.path.join(path, file_name))
+    name = file_name[:file_name.rfind('.')]
+    with codecs.open(os.path.join(path, name + '_fulltext.txt'), 'w', encoding='utf-8') as text_file:
         text_file.write(text)
-    with codecs.open('./anns/t_ann.json', 'w', encoding='utf-8') as ann_file:
+    ann_file_path = os.path.join(path, name + '_ann.json')
+    with codecs.open(ann_file_path, 'w', encoding='utf-8') as ann_file:
         json.dump(sentence, ann_file, encoding='utf-8')
 
     annotate_data(article_path)
 
-    ht_file = './anns/t_ht.json'
-    ann_file = './anns/t_ann.json'
+    ht_file = os.path.join(path, name + '_ht.json')
     ann = None
-    with codecs.open(ann_file, encoding='utf-8') as read_file:
+    with codecs.open(ann_file_path, encoding='utf-8') as read_file:
         ann = json.load(read_file)
-    merge_NCBO_ann('./anns/t_fulltext.ncbo', ann)
+    ncbo_file = os.path.join(path, name + '_fulltext.ncbo')
+    merge_NCBO_ann(ncbo_file, ann)
 
-    ht = read_highlights_json(ht_file)
-    merge_highlights(ann, ht)
+    if os.path.exists(ht_file):
+        ht = read_highlights_json(ht_file)
+        merge_highlights(ann, ht)
 
-    with codecs.open(ann_file, 'w', encoding='utf-8') as write_file:
+    with codecs.open(ann_file_path, 'w', encoding='utf-8') as write_file:
         json.dump(ann, write_file)
 
-    # print
+
+def main():
+    path = './anns/'
+    onlyfiles = [f for f in listdir(path) if isfile(join(path, f))]
+    for f in onlyfiles:
+        if f.endswith('.xml'):
+            ann_article(path, f)
+
+    onlyfiles = [f for f in listdir(path) if isfile(join(path, f))]
+    for f in onlyfiles:
+        if f.endswith('_ann.json'):
+            aa.analysis_ann(os.path.join(path, f))
 
 if __name__ == "__main__":
     main()

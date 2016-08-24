@@ -13,13 +13,12 @@ def extract_pdf_hightlights(pdf_path):
     total_annotations = 0
     ht = {}
     for i in range(doc.numPages()):
-        #print("========= PAGE {} =========".format(i+1))
         page = doc.page(i)
         annotations = page.annotations()
         (pwidth, pheight) = (page.pageSize().width(), page.pageSize().height())
         if len(annotations) > 0:
             for annotation in annotations:
-                if  isinstance(annotation, popplerqt4.Poppler.Annotation):
+                if isinstance(annotation, popplerqt4.Poppler.Annotation):
                     total_annotations += 1
                     if(isinstance(annotation, popplerqt4.Poppler.HighlightAnnotation)):
                         quads = annotation.highlightQuads()
@@ -32,8 +31,6 @@ def extract_pdf_hightlights(pdf_path):
                             bdy = PyQt4.QtCore.QRectF()
                             bdy.setCoords(*rect)
                             txt = txt + unicode(page.text(bdy)) + ' '
-
-                        #print("========= ANNOTATION =========")
                         key = str(i+1)
                         if key in ht:
                             ht[key].append(txt)
