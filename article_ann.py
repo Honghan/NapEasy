@@ -194,7 +194,7 @@ def merge_NCBO_ann(ncbo_file, ann):
 
 def normalise_highlighted_text(ht_text):
     ht_text = ht_text.strip().replace('- ', '')
-    ht_text = ht_text.replace(u'\ufb01', 'fi')
+    ht_text = ht_text.replace(u'\ufb01', 'fi').replace(u'\ufb02', 'fl')
     return ht_text
 
 
