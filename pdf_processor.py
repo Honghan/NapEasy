@@ -56,6 +56,14 @@ def extract_pdf_highlights(pdf_path, output_path):
 
 def sapienta_annotate(pdf_path, output_path):
     chdir(sapienta_path)
+    head, tail = split(pdf_path)
+    fname = tail[:tail.rfind('.')]
+    ann_file_name = fname + '_annotated.xml'
+
+    if isfile(join(output_path, ann_file_name)):
+        print('{} annotation result exits, skip.'.format(pdf_path))
+        return
+
     arr = ["pdfxconv", "-a"] + pdf_path if isinstance(pdf_path, list) else  ["pdfxconv", "-a", pdf_path]
     proc = subprocess.Popen(arr, stdout=subprocess.PIPE)
     streamdata = proc.communicate()[0]
@@ -63,9 +71,6 @@ def sapienta_annotate(pdf_path, output_path):
     if rc != 0:
         print('failed to annotate {0} with Sapienta'.format(pdf_path))
     else:
-        head, tail = split(pdf_path)
-        fname = tail[:tail.rfind('.')]
-        ann_file_name = fname + '_annotated.xml'
         rename(join(head, ann_file_name), join(output_path, ann_file_name))
         remove(join(head, fname + '.xml'))
 
