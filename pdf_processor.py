@@ -3,7 +3,7 @@ import sys
 import PyQt4
 import json
 from os import listdir
-from os.path import isfile, join, split
+from os.path import isfile, join, split, abspath
 import codecs
 import subprocess
 from os import chdir, rename, remove
@@ -48,7 +48,8 @@ def extract_pdf_highlights(pdf_path, output_path):
                                 ht[key].append(txt)
                             else:
                                 ht[key] = [txt]
-        with codecs.open(join(output_path, pdf_path[:pdf_path.find('.')] + '_ht.json'),
+        p, f = split(pdf_path)
+        with codecs.open(join(output_path, f[:f.find('.')] + '_ht.json'),
                          'w', encoding='utf-8') as write_file:
             json.dump(ht, write_file)
 
@@ -80,7 +81,7 @@ def extract_highlights_process(pdf_dir_path, opath):
                                     args=[opath])
 
 if __name__ == "__main__":
-    pdf_file_path = sys.argv[1]
-    output_path = sys.argv[2]
+    pdf_file_path = abspath(sys.argv[1])
+    output_path = abspath(sys.argv[2])
     sapienta_process(pdf_file_path, output_path)
     extract_highlights_process(pdf_file_path, output_path)
