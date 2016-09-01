@@ -21,37 +21,43 @@ thread_num_highlights = 10
 
 # extract highlights from a PDF file
 def extract_pdf_highlights(pdf_path, output_path):
-        doc = popplerqt4.Poppler.Document.load(pdf_path)
-        total_annotations = 0
-        ht = {}
-        for i in range(doc.numPages()):
-            page = doc.page(i)
-            annotations = page.annotations()
-            (pwidth, pheight) = (page.pageSize().width(), page.pageSize().height())
-            if len(annotations) > 0:
-                for annotation in annotations:
-                    if isinstance(annotation, popplerqt4.Poppler.Annotation):
-                        total_annotations += 1
-                        if(isinstance(annotation, popplerqt4.Poppler.HighlightAnnotation)):
-                            quads = annotation.highlightQuads()
-                            txt = ""
-                            for quad in quads:
-                                rect = (quad.points[0].x() * pwidth,
-                                        quad.points[0].y() * pheight,
-                                        quad.points[2].x() * pwidth,
-                                        quad.points[2].y() * pheight)
-                                bdy = PyQt4.QtCore.QRectF()
-                                bdy.setCoords(*rect)
-                                txt = txt + unicode(page.text(bdy)) + ' '
-                            key = str(i+1)
-                            if key in ht:
-                                ht[key].append(txt)
-                            else:
-                                ht[key] = [txt]
-        p, f = split(pdf_path)
-        with codecs.open(join(output_path, f[:f.find('.')] + '_ht.json'),
-                         'w', encoding='utf-8') as write_file:
-            json.dump(ht, write_file)
+    p, f = split(pdf_path)
+    result_file = join(output_path, f[:f.find('.')] + '_ht.json')
+    if isfile(result_file):
+        print('{} highlights extracted previously, skip'.format(result_file))
+        return
+
+    doc = popplerqt4.Poppler.Document.load(pdf_path)
+    total_annotations = 0
+    ht = {}
+    for i in range(doc.numPages()):
+        page = doc.page(i)
+        annotations = page.annotations()
+        (pwidth, pheight) = (page.pageSize().width(), page.pageSize().height())
+        if len(annotations) > 0:
+            for annotation in annotations:
+                if isinstance(annotation, popplerqt4.Poppler.Annotation):
+                    total_annotations += 1
+                    if(isinstance(annotation, popplerqt4.Poppler.HighlightAnnotation)):
+                        quads = annotation.highlightQuads()
+                        txt = ""
+                        for quad in quads:
+                            rect = (quad.points[0].x() * pwidth,
+                                    quad.points[0].y() * pheight,
+                                    quad.points[2].x() * pwidth,
+                                    quad.points[2].y() * pheight)
+                            bdy = PyQt4.QtCore.QRectF()
+                            bdy.setCoords(*rect)
+                            txt = txt + unicode(page.text(bdy)) + ' '
+                        key = str(i+1)
+                        if key in ht:
+                            ht[key].append(txt)
+                        else:
+                            ht[key] = [txt]
+
+    with codecs.open(result_file,
+                     'w', encoding='utf-8') as write_file:
+        json.dump(ht, write_file)
 
 
 def sapienta_annotate(pdf_path, output_path):
