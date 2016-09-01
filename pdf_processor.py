@@ -14,7 +14,7 @@ import ann_utils as util
 # sapienta path
 sapienta_path = r'/home/ubuntu/Documents/sapienta'
 # max thread numbers for sapienta anntoation
-thread_num_sapienta = 10
+thread_num_sapienta = 2
 # max thread numbers for extracting highlights
 thread_num_highlights = 10
 

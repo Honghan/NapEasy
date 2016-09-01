@@ -15,6 +15,7 @@ import codecs
 import xml.etree.ElementTree as ET
 from xlrd import open_workbook
 import ann_analysor as aa
+import ann_utils as util
 
 
 ontologies = 'FMA,GO,HP,PATO'
@@ -273,7 +274,8 @@ def read_highlights(xls_file):
     return ht
 
 
-def ann_article(path, file_name):
+def ann_article(file_path):
+    path, file_name = os.path.split(file_path)
     text, sentence = parse_sepienta(os.path.join(path, file_name))
     name = file_name[:file_name.rfind('.')]
     with codecs.open(os.path.join(path, name + '_fulltext.txt'), 'w', encoding='utf-8') as text_file:
@@ -301,10 +303,8 @@ def ann_article(path, file_name):
 
 def main():
     path = './anns/'
-    onlyfiles = [f for f in listdir(path) if isfile(join(path, f))]
-    for f in onlyfiles:
-        if f.endswith('.xml'):
-            ann_article(path, f)
+    num_threads = 10
+    util.multi_thread_process_files(path, 'xml', num_threads, ann_article)
 
     onlyfiles = [f for f in listdir(path) if isfile(join(path, f))]
     for f in onlyfiles:
