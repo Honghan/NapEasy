@@ -77,7 +77,7 @@ def sapienta_annotate(pdf_path, output_path):
     if rc != 0:
         print('failed to annotate {0} with Sapienta'.format(pdf_path))
     else:
-        if not isfile(join(head, ann_file_name)):
+        if isfile(join(head, ann_file_name)):
             rename(join(head, ann_file_name), join(output_path, ann_file_name))
             remove(join(head, fname + '.xml'))
 
