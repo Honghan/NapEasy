@@ -33,6 +33,7 @@ article_path = "./anns/"
 output_folder = "./anns/"
 
 
+# entity annotating using NCBO or other annotators later
 def annotate_data(path):
     onlyfiles = [f for f in listdir(path) if isfile(join(path, f))]
     for f in onlyfiles:
@@ -56,6 +57,7 @@ def annotate_data(path):
                 convert_NCBO_BRAT(obj, originfile.read(), join(output_folder, fname + '.ann'))
 
 
+# get the ontology names of the annotated entity
 def getEntityType(uri):
     for t in onto_name:
         if uri.startswith(onto_name[t]):
@@ -98,6 +100,7 @@ def convert_NCBO_BRAT(ncbo_ann, orginal_text, ann_file_path):
         outfile.write(anns)
 
 
+# parse the sapienta annotations
 def parse_sepienta(file_path):
     tree = ET.parse(file_path)
     root = tree.getroot()

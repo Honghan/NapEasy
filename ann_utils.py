@@ -6,15 +6,23 @@ import threading
 
 # list files in a folder and put them in to a queue for multi-threading processing
 def multi_thread_process_files(dir_path, file_extension, num_threads, process_func,
-                               proc_desc='processed', args=None):
+                               proc_desc='processed', args=None, multi=None):
     onlyfiles = [f for f in listdir(dir_path) if isfile(join(dir_path, f))]
     pdf_queque = Queue.Queue(len(onlyfiles))
     num_pdfs = 0
+    files = None if multi is None else []
     for f in onlyfiles:
         if f.endswith('.' + file_extension):
-            pdf_queque.put_nowait(join(dir_path, f))
+            if multi is None:
+                pdf_queque.put_nowait(join(dir_path, f))
+            else:
+                files.append(join(dir_path, f))
+                if len(files) >= multi:
+                    pdf_queque.put_nowait(files)
+                    files = []
             num_pdfs += 1
-
+    if files is not None and len(files) > 0:
+        pdf_queque.put_nowait(files)
     thread_num = min(num_pdfs, num_threads)
     arr = [process_func] if args is None else [process_func] + args
     arr.insert(0, pdf_queque)
