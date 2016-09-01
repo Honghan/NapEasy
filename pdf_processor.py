@@ -5,8 +5,11 @@ import json
 from os import listdir
 from os.path import isfile, join
 import codecs
+import subprocess
+from os import chdir
 
 
+# extract highlights from a PDF file
 def extract_pdf_hightlights(pdf_path):
 
     doc = popplerqt4.Poppler.Document.load(pdf_path)
@@ -49,6 +52,14 @@ def process_pdf(path):
                 json.dump(ht, write_file)
 
 
-if __name__ == "__main__":
-    process_pdf(sys.argv[1])
+def sapienta_annotate(pdf_path):
+    chdir(r'/home/ubuntu/Documents/sapienta')
+    # subprocess.Popen(["pdfxconv", "-a", pdf_path], cwd=r'/home/ubuntu/Documents/sapienta')
+    proc = subprocess.Popen(["pdfxconv", "-a", pdf_path], stdout=subprocess.PIPE)
+    streamdata = proc.communicate()[0]
+    rc = proc.returncode
+    print('return code:', rc)
 
+if __name__ == "__main__":
+    # process_pdf(sys.argv[1])
+    sapienta_annotate('t.pdf')
