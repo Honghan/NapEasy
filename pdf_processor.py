@@ -56,7 +56,8 @@ def extract_pdf_highlights(pdf_path, output_path):
 
 def sapienta_annotate(pdf_path, output_path):
     chdir(sapienta_path)
-    proc = subprocess.Popen(["pdfxconv", "-a", pdf_path], stdout=subprocess.PIPE)
+    arr = ["pdfxconv", "-a"] + pdf_path if isinstance(pdf_path, list) else  ["pdfxconv", "-a", pdf_path]
+    proc = subprocess.Popen(arr, stdout=subprocess.PIPE)
     streamdata = proc.communicate()[0]
     rc = proc.returncode
     if rc != 0:
@@ -72,7 +73,7 @@ def sapienta_annotate(pdf_path, output_path):
 def sapienta_process(pdf_dir_path, opath):
     util.multi_thread_process_files(pdf_dir_path, 'pdf', thread_num_sapienta, sapienta_annotate,
                                     proc_desc='annotated by Sapienta',
-                                    args=[opath])
+                                    args=[opath], multi=5)
 
 
 def extract_highlights_process(pdf_dir_path, opath):
