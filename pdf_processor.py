@@ -28,6 +28,9 @@ def extract_pdf_highlights(pdf_path, output_path):
         return
 
     doc = popplerqt4.Poppler.Document.load(pdf_path)
+    if doc is None:
+        return
+
     total_annotations = 0
     ht = {}
     for i in range(doc.numPages()):
