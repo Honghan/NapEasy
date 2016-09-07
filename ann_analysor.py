@@ -213,7 +213,7 @@ def analyse_highlighted_text(ht_file):
     nes = {}
     nes_dvds = {}
 
-    for ann in anns[:100]:
+    for ann in anns:
         hts = ann['marked']
         for ht in hts:
             extract_cd_nouns_nes(ht, n_freqs, nes, noun_evidence=n_evds, ne_evd=nes_dvds)
@@ -224,7 +224,7 @@ def analyse_highlighted_text(ht_file):
     print('cardinal noun and named entity patterns saved')
 
     sp_container = {}
-    utils.multi_thread_tasking(anns[:100], 15, analysis_sentence_struct, args=[sp_container],
+    utils.multi_thread_tasking(anns, 15, analysis_sentence_struct, args=[sp_container],
                                callback_func=serialise_pred_obj_json)
 
 
