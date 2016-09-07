@@ -30,21 +30,20 @@ onto_name = {
     'HPO': 'http://purl.obolibrary.org/obo/HP_',
     'GO': 'http://purl.obolibrary.org/obo/GO_'
 }
-article_path = "./anns/"
-output_folder = "./anns/"
 
 
 # entity annotating using NCBO or other annotators later
-def annotate_data(path):
-    onlyfiles = [f for f in listdir(path) if isfile(join(path, f))]
-    for f in onlyfiles:
-        if f.endswith('.txt'):
-            fname = f[:f.rfind('.')]
+def annotate_data(txt_file_path, output_folder):
+    # onlyfiles = [f for f in listdir(path) if isfile(join(path, f))]
+    # for f in onlyfiles:
+    #     if f.endswith('.txt'):
+            path, fname = os.path.split(txt_file_path)
+            fname = fname[:fname.rfind('.')]
             output_file = join(output_folder, fname + '.ncbo')
             obj = None
             if not isfile(output_file):
-                print('annotating {} ...'.format(f))
-                with codecs.open(join(path, f), encoding='utf-8') as datafile:
+                print('annotating {} ...'.format(txt_file_path))
+                with codecs.open(txt_file_path, encoding='utf-8') as datafile:
                     with codecs.open(output_file, 'w', encoding='utf-8') as outfile:
                         obj = ncboann.annotate(datafile.read(), ontologies)
                         json.dump(
@@ -54,8 +53,8 @@ def annotate_data(path):
             else:
                 with codecs.open(output_file, encoding='utf-8') as datafile:
                     obj = json.load(datafile)
-            with codecs.open(join(path, f), encoding='utf-8') as originfile:
-                convert_NCBO_BRAT(obj, originfile.read(), join(output_folder, fname + '.ann'))
+            # with codecs.open(txt_file_path, encoding='utf-8') as originfile:
+            #     convert_NCBO_BRAT(obj, originfile.read(), join(output_folder, fname + '.ann'))
 
 
 # get the ontology names of the annotated entity
@@ -199,6 +198,7 @@ def merge_NCBO_ann(ncbo_file, ann):
 def normalise_highlighted_text(ht_text):
     ht_text = ht_text.strip().replace('- ', '')
     ht_text = ht_text.replace(u'\ufb01', 'fi').replace(u'\ufb02', 'fl')
+        # .replace(u'\xb1', '±').replace(u'\xbc', '¼')
     return ht_text
 
 
@@ -277,16 +277,18 @@ def read_highlights(xls_file):
 def ann_article(file_path):
     path, file_name = os.path.split(file_path)
     text, sentence = parse_sepienta(os.path.join(path, file_name))
+
     name = file_name[:file_name.rfind('.')]
-    with codecs.open(os.path.join(path, name + '_fulltext.txt'), 'w', encoding='utf-8') as text_file:
+    txt_file_path = os.path.join(path, name + '_fulltext.txt')
+    with codecs.open(txt_file_path, 'w', encoding='utf-8') as text_file:
         text_file.write(text)
     ann_file_path = os.path.join(path, name + '_ann.json')
     with codecs.open(ann_file_path, 'w', encoding='utf-8') as ann_file:
         json.dump(sentence, ann_file, encoding='utf-8')
 
-    annotate_data(article_path)
+    annotate_data(txt_file_path, path)
 
-    ht_file = os.path.join(path, name + '_ht.json')
+    ht_file = os.path.join(path, name[:name.rfind('_')] + '_ht.json')
     ann = None
     with codecs.open(ann_file_path, encoding='utf-8') as read_file:
         ann = json.load(read_file)
@@ -302,14 +304,14 @@ def ann_article(file_path):
 
 
 def main():
-    path = './anns/'
-    num_threads = 10
+    path = './anns_v2/'
+    num_threads = 30
     util.multi_thread_process_files(path, 'xml', num_threads, ann_article)
 
-    onlyfiles = [f for f in listdir(path) if isfile(join(path, f))]
-    for f in onlyfiles:
-        if f.endswith('_ann.json'):
-            aa.analysis_ann(os.path.join(path, f))
+    # onlyfiles = [f for f in listdir(path) if isfile(join(path, f))]
+    # for f in onlyfiles:
+    #     if f.endswith('_ann.json'):
+    #         aa.analysis_ann(os.path.join(path, f))
 
 if __name__ == "__main__":
     main()
