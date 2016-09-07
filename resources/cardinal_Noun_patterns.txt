@@ -1,0 +1,137 @@
+patients	126	96 patients with probable AD and 107 patients with aMCI;
+months	27	At 6 months after surgery, the ADL score was increased from 20.60±1.64 to 60.83±2.85 (Paired t-test) (p<0.05)
+subjects	26	, 41 age-matched elderly subjects without depression
+controls	14	nonapathetic PD patients and 10 healthy controls were included as PD and healthy control groups, respectively
+participants	10	142 consecutively recruited participants with no history of cognitive impairment
+items	10	Experiment 2 used the 84 items
+groups	9	Apathetic PD patients had a smaller left nucleus accumbens than the two other groups did
+years	6	One year earlier, at the age of 65 years the patient also started to develop dysphagia with pharyngeal residue and the need for repeated swallows
+cases	6	We identified 9 PD cases without dementia and without VH
+clusters	5	three small clusters of reduced grey matter volume, located in the right frontal and parietal lobe
+male	5	20 (9 male, 11 female) consecutive patients who underwent bilateral stimulation of the subthalamic nucleus
+trials	5	of 5 free-recall trials of a 15 words list and a recall (trial 6) after an interference period of 15 minutes
+regions	5	levodopa intake in LID patients affected the functioning of the two key regions involved in the motor inhibition network: the right IFC and the MFC.
+males	4	Twenty of them (12 males and 8 females) met the clinical
+words	4	In the word repetition task, the participant listened and repeated 30 multisyllabic words representing the same items used in the naming task, one word at a time
+patient	4	We initially evaluated 62 elderly patient
+female	4	20 (9 male, 11 female) consecutive patients who underwent bilateral stimulation of the subthalamic nucleus
+adults	4	1,169 healthy adults
+females	4	Twenty of them (12 males and 8 females) met the clinical
+word	4	presented, through their earphones, with a list of 12 common Portuguese word
+platforms	4	When activity at four versus six platforms was compared, the left supramarginal gyrus showed a trend for being more active at four than six platforms
+AD	4	lv-PPA, and 23 AD)
+month	3	according to the BFM motor score after a mean follow-up period of 14.3 month
+minute	3	Assessment Scale Word List Learning test and 30 minute delayed recall, 14
+individuals	3	48 elderly individuals with depressive disorders
+conditions	3	The items were divided into three blocks designed for the three stimulation conditions (left DLPFC, right DLPFC, and sham stimulation).
+objects	3	we used 54 objects and 54 actions taken from the CRL-IPNP database.
+s	3	During this session, 20 words were successively presented for 6 s each
+names	3	all 20 faces from the encoding task were again presented twice, each either with two names (associative
+min	3	the phonemic fluency task, participants named words beginning with a specific letter (e.g., ‘‘s’’ in English and a different letter in the other language) in 1 min
+sets	3	Next, subjects viewed three sets of 10 photographs to test their memory for objects and places along the route
+volunteers	3	18 right-handed male volunteers
+actions	2	we used 54 objects and 54 actions taken from the CRL-IPNP database.
+improvement	2	three patients with PD who underwent bilateral STN DBS (2 patients) or GPi DBS (1 patient) showed a mean of 55% improvement
+weeks	2	A subset of 9 AD patients had 2 scans, 2 weeks apart, prior to
+photographs	2	Next, subjects viewed three sets of 10 photographs to test their memory for objects and places along the route
+people	2	approximately 200 cognitively normal older individuals to be followed for 3 years, 400 people with MCI to be followed for 3 years, and 200 people with early AD to be followed for
+year	2	One year earlier, at the age of 65 years the patient also started to develop dysphagia with pharyngeal residue and the need for repeated swallows
+PD	2	thus comprised 15 patients with LBD (n = 8 PD; n = 7 PDD/DLB) and 14 patients with tauopathies (n = 11 PSP; n = 3 CBD).
+imaging	2	aim of this study was to analyze in mild AD correlations between episodic memory performance, assessed by the FCSRT, and regional grey matter volume using three MRI anatomical imaging
+digits	2	two digits presented in a rapid stream of letters
+region	2	Therefore, we compared scores of AD patients on a standard geometric (2-dimensional) figure copying test as a measure of constructional praxis with immunoreactivity to the [3-amyloid protein and two antibodies to abnormally phosphorylated tau protein (found within neurofibrillary tangles, dystrophic neurites, neuropil threads) in five cortical brain region
+times	2	required to stand up from a chair and to sit down five times consecutively as fast as possible is registered
+voxels	2	the MMSE score as a covariate of no interest, the cluster of significant correlation was smaller (10,013 voxels) included only on the left side: hippocampus, parahippocampal gyrus, entorhinal cortex, amygdala, and thalamus
+tasks	2	we interrogated the default mode network by means of deactivations in MCI during two different active fMRI tasks
+letters	2	each 10 s block, subjects were presented with one of five possible task cues: a single letter, a single semantic category, two letters, two categories, or a control condition
+minutes	2	of 5 free-recall trials of a 15 words list and a recall (trial 6) after an interference period of 15 minutes
+cluster	2	When PD patients with and without PG were compared, only one cluster within the left OFC survived correction for multiple comparisons
+periods	2	Relative to the 10 s rest periods, word generation during the fluency tasks produced robust and widespread bilateral activation of frontal, parietal, and occipitotemporal cortices, and the anterior cingulate.
+nights	2	Patients underwent video-polysomnography on two consecutive nights both before (T1) and after surgery (T2).
+gyrus	2	Item 3 Left superior temporal gyrus (BA 13)
+types	2	category fluency, picture naming, naming from definition, word-association, and word reading of three different types of item, i.e., objects, actions, and famous people
+hypotheses	2	By combining structural and functional MRI measurements, the present study was designed to test the following two hypotheses:
+points	2	and Black [13] (ranging from 0 to 3 points).
+PD+VH	1	four groups of individuals: 9 PDD, 16 PD+VH, 19 PD-VH, and 56 healthy controls
+drawings	1	The assessment of constructional praxis in the CERAD Drawing test requires copying four line drawings of figures of increasing complexity (a circle, a diamond, intersecting rectangles, and a cube);
+rectangles	1	The CPT was composed of four geometric figures (circle, diamond, two intersecting rectangles, and a Necker cube) printed on individual sheets of paper
+PIB	1	PET tracer [11C]PIB
+Rating-sum	1	AD into two severity subgroups using Clinical Dementia Rating-sum of boxes (CDR-SB); less severe subgroup
+hou	1	The writing task was performed in a random order after both STN stimulators had been switched on (that is, the “on” condition) or off (that is, the “off” condition) for 1 hou
+categories	1	each 10 s block, subjects were presented with one of five possible task cues: a single letter, a single semantic category, two letters, two categories, or a control condition
+designs	1	to copy four geometric designs graded according to their perceptual± spatial complexity.
+aMCI	1	Eighty-eight consecutive AD or aMCI patients (49 AD, 39 aMCI) were fully
+disorientation	1	This study also indicates a specific relationship between NFT densities in area 23 and spatial disorientation in AD
+turns	1	At each of the six turns, subjects were asked, “Left, right, or straight?” and could respond verbally or by pointing
+list	1	of 5 free-recall trials of a 15 words list and a recall (trial 6) after an interference period of 15 minutes
+FDG-PET	1	12 subjects also had [18F]FDG-PET within 6 weeks
+steps	1	patial orientation was performed in three steps using an adapted version of the locational orientation subtests of the Mini Mental State Examination
+h	1	least 12 h after the last dose of dopaminergic medication
+patien	1	2 right-handed patien
+edition	1	Logical Memory (LM) subtest of the Wechsler Memory Scale, 3rd edition (WMS-III
+HC	1	22 HC
+odd	1	During the RVIP task, subjects were instructed to press a button using their right index finger when they saw a target sequence of three different odd or three different even numbers appearing consecutively
+category	1	One target category was natural (VEGETABLES) and one manufactured (TOOLS);
+phases	1	The pause between the two blinking phases lasted longer in patients than in HS
+cues	1	each 10 s block, subjects were presented with one of five possible task cues: a single letter, a single semantic category, two letters, two categories, or a control condition
+score	1	(LTPR = (Delayed recall score / Trial 5 score
+men	1	studied six women and five men
+gamma-ba	1	60–80 Hz gamma-ba
+members	1	2 members of the same research studies with diagnoses of aMCI
+pairs	1	80 pairs of words (items) for
+CBD	1	thus comprised 15 patients with LBD (n = 8 PD; n = 7 PDD/DLB) and 14 patients with tauopathies (n = 11 PSP; n = 3 CBD).
+levels	1	of subtraction operations was manipulated using three levels of arithmetic complexity
+figures	1	The CPT was composed of four geometric figures (circle, diamond, two intersecting rectangles, and a Necker cube) printed on individual sheets of paper
+MR	1	The aim of the present study was to investigate the correlation between local gray matter volume and the WMS-R-verbal score in healthy adults using high spatial resolution T1-weighted images with a 3 Tesla MR (3 T-MR) scanner and VBM.
+domains	1	associated with cognitive performance across four domains of language, namely auditory comprehension of single words (semantic processing), sentence repetition, production of complex sentences (grammatical processing), and speech fluency
+PSP	1	thus comprised 15 patients with LBD (n = 8 PD; n = 7 PDD/DLB) and 14 patients with tauopathies (n = 11 PSP; n = 3 CBD).
+fluorodeoxyglucose	1	18 F] fluorodeoxyglucose (FDG); the PET-FDG
+block	1	each 10 s block, subjects were presented with one of five possible task cues: a single letter, a single semantic category, two letters, two categories, or a control condition
+subscales	1	PDQL consists of four subscales: parkinsonian motor symptoms (14 items),
+PET	1	In the present study, by using multiple standardized test items to measure verbal semantic memory capacity [15] and PET, we correlated semantic memory capacity with regional cerebral glucose metabolism with a conservative · level in a sizable cohort of patients with mild AD.
+period	1	During a 1 year period, all the consecutive outpatients with probable AD
+community	1	15 elderly community!dwelling individuals of comparable age and educational backgrou
+accounts	1	Here, we evaluate two alternative accounts of the robust neural effects observed in the why/how contrast
+PDD/DLB	1	thus comprised 15 patients with LBD (n = 8 PD; n = 7 PDD/DLB) and 14 patients with tauopathies (n = 11 PSP; n = 3 CBD).
+phrases	1	Stimuli consisted of 128 syntactically similar phrases, each of which used a simple verb–complement construction
+T-MR	1	The aim of the present study was to investigate the correlation between local gray matter volume and the WMS-R-verbal score in healthy adults using high spatial resolution T1-weighted images with a 3 Tesla MR (3 T-MR) scanner and VBM.
+fast	1	In all patients PET was performed after at least a 6 h fast
+pa	1	18 pa
+examination	1	FDG-PET examination
+criteria	1	256 patients meeting UK Brain Bank criteria for the diagnosis of idiopathic PD
+structures	1	subcortical limbic structures
+scans	1	A subset of 9 AD patients had 2 scans, 2 weeks apart, prior to
+dots	1	requires participants to generate as many different designs as possible by using straight lines to connect arrays of five dots
+sessions	1	ubjects participated in three sessions: (1) an AB task session; (2) a PET session in which baseline D2-like (D2/D3) receptor availability was measured using the ligand [F-18]fallypride at rest; and
+emission	1	Eight RBD patients had one single single photon emission
+PDD	1	four groups of individuals: 9 PDD, 16 PD+VH, 19 PD-VH, and 56 healthy controls
+women	1	studied six women and five men
+language	1	59 speakers of more than 1 language
+mm	1	STN was interpreted to be located 3 mm posteriorly from the midcommissural point
+recall	1	Four neuropsychological measures reflecting recall from episodic and semantic memory, described below, were selected for the present analyses.
+classes	1	'Constructional praxis' usually includes two primary classes of activities: free drawing or copying
+error	1	the VBM group analysis, we compared patients who made at least one error on the RLT-Forward test
+stimulating	1	10 underwent pallidal deep brain stimulating (DBS) electrod
+numbers	1	During the RVIP task, subjects were instructed to press a button using their right index finger when they saw a target sequence of three different odd or three different even numbers appearing consecutively
+control	1	MCI and 15 control
+versus	1	When activity at four versus six platforms was compared, the left supramarginal gyrus showed a trend for being more active at four than six platforms
+PD-VH	1	four groups of individuals: 9 PDD, 16 PD+VH, 19 PD-VH, and 56 healthy controls
+scanner	1	T1 images using a 3T Philips MRI scanner
+tests	1	The K-MMSE and the 3MS tests were given to all the patients to determine their general cognitive functioning
+ventralis	1	4 underwent ventralis intermedius thalamic DBS
+sentences	1	The sentence-repetition task included five sentences each of six sentence types (Active, Passive, Object-Subject, Object-Object, Subject-Subject, and Subject-Object) for a total of 30
+speakers	1	59 speakers of more than 1 language
+blocks	1	The items were divided into three blocks designed for the three stimulation conditions (left DLPFC, right DLPFC, and sham stimulation).
+NCs	1	30 NCs
+systems	1	of CDT performance on three different scoring systems.
+CVFA	1	d 1 min CVFA (‘‘animal fluency’
+nouns	1	Stimuli consisted of 360 German nouns
+scores	1	younger patients showed a greater improvement between preoperative and 12 months ADL scores than older ones.
+con-	1	24 elderly con-
+subgroups	1	Here, we report our findings of the spectral analysis of the EEG and hippocampal volumes measured in a magnetic resonance imaging (MRI) scan for two subgroups of AD
+antibodies	1	Therefore, we compared scores of AD patients on a standard geometric (2-dimensional) figure copying test as a measure of constructional praxis with immunoreactivity to the [3-amyloid protein and two antibodies to abnormally phosphorylated tau protein (found within neurofibrillary tangles, dystrophic neurites, neuropil threads) in five cortical brain region
+MCI	1	1 elderly participants (45 controls, 36 MCI
+floor	1	Subjects were taken on a novel route through one floor of the Ambulatory Care Center
+m	1	Hoehn and Yahr staging, Schwab and England ADL, timed tests including time to walk 4.5 m,
+postoperativel	1	evaluations were made preoperatively and 12 months postoperativel
+SPECT	1	two rCBF SPECT scans within the same session
