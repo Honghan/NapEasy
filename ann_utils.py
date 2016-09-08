@@ -41,15 +41,19 @@ def multi_thread_tasking(lst, num_threads, process_func,
                                file_filter_func=None, callback_func=None):
     num_pdfs = len(lst)
     pdf_queque = Queue.Queue(num_pdfs)
+    print('putting list into queue...')
     for item in lst:
         pdf_queque.put_nowait(item)
     thread_num = min(num_pdfs, num_threads)
     arr = [process_func] if args is None else [process_func] + args
     arr.insert(0, pdf_queque)
+    print('queue filled, threading...')
     for i in range(thread_num):
         t = threading.Thread(target=multi_thread_do, args=tuple(arr))
         t.daemon = True
         t.start()
+
+    print('waiting jobs to finish')
     pdf_queque.join()
     print('{0} files {1}'.format(num_pdfs, proc_desc))
     if callback_func is not None:
@@ -83,8 +87,8 @@ def convert_ann_for_training(ann_file, non_hts, hts, out_path):
     p, fn = split(ann_file)
     for ann in anns:
         co = {
-                # 'src': fn,
-                # 'sid': ann['sid'],
+                'src': fn,
+                'sid': ann['sid'],
                 'text': ann['text'],
                 'struct': '' if 'struct' not in ann else ann['struct'],
                 'sapienta': '' if 'CoreSc' not in ann else ann['CoreSc'],
@@ -111,6 +115,12 @@ def save_json_array(lst, file_path):
     with codecs.open(file_path, 'w', encoding='utf-8') as wf:
         json.dump(lst, wf, encoding='utf-8')
 
+
+def load_json_data(file_path):
+    data = None
+    with codecs.open(file_path, encoding='utf-8') as rf:
+        data = json.load(rf, encoding='utf-8')
+    return data
 
 def save_sentences(non_hts, hts, output_path):
     training_testing_ratio = 0.6
@@ -140,12 +150,12 @@ def save_sentences(non_hts, hts, output_path):
 
 
 def main():
-    # ann_to_training('./anns_v2', './training')
-    sents = [
-        'The control group was comprised of 15 elderly community dwelling individuals of comparable age and educational background',
-        'This resulted in data of 172 participants to be included in the present study.'
-    ]
-    relation_patterns(sents[0])
+    ann_to_training('./anns_v2', './training')
+    # sents = [
+    #     'The control group was comprised of 15 elderly community dwelling individuals of comparable age and educational background',
+    #     'This resulted in data of 172 participants to be included in the present study.'
+    # ]
+    # relation_patterns(sents[0])
 
 if __name__ == "__main__":
     main()
