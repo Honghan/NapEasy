@@ -8,7 +8,8 @@
 				var url = tmining.server_prefix + file_path
 				console.log(url)
 				$('#loadDiv').load(url, function(){
-					alert('done loading.')
+					eval("var summ = " + $('#loadDiv').html());
+					console.log(summ);
 				});
 			},
 
