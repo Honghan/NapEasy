@@ -1,327 +1,356 @@
 MCI	54	neuropsychological tests of patients with MCI or AD.
-STN	42	Deep brain stimulation (DBS) of the subthalamic nucleus (STN) has been shown to effectively reduce long-term complications of dopaminergic medication in patients with Parkinson’s disease (PD)
-rCBF	41	Significant regional increases of rCBF were found bilaterally in the inferior frontal gyri and parietal cortices, and also in the fusiform gyri bilaterally
+rCBF	39	Significant regional increases of rCBF were found bilaterally in the inferior frontal gyri and parietal cortices, and also in the fusiform gyri bilaterally
 MMSE	36	(MMSE),
-UPDRS	32	Patients were clinically assessed using the UPDRS
+STN	32	Deep brain stimulation (DBS) of the subthalamic nucleus (STN) has been shown to effectively reduce long-term complications of dopaminergic medication in patients with Parkinson’s disease (PD)
 CDT	31	CDT
 AD	31	57 subjects with AD, 66 subjects with MCI, and 35 healthy cognitively normal subjects
+UPDRS	30	Patients were clinically assessed using the UPDRS
 aMCI	25	The goal of this study was to investigate test-specific neural correlates in a large sample of patients with AD or the amnestic type of mild cognitive impairment (aMCI),
-MRI	24	In this study, we used MRI surface-based morphometry (SBM)
-Boston	18	Boston Naming Test
+MRI	23	In this study, we used MRI surface-based morphometry (SBM)
 VBM	17	In the present study, we applied an optimized VBM method
-Wechsler	16	Wechsler Memory Scale-Revised Logical Memory I and II subtests
-Yahr	16	PD corresponding to Hoehn and Yahr stages (HY) 2–3
+Boston Naming Test	17	Boston Naming Test
 PET	16	PET tracer [11C]PIB
 fMRI	16	fMRI measurements
-Alzheimer	16	18 with amnestic MCI, 21 with mild dementia of the Alzheimer type and 11
-CERAD	15	The Consortium to Establish a Registry for AD (CERAD) neuropsychological battery
-Rey	14	and the Rey Osterrieth Complex Figure (ROCF) test
+Alzheimer	15	18 with amnestic MCI, 21 with mild dementia of the Alzheimer type and 11
+Yahr	14	PD corresponding to Hoehn and Yahr stages (HY) 2–3
 CA1	14	(CA1) and of the pons at the mid-portion of the locus coeruleus
 Hoehn	14	PD corresponding to Hoehn and Yahr stages (HY) 2–3
-PD	13	Moreover, PD þ RBD þ patients showed more severe nigro-striatal dopaminergic impairment compared with PD þ RBD-patients, mainly at caudate level.
-Word	12	Constructional Praxis, and Word List Memory
-SPECT	12	In the present investigation, we have studied a sample of patients with mild Alzheimer’s disease and elderly healthy controls using both structural MRI, to measure hippocampal atrophy, and the SPECT technique, to measure rCBF patterns during an episodic memory retrieval task
+CERAD	13	The Consortium to Establish a Registry for AD (CERAD) neuropsychological battery
+PD	12	Moreover, PD þ RBD þ patients showed more severe nigro-striatal dopaminergic impairment compared with PD þ RBD-patients, mainly at caudate level.
 Brodmann	12	right: Brodmann area [BA] 38, 34 and 28; left: BA 28), the left middle frontal gyrus and the right inferior frontal gyrus (BA 9).
 FTD	11	Neurodegenerative diseases such as Alzheimer’s disease (AD) and frontotemporal dementia (FTD
 DBS	11	Deep brain stimulation (DBS) of the subthalamic nucleus (STN) has been shown to effectively reduce long-term complications of dopaminergic medication in patients with Parkinson’s disease (PD)
-Consortium	11	Consortium to Establish a Registry for Alzheimer’s Disease-Neuropsychological Assessment Batter
 Left	11	Left angular gyrus
-Clinical	11	Clinical Dementia Rating
-National	10	AD patients were diagnosed according to the NINCDS-ADRDA (National Institute of Neurological and Communicative Disorders and Stroke and the Alzheimer’s Disease and Related Disorders Association)
+Consortium	11	Consortium to Establish a Registry for Alzheimer’s Disease-Neuropsychological Assessment Batter
+SPECT	11	In the present investigation, we have studied a sample of patients with mild Alzheimer’s disease and elderly healthy controls using both structural MRI, to measure hippocampal atrophy, and the SPECT technique, to measure rCBF patterns during an episodic memory retrieval task
+National Institute	10	AD patients were diagnosed according to the NINCDS-ADRDA (National Institute of Neurological and Communicative Disorders and Stroke and the Alzheimer’s Disease and Related Disorders Association)
 FAB	10	This task was modelled after the similarities subtest of the FAB
+STN DBS	10	Patients 5 and 6 suffered also from motor fluctuations and were therefore scheduled for bilateral STN DBS.
 IFG	9	STN LFP power during the execution of IFG conditions was interrelated with a modulation of the directionality of information flow between the muscle electromyogram (EMG) and STN LFPs
 BNT	9	GMV in the temporal lobe was related to language tasks (BNT, VF),
-Global	8	Global Deterioration Scal
 Neurological	8	AD patients were diagnosed according to the NINCDS-ADRDA (National Institute of Neurological and Communicative Disorders and Stroke and the Alzheimer’s Disease and Related Disorders Association)
 VLp	8	lateral part of the thalamus may be divided into ventral lateral anterior (VLa) and posterior (VLp) nuclei
 CDR	8	Clinical Dementia Rating (CDR)
-Mini	8	Mini Mental Status Examination (MMSE) (
 DLPFC	8	The purpose of this study was to explore the effects of rTMS applied to the DLPFC on an action and object picture-naming task in older adults
-AMY	8	amygdala (AMY
 SPL	7	temporal lobe, such as the fusiform gyrus (FG) and lateral occipital complex (LOC), MTG, clusters in the parietal lobe (SPL, SMG), including anterior and posterior parts of the intraparietal area, frontal activation, including PMv, PMd, insula lobule, and a cluster in the middle frontal gyrus (MFG)
 ReHo	7	In the current study, we applied ReHo method to explore regional brain activity in TD and AR types during resting state, and hypothesized that parkinsonian tremor is mediated by a distinct neural network primarily involving the CTC pathway.
+Rey	7	Copy of the Rey figure
 NFT	7	which included prospective examination of temporal and spatial orientation and quantitative assessment of NFT and senile plaques (SP) in the hippocampal formation, entorhinal cortex, and selected neocortical areas.
 CLOX1	7	CDT and CLOX1,
 RBD	7	orthostatic hypotension and REM sleep behavior disorder (RBD) identified the diffuse/malignant subtype
-GPi	7	Chronic deep brain stimulation (DBS) of the posteroventral lateral globus pallidus internus (GPi) and the subthalamic nucleus (STN)
-Communicative	7	AD patients were diagnosed according to the NINCDS-ADRDA (National Institute of Neurological and Communicative Disorders and Stroke and the Alzheimer’s Disease and Related Disorders Association)
 COWAT	7	Controlled Oral Word Association Test (COWAT),
 rCMglc	7	regional cerebral glucose metabolism (rCMglc)
-Stroop	7	Stroop test
 GMV	7	MRI-based volumetry has been proposed as a promising biomarker allowing early detection of structural changes such as loss of grey matter volume (GMV)
-Memory	7	Memory functions were assessed with subtests from the Wechsler Memory Scale-Revised in German
+Clinical Dementia	6	Clinical Dementia Rating
+PCC	6	i.e., the posterior cingulate cortex (PCC) and the ventromedial prefrontal cortex (vMPFC),
 PCA	6	Posterior cortical atrophy (PCA)
 LOAD	6	This study compares EOAD with LOAD on both cognitive features and functional neuroimaging with positron emission tomography (PET).
-Category	6	Category Fluency Test
 LID	6	LID patients
 EOAD	6	This study compares EOAD with LOAD on both cognitive features and functional neuroimaging with positron emission tomography (PET).
 IPL	6	and in the IPL bilaterally
-Related	6	AD patients were diagnosed according to the NINCDS-ADRDA (National Institute of Neurological and Communicative Disorders and Stroke and the Alzheimer’s Disease and Related Disorders Association)
-Rouleau	6	Rouleau.
-MTG	6	temporal lobe, such as the fusiform gyrus (FG) and lateral occipital complex (LOC), MTG, clusters in the parietal lobe (SPL, SMG), including anterior and posterior parts of the intraparietal area, frontal activation, including PMv, PMd, insula lobule, and a cluster in the middle frontal gyrus (MFG)
-PCC	6	i.e., the posterior cingulate cortex (PCC) and the ventromedial prefrontal cortex (vMPFC),
-Digit	6	Digit Span Forward and Backward)
+Communicative Disorders	6	AD patients were diagnosed according to the NINCDS-ADRDA (National Institute of Neurological and Communicative Disorders and Stroke and the Alzheimer’s Disease and Related Disorders Association)
+GPi	6	Chronic deep brain stimulation (DBS) of the posteroventral lateral globus pallidus internus (GPi) and the subthalamic nucleus (STN)
 DMN	6	default mode network (DMN
 MFG	6	temporal lobe, such as the fusiform gyrus (FG) and lateral occipital complex (LOC), MTG, clusters in the parietal lobe (SPL, SMG), including anterior and posterior parts of the intraparietal area, frontal activation, including PMv, PMd, insula lobule, and a cluster in the middle frontal gyrus (MFG)
-Parkinson	6	Parkinson Disease Rating Scale
-PSP	6	abnormalities in PSP remain unclear
 VH	6	Twelve PD patients with VH, 14 PD patients without VH and 12 controls participated in the follow-up assessment
+MTG	6	temporal lobe, such as the fusiform gyrus (FG) and lateral occipital complex (LOC), MTG, clusters in the parietal lobe (SPL, SMG), including anterior and posterior parts of the intraparietal area, frontal activation, including PMv, PMd, insula lobule, and a cluster in the middle frontal gyrus (MFG)
 Stroke	6	AD patients were diagnosed according to the NINCDS-ADRDA (National Institute of Neurological and Communicative Disorders and Stroke and the Alzheimer’s Disease and Related Disorders Association)
-Seoul	6	Seoul Neuropsychological Screening Battery (SNSB)
-Mental	6	The Cambridge Examination for Mental Disorders of the Elderly
+AMY	6	amygdala (AMY
 ADL	6	The Schwab and England Test was used to evaluate the daily living activities (ADL)
-Verbal	6	Verbal Fluency modified Boston Naming Test
-Spatial	6	Visuospatial attention span and working memory were examined with the Spatial Span Forward (SSF) and Backward (SSB) subtests of the WMS-III
 ROIs	5	VBM analyses, investigating the neuroanatomical changes occurring when the three groups were analyzed together (one-way AnCOVA analysis), revealed the presence of two significant clusters (surviving threshold corrected for multiple comparisons within ROIs): bilateral OFC and ACC
 PDVH	5	occipital functional connectivity with inferior/superior/ middle and ventral medial prefrontal cortex, superior temporal gyrus, caudate, thalamus and anterior cingulate cortex (ACC) was greater in PDVH compared to the PDnonVH group
 CPT	5	onstructional Praxis subtest (CPT) of the C E R A D battery prior to death
-RCFT	5	the RCFT; immediate recall, 20 min delayed recall
+RCFT	5	the Rey Complex Figure Test (RCFT)
 DTI	5	the present work we use neuroimaging measures obtained from structural MRI and DTI in order to thoroughly examine the neural correlates of episodic memory
-Mattis	5	Mattis Dementia Rating Scale
-Epworth	5	Daytime sleepiness was estimated by the Epworth Sleepiness Scale (ESS
+Frontal Assessment Battery	5	ecutive control (Frontal Assessment Battery, Modified Card Sorting Test and Stroop task),
 RAVLT	5	RAVLT
 LBD	5	Lewy body diseases (LBD) (
 BFM	5	Burke–Fahn– Marsden (BFM) scale in dystonia
-Semantic	5	(Story Recall, Rey–Osterrieth Complex Figure recall), visuospatial abilities (Rey–Osterrieth Complex Figure copy, Clock Design), executive functions (Weigl’s Sorting Test, Phonemic and Semantic Fluencies, Frontal Assessment Battery) and attention (Number cancellation)
 SFG	5	PC correlated with higher metabolic activity in bilateral inferior frontal gyrus (IFG), pars triangularis, right superior frontal gyrus (SFG)/ premotor cortex, left middle temporal gyrus (MTG), and right occipital lobe
-Frontal	5	ecutive control (Frontal Assessment Battery, Modified Card Sorting Test and Stroop task),
-FDG	5	Performance on the RBANS Figure Copy test correlated significantly with normalized FDG uptake in eight clusters with main peaks
-FOG	5	Freezing of gait (FOG) is a unique and disabling symptom usually observed in 25% of early Parkinson’s disease (PD) patients and 50% of patients with advanced PD [
-TMT	5	Trail Making Test (TMT
-PPA	5	components in the variants of PPA and in typical AD
 DAN	5	dorsal attention network (DAN
+FOG	5	Freezing of gait (FOG) is a unique and disabling symptom usually observed in 25% of early Parkinson’s disease (PD) patients and 50% of patients with advanced PD [
+Parkinson	5	Gastrointestinal (GI) dysfunction is one of the most common non-motor symptom of Parkinson's disease
+PSP	5	abnormalities in PSP remain unclear
+PPA	5	components in the variants of PPA and in typical AD
 BOLD	5	design, blood oxygenation level dependent (BOLD) signal changes
-WMS	5	WMS IR)
-Scale	5	Dementia Rating Scale
 ROI	5	ROI analyses controlling for the effect of semantic memory performance revealed that episodic memory performance significantly predicted with mean signal
 CVLT	5	pisodic learning task is the CVLT (
 ACC	5	VBM analyses, investigating the neuroanatomical changes occurring when the three groups were analyzed together (one-way AnCOVA analysis), revealed the presence of two significant clusters (surviving threshold corrected for multiple comparisons within ROIs): bilateral OFC and ACC
 PDQL	5	evaluate the benefit of bilateral STN stimulation on quality of life using a health-specific scale, the PD Quality of Life (PDQL) scale
+Spatial	5	Spatial and temporal disorientation are cardinal symptoms in Alzheimer’s disease
 ESS	5	Daytime sleepiness was estimated by the Epworth Sleepiness Scale (ESS
 SIM	4	WAIS-R Similarities subtest (SIM
 VAN	4	(VAN)
-CBD	4	corticobasal degeneration (CBD)
+Wechsler Adult Intelligence Scale	4	Vocabulary subtest of the Wechsler Adult Intelligence Scale
+Global	4	Global cognitive ability The ACE-
 SMA	4	degree of SA enlargement in the right supplementary motor area (SMA
 LFF	4	We found increased PSD of LFF in AD patients compared to healthy controls and MCI patients in the left CA1 and right DG, CA3, CA1, and EC
 Backward	4	Digit Span Forward and Backward)
 NHP	4	The Nottingham Health Profile (NHP)
-III	4	third month and sixth month score; the UPDRS-I, II, III, and IV scores in both the ‘on’ and ‘off’ states were significantly better
 STG	4	the DPD patients exhibited increased left AMY FC with the bilateral mediodorsal thalamus (mdTHA) and increased right AMY FC with the left superior temporal gyrus (STG) and the calcarine gyrus
 BA7	4	the contrary, significant hypometabolic clusters were found in aMCI subgroup in comparison with CTR in left (Brodmann areas = BA; BA7, BA19) and right (BA7) precuneus, in left inferior parietal lobule (BA39) and in left cingulate gyrus
-GMVs	4	Apart from this, we studied longitudinal data, which were available for a subset of patients, and associated the rate of neuropsychological performance loss (a) to baseline GMVs and (b) to rates of regional GMV loss.
 SAD	4	Social Anxiety Disorders (SAD)
+Clinical Dementia Rating	4	Clinical Dementia Rating (CDR)
 FCSRT	4	aim of this study was to analyze in mild AD correlations between episodic memory performance, assessed by the FCSRT, and regional grey matter volume using three MRI anatomical imaging
 mPRC	4	Therefore, the aim of this cross-sectional study was to determine whether episodic memory and semantic object memory functioning as measured by common clinical neuropsychological tests are distinctly associated with the ERC/HP and medial PRC (mPRC) integrity, respectively, in healthy control participants (NC) and patients with suspected early AD.
-Benton	4	Benton Visual Retention Test
-Dementia	4	Dementia Rating Scale
-Visual	4	Visual hallucinations (VH) have been reported to occur in 50% of patients with Parkinson’s disease (PD).
+Rouleau	4	Rouleau.
+Epworth Sleepiness Scale	4	Daytime sleepiness was estimated by the Epworth Sleepiness Scale (ESS
+GMVs	4	Apart from this, we studied longitudinal data, which were available for a subset of patients, and associated the rate of neuropsychological performance loss (a) to baseline GMVs and (b) to rates of regional GMV loss.
+Seoul Neuropsychological	4	Seoul Neuropsychological Screening Battery (SNSB)
 EMG	4	STN LFP power during the execution of IFG conditions was interrelated with a modulation of the directionality of information flow between the muscle electromyogram (EMG) and STN LFPs
+FDG	4	18 F] fluorodeoxyglucose (FDG); the PET-FDG
 MFC	4	the MFC
 Recall	4	Recall, Rey–Osterrieth Complex Figure recall
-Trail	4	Trail Making Test (TMT
-California	4	California Verbal Learning Test
+Mini Mental State Examination	4	Mini Mental State Examination (MMSE)
+TMT	4	Trail Making Test (TMT
+Mattis Dementia Rating Scale	4	Mattis Dementia Rating Scale
+CBD	4	corticobasal degeneration (CBD)
 ROCF	4	ROCF test
-United	4	diagnostic criteria of the Parkinson’s Disease Society Brain Bank of the United Kingdon
 WMH	4	White matter (WM) hyperintensities (WMH)
-Shulman	4	The Rouleau CDT and CLOX1 scored the clock drawings for the free-drawn method; the Shulman CDT scored the clock drawings for the pre-drawn method
-Modified	4	Animal Naming, Modified Boston Naming Test [BNT
+California Verbal	4	California Verbal Learning Test
+Stroop	4	Stroop test
 RVIP	4	determine the neural basis of a novel block design version of the RVIP task using the superior temporal and spatial resolution of functional MRI (fMRI),
 PMd	4	temporal lobe, such as the fusiform gyrus (FG) and lateral occipital complex (LOC), MTG, clusters in the parietal lobe (SPL, SMG), including anterior and posterior parts of the intraparietal area, frontal activation, including PMv, PMd, insula lobule, and a cluster in the middle frontal gyrus (MFG)
+III	4	third month and sixth month score; the UPDRS-I, II, III, and IV scores in both the ‘on’ and ‘off’ states were significantly better
 NC	4	clinical measures of episodic (i.e., CVLT and ROCF delayed recall) and semantic (i.e., Boston Naming Test (BNT) and category verbal fluency of animals (CVFA) memory performance with measures of gray and white matter (GM and WM, respectively) integrity in NC, aMCI and AD patients.
-Unified	4	Nocturnal mobility was evaluated by item 12 of the Unified Parkinson’s Disease Rating Scale II (UPDRS-II).
-Apathy	4	Apathy is characterized by lack of interest, loss of initiative, indifference, and flattening of affect
 PSD	4	We found increased PSD of LFF in AD patients compared to healthy controls and MCI patients in the left CA1 and right DG, CA3, CA1, and EC
-Constructional	4	Constructional Praxis, and Word List Memory
+Memory	4	Memory functions were assessed with subtests from the Wechsler Memory Scale-Revised in German
 fvFTD	3	frontal variant of frontotemporal dementia (fvFTD)
+Visual	3	Visual hallucinations (VH) have been reported to occur in 50% of patients with Parkinson’s disease (PD).
 Concept	3	Concept formation refers to the ability to identify and extract the common and pertinent features of objects or concepts
 MI	3	MI was
 Lewy	3	Lewy body diseases (LBD) (
 Abstract	3	Abstract reasoning was evaluated by Weigl’s sorting test (WST)
 DPD	3	the DPD patients exhibited increased left AMY FC with the bilateral mediodorsal thalamus (mdTHA) and increased right AMY FC with the left superior temporal gyrus (STG) and the calcarine gyrus
 Hippocampal	3	Hippocampal volumetry
-Disease	3	Disease Rating Scale (UPDRS-III).
-CA3	3	CA3
+Mental State Examination	3	Mental State Examination (MMSE)
+Category Fluency	3	Subjects were administered tests of Category Fluency
 Deep	3	Deep brain stimulation (DBS) of the subthalamic nucleus (STN) has been shown to effectively reduce long-term complications of dopaminergic medication in patients with Parkinson’s disease (PD)
 PDND	3	Parkinson’s disease without dementia (PDND) compared with normal controls
-Functional	3	Functional Assessment Questionnaire
 IPS	3	The DAN in NC consists of bilateral inferior parietal lobe (IPL) and superior parietal lobe (SPL) which cover the IPS area, and regions in and around the FEF including the bilateral middle frontal gyrus (MFG), superior frontal gyrus (SFG) and inferior frontal gyrus (IFG).
-Clock	3	(Story Recall, Rey–Osterrieth Complex Figure recall), visuospatial abilities (Rey–Osterrieth Complex Figure copy, Clock Design), executive functions (Weigl’s Sorting Test, Phonemic and Semantic Fluencies, Frontal Assessment Battery) and attention (Number cancellation)
+lvPPA	3	logopenic variant of PPA or lvPPA
 ADNI	3	the Alzheimer’s Disease Neuroimaging Initiative (ADNI) database
 SNSB	3	Seoul Neuropsychological Screening Battery (SNSB)
-Cambridge	3	The Cambridge Examination for Mental Disorders of the Elderly
+Global Performance Score	3	Statistical analysis revealed significant differences in the Global Performance Score between patients with behavioural variant FTD and non-frontal participants
 BA31	3	Instead, a significant positive correlation was found between RAVLT-DR and brain metabolism in left (BA 31) and right (BA7, BA31) precuneus and in left inferior parietal lobule
 Language	3	Language and Semantic Knowledge
 PDD	3	Parkinson’s disease will eventually develop dementia (PDD
 ITG	3	temporal pole, right inferior temporal gyrus (ITG), and left ITG/fusiform gyrus
-Neuropsychiatric	3	Neuropsychiatric Inventory
-WL	3	WL DR),
+CA3	3	CA3
+Verbal	3	Verbal Fluency Tests
+Dementia	3	Dementia Rating Scale
+Digit Span	3	Digit Span subtest of the Wechsler Adult Intelligence Scale
 PSPr	3	progressive supranuclear palsy (PSPr),
-ADI	3	In summary, the AD2 group showed more widespread cognitive dysfunctions than did the ADI group
 OFC	3	When PD patients with and without PG were compared, only one cluster within the left OFC survived correction for multiple comparisons
-Wisconsin	3	Wisconsin Card Sorting Test
-Part	3	Part III of the Unified Parkinson Disease Rating Scale (UPDRS-motor)
-DSM	3	DSM IV-TR
+Related Disorders Association	3	AD patients were diagnosed according to the NINCDS-ADRDA (National Institute of Neurological and Communicative Disorders and Stroke and the Alzheimer’s Disease and Related Disorders Association)
 Mendez	3	Mendez
 naMCI	3	nonamnestic MCI (naMCI
 Camptocormia	3	Camptocormia, or ‘‘bent spine syndrome
 WAB	3	Western Aphasia Battery (WAB)
+Related Disorder Association	3	60 patients who met criteria for probable AD established by the National Institute of Neurological and Communicative Disorders and Stroke and the Alzheimer’s Disease and Related Disorder Association
 SVLT	3	SVLT immediate recall
 SRT	3	The Buschke–Fuld selective reminding test (SRT), in its short version
 LOC	3	temporal lobe, such as the fusiform gyrus (FG) and lateral occipital complex (LOC), MTG, clusters in the parietal lobe (SPL, SMG), including anterior and posterior parts of the intraparietal area, frontal activation, including PMv, PMd, insula lobule, and a cluster in the middle frontal gyrus (MFG)
+Trail Making Test	3	Trail Making Test (TMT
+Wechsler Memory	3	Digit Span Forward (DSF) and Backward (DSB) subtests of the Wechsler Memory ScaleeThird edition
 Chinese	3	The working-memory capacity was measured by the DB subtest of the digit span test in the Chinese Revised Wechsler Adult Intelligence Scale (WAIS-RC)
-lvPPA	3	logopenic variant of PPA or lvPPA
 II	3	third month and sixth month score; the UPDRS-I, II, III, and IV scores in both the ‘on’ and ‘off’ states were significantly better
 SIVD	3	Subcortical ischemic vascular dementia (SIVD)
 MTL	3	Based on these studies, we suggest increased MTL intrinsic activity in early AD.
 MTA	3	The first aim of the present study was to determine the precise role of WMH and MTA (main and interaction effects) in TMT-B task performance in elderly participants.
 rTMS	3	Repetitive transcranial magnetic stimulation (rTMS) can induce a brief change in a subject’s behavioral performance only if it is applied over an area that is causally engaged in that task being executed.
-England	3	The Schwab and England Test was used to evaluate the daily living activities (ADL)
+WMS	3	WMS IR)
+Word List Memory	3	Constructional Praxis, and Word List Memory
+Scale	3	Dementia Rating Scale
+Shulman	3	We used the pre-drawn method and a 5-point scale for the Shulman CDT
 HRQoL	3	effect of bilateral STN DBS on HRQoL in patients with advanced PD using the PDQ-39 and NHP questionnaires.
 BA19	3	the contrary, significant hypometabolic clusters were found in aMCI subgroup in comparison with CTR in left (Brodmann areas = BA; BA7, BA19) and right (BA7) precuneus, in left inferior parietal lobule (BA39) and in left cingulate gyrus
 Schwab	3	The Schwab and England Test was used to evaluate the daily living activities (ADL)
 IVD	3	In the present study the SIM was administered to participants suffering from AD and IVD associated with subcortical periventricular and deep white matter alterations
-Logical	3	Wechsler Memory Scale-Revised Logical Memory I and II subtests
 AD2	3	AD2
-Letter	3	Letter Fluency (CFL:
+Unified	3	Nocturnal mobility was evaluated by item 12 of the Unified Parkinson’s Disease Rating Scale II (UPDRS-II).
+ADI	3	In summary, the AD2 group showed more widespread cognitive dysfunctions than did the ADI group
 DAT	3	In patients with Hoehn and Yahr stage 2, there was a significant inverse correlation of the ESS score with mean DAT binding of both sides of the striatum
-TD	3	and TD Client.
 Stimuli	3	Stimuli consisted of 128 syntactically similar phrases, each of which used a simple verb–complement construction
-Executive	3	Executive Systems Functioning
-Brain	3	Brain Bank criteria
 LIFG	2	The comparison of switching and free generation trials within these ROIs revealed significantly greater activity in the LIFG during switching compared to free generation
 WLR	2	Word List Recall (WLR),
 WLM	2	Word List Memory (WLM
 VaD	2	vascular dementia (VaD
 Posterior	2	Posterior caudate Right
+Mental Disorders	2	The Cambridge Examination for Mental Disorders of the Elderly
 NPI	2	VH was rated using the Spanish version of the neuropsychiatric inventory (NPI) (subscale hallucinations).
-Brief	2	the Brief Visuospatial Memory Test-Revised
-Hamilton	2	Hamilton Rating Scale for Depression
-Hopkins	2	Hopkins Verbal Learning Test-Revised
+Cued Selective	2	Free and Cued Selective Reminding Test
 DSB	2	Digit Span Forward (DSF) and Backward (DSB) subtests of the Wechsler Memory ScaleeThird edition
 MD	2	Due to the complex pathology of AD, we hypothesised that MD would be a more sensitive marker of episodic memory than FA.
 dACC	2	with the dACC
 FA	2	FA voxel-based morphometry analyses.
+RBANS Figure Copy	2	ERAD Drawing test and the RBANS Figure Copy test
 REM	2	orthostatic hypotension and REM sleep behavior disorder (RBD) identified the diffuse/malignant subtype
 SMG	2	temporal lobe, such as the fusiform gyrus (FG) and lateral occipital complex (LOC), MTG, clusters in the parietal lobe (SPL, SMG), including anterior and posterior parts of the intraparietal area, frontal activation, including PMv, PMd, insula lobule, and a cluster in the middle frontal gyrus (MFG)
 LFP	2	analyzed their tremor associated LFP activity in the VLp
 mdTHA	2	the DPD patients exhibited increased left AMY FC with the bilateral mediodorsal thalamus (mdTHA) and increased right AMY FC with the left superior temporal gyrus (STG) and the calcarine gyrus
 CTh	2	an additional analysis of variance for CTh in the parahippocampal cluster for the 3 groups (F[2.48] 5 6.171; P 5 0.00413), and the post-hoc t test analysis indicated that CTh was significantly thinner in the PD-MCI group compared with the HC and PD non-MCI groups,
-SPM	2	sites of significant SPM correlation between neuropsychological scores and brain perfusion SPECT.
+Token Test	2	verbal fluency and language comprehension (Word List Generation, Token Test) a
+Wechsler Memory Scale	2	Wechsler Memory Scale (WMS) Mental Control subtest
+DSM IV	2	Presence of SAD was determined according to the DSM IV TR criteria, assessed through the structural clinical interview for DSM IV axis I disorders (SCID I)
 German	2	Memory functions were assessed with subtests from the Wechsler Memory Scale-Revised in German
 EDS	2	A recent study described that excessive daytime sleepiness (EDS) may even be associated with an increased risk of developing PD
 SBM	2	In this study, we used MRI surface-based morphometry (SBM)
 ERC	2	and are associated with atrophy of the entorhinal cortex (ERC) and hippocampus (HP) (i.e., ERC/HP complex;
 BAI	2	Beck Anxiety Inventory (BAI)
-Warrington	2	Warrington short recognition memory tests (WRTM) for words and faces,
+Thirty	2	Thirty patients who fulfilled the criteria for AD or aMCI
+Rey Complex Figure Test	2	the Rey Complex Figure Test (RCFT)
 Impaired	2	Impaired CDT performance was significantly correlated with reduced volumes of the right and left hippocampus
-pTau	2	extent of local pTau spread, and MI, as an indicator of local intraneuronal concentration of pTau
 tAD	2	ight hippocampal volume in the tAD group was significantly smaller compared with that in the PCA group
 Petersen	2	MCI was defined according to the criteria proposed by Petersen
+FAS	2	mmed the number of words the patient generated within one minute beginning with the letters F, A, and S (FAS).
 ICDs	2	Impulse control disorders (ICDs) and related behaviours commonly occur in Parkinson disease (PD),
-Beck	2	Beck Anxiety Inventory (BAI)
+Wechsler	2	Wechsler Memory Scale-Revised Logical Memory I and II subtests
+Memory Assessment Scales	2	emory was derived from delayed and cued recall and selected immediate recall trials of the word list learning task of the Memory Assessment Scales
 Control	2	Control subjects
+Semantic	2	Semantic and phonemic fluency tasks are exemplary clinical ways to tap into semantic and phonological processes central to speech production
 Mild	2	Mild cognitive impairment (MCI) is characterized by cognitive deficits which do not yet reach the threshold of dementia
 PDnonVH	2	occipital functional connectivity with inferior/superior/ middle and ventral medial prefrontal cortex, superior temporal gyrus, caudate, thalamus and anterior cingulate cortex (ACC) was greater in PDVH compared to the PDnonVH group
 DLB	2	Lewy bodies (DLB)
+Word	2	Word list recall performance was significantly correlated with bihemispheric superior and middle frontal, left inferior frontal, right medial frontal, left caudate, thalamus, insula and right putamen glucose metabolism.
 LARS	2	Lille Apathy Rating Scale (LARS
-Cued	2	Free and Cued Selective Reminding Test
 MPFC	2	precuneus, posterior cingulate cortex (PCC), inferior parietal, hippocampus and medial prefrontal cortex (MPFC),
-Luria	2	Spatial thinking was assessed with the Luria Mental Rotation Test
 PVE	2	partial volume effects (PVE) (
 Impulse	2	Impulse control disorders (ICDs) and related behaviours commonly occur in Parkinson disease (PD),
-Amnestic	2	Amnestic mild cognitive impairment aMCI
+Hopkins Verbal	2	Hopkins Verbal Learning Test-Revised
 Anterior	2	Anterior caudate
 xjView	2	by xjView and Table 3 by TD
+UK Brain Bank	2	256 patients meeting UK Brain Bank criteria for the diagnosis of idiopathic PD
 AT8	2	However, CPT performance was significantly correlated with AT8 'load' in occipital cortex (area 18).
+Neuropsychiatric	2	Neuropsychiatric Inventory
 DB	2	In Experiment 1, we measured regional cerebral blood flow (rCBF) in healthy participants during performance of DF, DB, and a sensorimotor control task
+Clock Drawing Test	2	The Clock Drawing Test (CDT) is widely used in cognitive assessment
+Cambridge Cognitive	2	The Cambridge Cognitive Examination
 Single	2	Single photon emission computed tomography (SPECT
 ET	2	Twelve patients with ET and five patients with tremordominant PD were implanted in the VL
+WL	2	WL DR),
 BGN	2	basal ganglia network (BGN
 Free	2	Free and Cued Selective Reminding Test
 Fourteen	2	Fourteen, right-handed, healthy volunteers participated in the study
 DemTect	2	dementia screening devices is the DemTect
 WLRc	2	ord List Recognition (WLRc
-Thirty	2	Thirty patients who fulfilled the criteria for AD or aMCI
-Line	2	Judgement of Line Orientation Test 26
+Scale Part	2	Scale Part III (MDS-UPDRS III).
 Dopamine	2	Dopamine transporter SPECT scans
+Rey Auditory Verbal	2	Rey Auditory Verbal Learning Test (RAVLT
 PSQI	2	Pittsburgh sleep quality index (PSQI) questionnaire
+Wisconsin Card Sorting Test	2	Wisconsin Card Sorting Test
+Part	2	Unified Parkinson’s Disease Rating Scale motor score (UPDRS, Part III)
 LIDs	2	Specifically, in patients with LIDs during OFF phase, this region showed significant overactivity
 PSG	2	The objective of our study was to assess the sleep symptoms and PSG architecture before and after STN DBS in a group of patients with advanced PD.
+Constructional Praxis	2	Constructional Praxis, and Word List Memory
 mPFC	2	increased functional connectivity between the mPFC and the bilateral PCC (BA 29/30), and between the PCC and the right parahippocampus and anterior hippocampus (BA 36), than healthy elderly
 Low	2	Low path length and clustering values in frontoparietal areas were associated with impaired executive functioning.
-Movement	2	Movement Disorder Society’s diagnostic criteria for Parkinson’s Disease Dementia
 SMN	2	Statistically significant connectivity differences were identified only in the DMN and SMN components
 BA25	2	Also, a significant positive correlation was found between RAVLT-LTPR and brain metabolism in right posterior cingulate gyrus (BA31), in left (BA31) and right (BA7) precuneus, and in a bilateral orbitofrontal cluster including the left subcallosal gyrus (BA25) and the right inferior frontal gyrus (BA11 and BA47) (Fig. 3, Table 3).
 Episodic	2	Episodic memory – verbal: Fuld Object Memory Evaluation (FOME)
+Digit Span Forward	2	Digit Span Forward and Backward)
 CP	2	CP IR)
 rsFC	2	The four seed regions (ROIs) where the GMVs were positively correlated with the DB scores were selected for the rsFC analysis.
 rCMRGlc	2	ippocampal rCMRGlc correlated with immediate recall
 Twelve	2	Twelve PD patients with VH, 14 PD patients without VH and 12 controls participated in the follow-up assessment
 Apathetic	2	Apathetic PD patients had a smaller left nucleus accumbens than the two other groups did
-FAS	2	mmed the number of words the patient generated within one minute beginning with the letters F, A, and S (FAS).
+Modified Card Sorting Test	2	ecutive control (Frontal Assessment Battery, Modified Card Sorting Test and Stroop task),
 Eighteen	2	Eighteen AD patients with dementia severity of 0.5 (suspicious) or 1 (mild) based on the CDR
+AMY FC	2	the DPD patients exhibited increased left AMY FC with the bilateral mediodorsal thalamus (mdTHA) and increased right AMY FC with the left superior temporal gyrus (STG) and the calcarine gyrus
 CVFA	2	d 1 min CVFA (‘‘animal fluency’
-ERAD	2	ERAD Drawing test and the RBANS Figure Copy test
+United Kingdom	2	fulfilled the United Kingdom Parkinson’s Disease Brain Bank criteria for idiopathic
+Category	2	Category fluency verbal (CFVT) was tested for colours, animals, fruits and towns in four 2 min periods
 DRT	2	dopamine replacement therapy (DRT)
-Landmark	2	Subjects were asked to identify whether or not they had seen these objects or places (Landmark Recognition).
-Token	2	verbal fluency and language comprehension (Word List Generation, Token Test) a
-RBANS	2	ERAD Drawing test and the RBANS Figure Copy test
-Disability	2	Disability Assessment for Dementia
+Word List Recognition	2	Word List Learning, Constructional Praxis, Word List recall and Word List Recognition
+SPM	2	sites of significant SPM correlation between neuropsychological scores and brain perfusion SPECT.
+Apathy Evaluation Scale	2	Apathy Evaluation Scale
+Word List Recall	2	Word List Recall (WLR),
 BA11	2	Also, a significant positive correlation was found between RAVLT-LTPR and brain metabolism in right posterior cingulate gyrus (BA31), in left (BA31) and right (BA7) precuneus, and in a bilateral orbitofrontal cluster including the left subcallosal gyrus (BA25) and the right inferior frontal gyrus (BA11 and BA47) (Fig. 3, Table 3).
+Hamilton Rating Scale	2	Hamilton Rating Scale for Depression
 BDI	2	41 patients (38.0%) were assigned to the depressed PD group (BDI
-Daily	2	Bayer Activities of Daily Living Scale
+Logical	2	Wechsler Memory Scale-Revised Logical Memory I and II subtests
+pTau	2	extent of local pTau spread, and MI, as an indicator of local intraneuronal concentration of pTau
 PMv	2	temporal lobe, such as the fusiform gyrus (FG) and lateral occipital complex (LOC), MTG, clusters in the parietal lobe (SPL, SMG), including anterior and posterior parts of the intraparietal area, frontal activation, including PMv, PMd, insula lobule, and a cluster in the middle frontal gyrus (MFG)
-Korean	2	Korean Version of the Consortium to Establish a Registry for Alzheimer’s Disease Assessment Packet
+Letter	2	Letter fluency scores were positively and significantly correlated only with the left inferior frontal
 Sixteen	2	Sixteen neuropathologically confirmed [26] AD cases
 FEF	2	DAN in AD includes bilateral IPL, bilateral MFG and left precentral gyrus, which also involves the IPS and FEF regions
-Society	2	UK Parkinson’s disease Society Brain Bank criteria
+Apathy	2	Apathy is characterized by lack of interest, loss of initiative, indifference, and flattening of affect
+Society Brain Bank	2	UK Parkinson’s disease Society Brain Bank criteria
+Disability Assessment	2	Disability Assessment for Dementia
+Benton Visual Retention Test	2	Benton Visual Retention Test
 Twenty	2	Twenty healthy participants
 rCMRglc	2	significant inverse associations between the rCMRglc and the B-ADL scores were found in brain regions typically affected by pathology in LB-associated disorders, including the prefrontal, temporoparietal, and occipital association cortices and the precuneus.
-Ruff	2	Nonverbal fluency was assessed with the Ruff Figural Fluency Test
-Fatigue	2	Fatigue is a common problem in the general population
+Seoul Verbal	2	Seoul Verbal Learning Test
+TD	2	In the current study, we applied ReHo method to explore regional brain activity in TD and AR types during resting state, and hypothesized that parkinsonian tremor is mediated by a distinct neural network primarily involving the CTC pathway.
+Constructional Recall	2	Constructional Recall (C
 BA47	2	Also, a significant positive correlation was found between RAVLT-LTPR and brain metabolism in right posterior cingulate gyrus (BA31), in left (BA31) and right (BA7) precuneus, and in a bilateral orbitofrontal cluster including the left subcallosal gyrus (BA25) and the right inferior frontal gyrus (BA11 and BA47) (Fig. 3, Table 3).
+Executive	2	Executive functions
+Brain	2	Brain MRIs were obtained
 Sunderland	2	Sunderland.
+Functional Assessment Questionnaire	1	Functional Assessment Questionnaire
+Athwal	1	rating scale (Athwal et al., 2001):
 MDRS	1	Mattis Dementia Rating Scale (MDRS)
-Efficiency	1	Learning Efficiency Index (LEI)
+Mini Mental Status Examination	1	Mini Mental Status Examination (MMSE) (
 SYDBAT	1	Sydney Language Battery (SYDBAT
 Western	1	Western Aphasia Battery (WAB)
-Bayer	1	Bayer Activities of Daily Living Scale
+Nottingham Health	1	The Nottingham Health Profile (NHP)
 Praxis	1	onstructional Praxis subtest (CPT) of the C E R A D battery prior to death
 Levodopa	1	Levodopa remains the most effective oral treatment for Parkinson’s
 VAS	1	VAS and QST once outside the scanner
+Automatic	1	Automatic analysis of subcortical structures revealed that thalamic volumes were significantly reduced in PD patients with FOG compared with those without FOG after adjusting for age, sex, disease duration, UPDRS score, BDI and total intracranial volume
+Minnesota Impulsive Disorder Interview	1	Minnesota Impulsive Disorder Interview,
 Rest	1	Rest tremor
-Nottingham	1	The Nottingham Health Profile (NHP)
+Disease Society Brain Bank	1	UK Parkinson's Disease Society Brain Bank
+UPDRS III	1	improvement in the score of the UPDRS III was correlated with the improvement in the total PDQL
+Fig	1	non-hallucinating PD patients, in the left lingual gyrus (BA 18) and in the superior parietal lobe bilaterally (BA 7) (Table 2, Fig. 2).
 VLa	1	lateral part of the thalamus may be divided into ventral lateral anterior (VLa) and posterior (VLp) nuclei
 Postsurgery	1	Postsurgery, the UPDRS motor score during the off period was 58; it was 29 during the on period.
+Wechsler Adult Intelligence Scale Digit Span	1	attention or working memory, significant between-group differences were found on the Wechsler Adult Intelligence Scale Digit Span (backwards, raw)
+Daytime	1	Daytime sleepiness was estimated by the Epworth Sleepiness Scale (ESS
+Landmark Location	1	We found volumes that significantly correlated with Landmark Location scores in the right posterior hippocampus
 LSD	1	Fisher’s Least Significant Difference (LSD) test, revealed that for actions, naming performance was better during stimulation of both left
+ERAD Drawing	1	ERAD Drawing test and the RBANS Figure Copy test
+Rouleau Clock	1	The Rouleau Clock Scoring quantitative scale (RCS) 5 was used for the rating of clock drawings
+Mini Mental State	1	all participants the CDT and the Mini Mental State
 Continuous	1	Continuous electrode stimulation was required to ease the symptoms
-Berg	1	The Berg Balance Scale (BBS) was
+Color Trails	1	Color Trails Tests Parts I and II
+UK PD Society Brain Bank	1	UK PD Society Brain Bank diagnostic criteria
 Amygdale	1	Amygdale rCMRGlc correlated with the recognition memory for words
-Immunohistochemistry	1	Immunohistochemistry
+Yahr Scale	1	Hoehn and Yahr Scale
+Cookie Theft	1	The Cookie Theft picture from the Boston Diagnostic Aphasia Examination
 Patients	1	Patients included those with naMCI, aMCI-m, and aMCI-
 English	1	the phonemic fluency task, participants named words beginning with a specific letter (e.g., ‘‘s’’ in English and a different letter in the other language) in 1 min
 DSF	1	Digit Span Forward (DSF) and Backward (DSB) subtests of the Wechsler Memory ScaleeThird edition
 rsFCs	1	with the rsFCs
 CBF	1	CBF
+MC	1	MC (n = 54)
 Hassler	1	VLp partially corresponding to Hassler's ventral intermediate nucleus
-Palm	1	Pyramids and Palm Trees
+Core Assessment Protocol	1	Core Assessment Protocol for intracerebral
 MRIs	1	To explore these issues, we investigated structural brain MRIs of patients with Parkinson’s disease with and without MCI and dementia and healthy elderly volunteers using VBM.
+Cambridge Examination	1	The Cambridge Examination for Mental Disorders of the Elderly
+Heaton Visual	1	Heaton Visual Reproduction Test
 CTR	1	the contrary, significant hypometabolic clusters were found in aMCI subgroup in comparison with CTR in left (Brodmann areas = BA; BA7, BA19) and right (BA7) precuneus, in left inferior parietal lobule (BA39) and in left cingulate gyrus
 S1	1	S1 was the only brain area with reduced fMRI activation
 FC	1	For the MFG-PHC connection, FC remained a significant predictor of episodic memory in the aMCI and AD groups.
-Animal	1	Animal Naming, Modified Boston Naming Test [BNT
 Cortical	1	Cortical folding analysis demonstrated the presence of a decreased index of gyrification in the OFC in the PD patients with PG when compared to PD controls
 SMC	1	SMC (n = 32
 Volumetry	1	Volumetry
-Core	1	Core Assessment Protocol for intracerebral
+Berg Balance Scale	1	The Berg Balance Scale (BBS) was
+Social Anxiety Disorders	1	Social Anxiety Disorders (SAD)
+UK Parkinson	1	UK Parkinson's Disease Society Brain Bank
 PDRS	1	PDRS
+WL IR	1	Left hippocampal GMV correlated with memory tasks (WMS IR, WMS DR, WL IR, WL DR)
+CFVT	1	Category fluency verbal (CFVT) was tested for colours, animals, fruits and towns in four 2 min periods
+Tremor Type	1	Movement Disorders Consensus Statement on Tremor Type I or Type II classification
 FOME	1	Episodic memory – verbal: Fuld Object Memory Evaluation (FOME)
 MoCA	1	Montreal Cognitive Assessment (MoCA)
-Montreal	1	Montreal Cognitive Assessment (MoCA)
+Daily Living Scale	1	Bayer Activities of Daily Living Scale
+Shulman CDT	1	The Rouleau CDT and CLOX1 scored the clock drawings for the free-drawn method; the Shulman CDT scored the clock drawings for the pre-drawn method
 nCMRglc	1	analyses showed that the test scores correlated significantly with nCMRglc in the left inferior parietal lobule
 QUIP	1	Questionnaire for Impulsive-Compulsive Disorders in Parkinson’s disease (QUIP)-short form
 MMS	1	MMS
 SN	1	SN echogenicity and motor and non-motor characteristics in Chinese patients with PD.
+Movement Disorder	1	Movement Disorder Society’s diagnostic criteria for Parkinson’s Disease Dementia
 Meynert	1	The nucleus basalis of Meynert located in the substantia innominata (SI) of the basal forebrain provides the principal cholinergic input of the cortical areas and the pedunculopontine nucleus provides the major cholinergic input to the thalamus
 Le	1	Le
 ANIMALS	1	familiar semantic category, ie, ANIMALS
@@ -329,159 +358,315 @@ VOSP	1	visual object and space perception battery (VOSP): (i) incomplete letters
 Addenbrooke	1	Addenbrooke's Cognitive ExaminationeRevised
 Dutch	1	total immediate recall of the Dutch version of the Rey auditory verbal learning task (RAVLT)
 Virtual	1	Virtual reality navigation tasks are highly suitable for use in an MRI environment, and the widespread use of navigation tasks in healthy controls has identified regions that are reliably activated
-Stereotactic	1	In this study, we performed 3-dimensional stereotactic surface projection (3D-SSP) analysis of SPECT imaging data and Stereotactic Extraction Estimation (SEE) analysis to determine and quantify AD-specific hypoperfusion areas, and examined the regional cerebral blood flow (rCBF) decline associated with OT
 CLOX	1	the executive clock drawing task (CLOX
-Purdeu	1	Purdeu Pegboard Test
+Sleep	1	nternational Classification of Sleep Disorders-II criteria
+Danish Prostate Symptom Scor	1	the Danish Prostate Symptom Scor
+Warrington	1	Warrington short recognition memory tests (WRTM) for words and faces,
 CAl	1	but there was a weak correlation between the number of neurons in the parahippocampal gyrus and a stronger correlation with these in the hippocampus (CAl; Fig. 3) and locus coeruleus.
-IADLs	1	Activities of daily living (ADLs)/Instrumental Activities of daily living (IADLs)
+Semantic Fluencies	1	(Story Recall, Rey–Osterrieth Complex Figure recall), visuospatial abilities (Rey–Osterrieth Complex Figure copy, Clock Design), executive functions (Weigl’s Sorting Test, Phonemic and Semantic Fluencies, Frontal Assessment Battery) and attention (Number cancellation)
+Edinbur	1	Edinbur
+Philips	1	T1 images using a 3T Philips MRI scanner
 Dyskinesias	1	Dyskinesias were continuous but only mild
-NCs	1	34 healthy volunteers (NCs)
+UK	1	UK Parkinson’s disease Society Brain Bank criteria
 Nonverbal	1	Nonverbal fluency was assessed with the Ruff Figural Fluency Test
+Purdeu Pegboard Test	1	Purdeu Pegboard Test
+Ruff Figural Fluency Test	1	Nonverbal fluency was assessed with the Ruff Figural Fluency Test
 Model	1	between local graph property values and cognitive impairment with Model
 Buschke	1	In the present study, patients with a clinical diagnosis of AD were examined with high-resolution, quantitative MRI protocols as well as the verbal and spatial versions of the Buschke controlled
-CA2	1	an optimized design was implemented for sampling, measuring volume, measuring the size, and estimating the number of neurons in CA1 and CA2 subfields of the hippocampus using the optical dissector for cases with the pathological diagnosis of AD or IVD and normal control subjects.
+Spatial Span Forward	1	Visuospatial attention span and working memory were examined with the Spatial Span Forward (SSF) and Backward (SSB) subtests of the WMS-III
+Communication Disorders	1	National Institute of Neurological and Communication Disorders and Stroke/Alzheimer Disease and Related Disorders Association (NINCDS-ADRDA
+SOG	1	The network involved in controlling a functional grip and the manipulation of an object included the left LOC, a cluster in the left lateral part of the superior occipital gyrus (SOG) close to the parietal-occipital sulcus, SPL, and left PMd, the latter two matched the areas also described for the planning phase.
+GPi DBS	1	Patients 1–4 were scheduled for bilateral GPi DBS.
+Ruff Figural Fluency	1	Ruff Figural Fluency test
+Verbal Fluency Test	1	Verbal Fluency Test
 Todds	1	The Todds scoring system
 CLOX2	1	CLOX1 and CLOX2.
 TOOLS	1	One target category was natural (VEGETABLES) and one manufactured (TOOLS);
-Minnesota	1	Minnesota Impulsive Disorder Interview,
+Mental Control	1	Wechsler Memory Scale (WMS) Mental Control subtest
 White	1	White matter (WM) hyperintensities (WMH)
 PRC	1	pathology affects the more medial portion of the perirhinal cortex (PRC
+Epworth	1	Epworth sleepiness scale
 Fuld	1	the Fuld object-memory evaluation (
 PRI	1	MCI-AD group, the PRI score was significantly correlated with brain metabolism in the right lateral temporal cortex
 Contact	1	Contact heat stimulation
-Figs	1	We found a significant relationship between AT8 'load' in occipital cortex (area 18) and constructional apraxia such that those with the best figure copying ability had the least early neuritic pathology and those with the greatest copying impairment had the most AT8 pathology (see Figs. 2 and 3).
+Verbal Concept Formation Task	1	To study these issues, we designed a new experimental paradigm based on similarities, called the Verbal Concept Formation Task
+Order Memory	1	Order Memory scores correlated significantly with the volume of voxels in the inferior frontal gyrus, particularly on the left, and in the left superior frontal gyrus, but not in any part of the hippocampal or parahippocampal regions
 Task	1	Task performance correlated negatively with rCBF change in bilateral occipital cortex/fusiform gyrus
 R0	1	Contrasting R2 with R0 displayed activity relating to effortful retrieval, showing an extensive frontoparietal distribution of activity, involving both the SN and EN
+Figs	1	We found a significant relationship between AT8 'load' in occipital cortex (area 18) and constructional apraxia such that those with the best figure copying ability had the least early neuritic pathology and those with the greatest copying impairment had the most AT8 pathology (see Figs. 2 and 3).
 Sixty	1	Sixty consecutive patients with PD (
+Modified Columbia Scale	1	Modified Columbia Scale (MCS
 Logopenic	1	Logopenic progressive aphasia (lv-PPA) is a progressive language disorder characterised by hesitant speech, difficulties with word retrieval and sentence repetition and, in many cases, phonological speech errors
-Social	1	Social Anxiety Disorders (SAD)
+Type II	1	Movement Disorders Consensus Statement on Tremor Type I or Type II classification
 Simple	1	Simple linear correlation analysis produced generally similar results as those of multiple linear regression analysis
 APS	1	atypical parkinsonian syndromes (APS)
+Functional	1	Functional MRI
 vMPFC	1	i.e., the posterior cingulate cortex (PCC) and the ventromedial prefrontal cortex (vMPFC),
-Fluency	1	Verbal Fluency Tests
-Philips	1	T1 images using a 3T Philips MRI scanner
+Unified Parkinson Disease Rating Scale	1	Part III of the Unified Parkinson Disease Rating Scale (UPDRS-motor)
+IADLs	1	Activities of daily living (ADLs)/Instrumental Activities of daily living (IADLs)
 DaTscan	1	DaTscan SPECT
 FTLD	1	well as their extent in subjects suffering from AD or FTLD, using data corrected for PVE
 Phonemic	1	(Story Recall, Rey–Osterrieth Complex Figure recall), visuospatial abilities (Rey–Osterrieth Complex Figure copy, Clock Design), executive functions (Weigl’s Sorting Test, Phonemic and Semantic Fluencies, Frontal Assessment Battery) and attention (Number cancellation)
+Clock	1	(Story Recall, Rey–Osterrieth Complex Figure recall), visuospatial abilities (Rey–Osterrieth Complex Figure copy, Clock Design), executive functions (Weigl’s Sorting Test, Phonemic and Semantic Fluencies, Frontal Assessment Battery) and attention (Number cancellation)
+Sydney Language Battery	1	Sydney Language Battery (SYDBAT
+Boston Diagnostic Aphasia Examination	1	The Cookie Theft picture from the Boston Diagnostic Aphasia Examination
+Functional Activities Questionnaire	1	Functional Activities Questionnaire (23) and the Disability Assessment for Dementia
+Bayer Activities	1	Bayer Activities of Daily Living Scale
 IFC	1	What has therefore been proposed is that the MFC and IFC are implicated in the symptoms of LID patients that were previously thought to arise only in the primary motor circuit
+Chair Stand Test	1	Chair Stand Test score was greater after surgery (p < 0.05
 IQ	1	group of 10 healthy volunteers (6 male), age and IQ matched to the patients
+Yahr Rating Scale	1	Hoehn and Yahr Rating Scale
+NCs	1	34 healthy volunteers (NCs)
+Sun Java Swing	1	confrontation naming, naming from definition and reading tasks using Sun Java Swing
+Benton Facial Recognition Test	1	Visual Form Discrimination Test and Benton Facial Recognition Test;
+Amyloid	1	Amyloid plaques and neurofibrillary tangles are the pathologic hallmark of Alzheimer disease (AD).
 EF	1	EF was assessed by Trail Making Test B
+Paired	1	At 6 months after surgery, the ADL score was increased from 20.60±1.64 to 60.83±2.85 (Paired t-test) (p<0.05)
+Nine	1	Nine right-handed patients with mild AD (
+Assessment Scale Word List	1	Assessment Scale Word List Learning test and 30 minute delayed recall, 14
+Correlation	1	Correlation analyses revealed that PFS-16 scores were negatively correlated with SMA connectivity changes
 CST	1	At the same time, the participants performed the TUG and CST tests faster compared to before surgery.
-CFVT	1	Category fluency verbal (CFVT) was tested for colours, animals, fruits and towns in four 2 min periods
-Chair	1	Chair Stand Test score was greater after surgery (p < 0.05
+Logical Memory	1	Logical Memory (LM) subtest of the Wechsler Memory Scale, 3rd edition (WMS-III
+CA2	1	an optimized design was implemented for sampling, measuring volume, measuring the size, and estimating the number of neurons in CA1 and CA2 subfields of the hippocampus using the optical dissector for cases with the pathological diagnosis of AD or IVD and normal control subjects.
+Visual Form Discrimination Test	1	Visual Form Discrimination Test and Benton Facial Recognition Test;
+Alzheimer Disease	1	Consortium to Establish a Registry for Alzheimer Disease neuropsychological battery ( C E R A D
+Fatigue Severity Scale	1	Fatigue Severity Scale (FSS),
 SSF	1	Visuospatial attention span and working memory were examined with the Spatial Span Forward (SSF) and Backward (SSB) subtests of the WMS-III
+Odor	1	Odor discrimination was performed with the 16-item odor identification test from the extended version of sniffin' sticks
 SSB	1	Visuospatial attention span and working memory were examined with the Spatial Span Forward (SSF) and Backward (SSB) subtests of the WMS-III
 BA37	1	that metabolism in left anterior temporal [Brodmann’s area (BA) 21/38], posterior inferior temporal (BA37), inferior parietal (BA40) and medial occipital (BA19) areas was correlated with both verbal and nonverbal semantic performance.
+Olton Radial Arm	1	Olton Radial Arm
+Ventral	1	Ventral striatum
 BA39	1	the contrary, significant hypometabolic clusters were found in aMCI subgroup in comparison with CTR in left (Brodmann areas = BA; BA7, BA19) and right (BA7) precuneus, in left inferior parietal lobule (BA39) and in left cingulate gyrus
+Participants	1	Participants moved in a virtual circular arena containing a randomly arranged array of circular platforms positioned on the floor
+Black	1	and Black [13] (ranging from 0 to 3 points).
 IADL	1	IADL
+Stroop Interference Test	1	letter and category fluencies and the Stroop Interference Test
+Luria	1	contrasting programme, go-no-go test, Luria loop, phonemic and semantic Controlled Oral Word Association Test, and stroop test).
+CDT2	1	CDT2 group, the left posterolateral temporal cortex showed significantly lower rCBF
+Local	1	Local field potential
+CTC	1	In the current study, we applied ReHo method to explore regional brain activity in TD and AR types during resting state, and hypothesized that parkinsonian tremor is mediated by a distinct neural network primarily involving the CTC pathway.
+Semantic Knowledge	1	Language and Semantic Knowledge
 AIMS	1	and Abnormal Involuntary Movements Scale (AIMS).
+Poorer	1	Poorer performance on FAB was associated with lower metabolic activity in the bilateral middle temporal gyri (BA 21/37/39), bilateral middle frontal gyri (BA 6/9), left inferior parietal lobule (BA 39/40), right angular gyrus (BA 39), and right precuneus (BA19) regions
+Landmark Recognition	1	Subjects were asked to identify whether or not they had seen these objects or places (Landmark Recognition).
 SEE	1	In this study, we performed 3-dimensional stereotactic surface projection (3D-SSP) analysis of SPECT imaging data and Stereotactic Extraction Estimation (SEE) analysis to determine and quantify AD-specific hypoperfusion areas, and examined the regional cerebral blood flow (rCBF) decline associated with OT
-Aphasia	1	Western Aphasia Battery (WAB)
-Olton	1	Olton Radial Arm
+Atrophy	1	Atrophy of the hippocampal formation
+Amnestic	1	Amnestic mild cognitive impairment aMCI
+Illness Rating Scale	1	mulative Illness Rating Scale (CIRS)
 FRS	1	The Frontotemporal Dementia Rating Scale (FRS)
 WAIS	1	similarities subtest of the WAIS
 BBS	1	The Berg Balance Scale (BBS) was
-CDT2	1	CDT2 group, the left posterolateral temporal cortex showed significantly lower rCBF
 TUG	1	At the same time, the participants performed the TUG and CST tests faster compared to before surgery.
+Volumetric	1	Volumetric determination of SI
+Span	1	Span tasks, which may include either numbers or words, require the additional temporary storage of items, which is underpinned mainly by verbal short-term memory
 DF	1	DF generated greater activity than DB in precuneus (BA 7), posterior cingulate cortex (BA 31), bilateral middle temporal gyrus (BA 19), orbital gyrus (BA 11 and 10), left fusiform gyrus (BA 20), right supramarginal gyrus (BA 40), and right middle and inferior temporal gyrus
 DG	1	AD, increased PSD of LFF of right CA1 and DG correlated with cortical thinning of right and left ventral PCC, respective
+Map Drawing	1	quiet place in the waiting room and were first asked to draw the route on a map (Map Drawing).
 LTPR	1	(LTPR = (Delayed recall score / Trial 5 score
+Maze	1	Maze in an fMRI study comparing
+Edinburgh Handedness Inventory	1	Edinburgh Handedness Inventory [28].
+Lille Apathy Rating Scale	1	Lille Apathy Rating Scale (LARS
+Rey CFT	1	SVLT immediate recall score was correlated with left superior temporal gyrus and Rey CFT delayed recall score was correlated with left inferior frontal gyrus (BA 47), right inferior frontal gyrus, and left lentiform nucleus by xjView, as shown in Table
+Half	1	Half of the results were correct and half were incorrect.
 lFEF	1	For the core regions in the DAN, the resting activity intensity in the left IPS (lIPS) and left FEF (lFEF) are sensitive and specific to the disease
+Bonferroni	1	Using Bonferroni correction, the total recall of the FCSRT was significantly
+Healthy	1	Healthy control subjects
+Benton	1	assessed using the tests and scores proposed by Benton et al.
+Part III	1	Part III of the Unified Parkinson Disease Rating Scale (UPDRS-motor)
+Category Fluency Test	1	Category Fluency Test
+Folstein	1	Folstein Mini-mental State Examination
+Mean	1	Mean hippocampal cross-sectional area, a proxy for total hippocampal volume (see Section Hippocampus), correlated with delayed recall but not with delayed recognition
+Portuguese	1	presented, through their earphones, with a list of 12 common Portuguese word
+Fifty	1	Fifty cognitively intact healthy normal controls (NC
+Brief Visuospatial	1	the Brief Visuospatial Memory Test-Revised
+Thirteen	1	Thirteen (4 male, 9 female) healthy older adults
 QST	1	VAS and QST once outside the scanner
 PDSS	1	The Parkinson’s disease sleep scale (PDSS)
 MCS	1	Modified Columbia Scale (MCS
 MCP	1	posterior to the midcommissural point (MCP = mid-AC (commissura anterior)–PC (commissura
-Lille	1	Lille Apathy Rating Scale (LARS
+Rey Complex Figure Tes	1	Rey Complex Figure Tes
+Ratin	1	Ratin
+TBSS	1	With DTI, we utilise the TBSS processing strategy to determine a white matter skeleton, then create cingulum and fornix regions of interest (ROIs) overlaid on the skeleton.
+Passive	1	The sentence-repetition task included five sentences each of six sentence types (Active, Passive, Object-Subject, Object-Object, Subject-Subject, and Subject-Object) for a total of 30
 PAG	1	As expected, the hypothesis-driven ROI-analyses on the contrast bladder filling versus empty bladder (independent of STN-DBS) yielded increased neural activity in the PAG
+Test	1	Test
+Immunohistochemistry	1	Immunohistochemistry
+Wisconsin Card	1	Wisconsin Card
+Parkinson Disease Rating Scale	1	Parkinson Disease Rating Scale
+See Experimental	1	study used a 2 (number versus alphabet) × 2 (forward versus backward recitation) design (See Experimental procedures).
+DRS	1	DRS Initiation/Perseveration
 OFF	1	Specifically, in patients with LIDs during OFF phase, this region showed significant overactivity
-aSyn	1	a strong association was found between aSyn burden in the amygdaloid complex
+Warrington Recognition Memory	1	Warrington Recognition Memory for Faces;
+WMS IR	1	Left hippocampal GMV correlated with memory tasks (WMS IR, WMS DR, WL IR, WL DR)
+TMT B	1	TMT B (
+Disease Rating Scale	1	Disease Rating Scale (UPDRS-III).
+FDG PET	1	To address this issue, we investigated the neural correlates of delayed episodic verbal memory by FDG PET in patients with MCI.
 PHC	1	we found higher strength of FC between the right MFG and the PHC to be associated with reduced episodic memory performance in aMCI
 GPe	1	the GPe
 PHG	1	However, additional activity was seen above threshold bilaterally in parahippocampal gyri (PHG).
 CAMCOG	1	MMSE and the CAMCOG battery
+Executive Systems	1	Executive Systems Functioning
 FCNs	1	unctional connectivity networks (FCNs),
 lGI	1	n fact, we found a significant reduction of lGI in the left OFC
-Sydney	1	Sydney Language Battery (SYDBAT
+Steiger	1	We found that for LM, a test of verbal contextual memory, delayed recall correlated with CA1-SRLM width better on the left (p<0.01 by Steiger's Z; Table 3), and delayed recognition correlated with ERC width better on the left
+MRI Scanning	1	MRI Scanning and Quantification
 Performance	1	Performance on the RBANS Figure Copy test correlated significantly with normalized FDG uptake in eight clusters with main peaks
-TBSS	1	With DTI, we utilise the TBSS processing strategy to determine a white matter skeleton, then create cingulum and fornix regions of interest (ROIs) overlaid on the skeleton.
+Stereotactic Extraction Estimation	1	In this study, we performed 3-dimensional stereotactic surface projection (3D-SSP) analysis of SPECT imaging data and Stereotactic Extraction Estimation (SEE) analysis to determine and quantify AD-specific hypoperfusion areas, and examined the regional cerebral blood flow (rCBF) decline associated with OT
+Ambulatory Care Center	1	Subjects were taken on a novel route through one floor of the Ambulatory Care Center
+Semantic Memory Test Battery	1	included verbal and nonverbal tests of semantic knowledge comparable to parts of the Semantic Memory Test Battery published by
+PC	1	PC correlated with higher metabolic activity in bilateral inferior frontal gyrus (IFG), pars triangularis, right superior frontal gyrus (SFG)/ premotor cortex, left middle temporal gyrus (MTG), and right occipital lobe
+Animal Naming	1	Animal Naming, Modified Boston Naming Test [BNT
 EFR	1	emotional facial recognition (EFR)
 Parietal	1	Parietal right GMV as well as both-sided occipital GMVs correlated with the score in constructive praxis.
-Heaton	1	Heaton Visual Reproduction Test
+Brief Social Phobia Scale	1	Brief Social Phobia Scale
+Japanese	1	The patient was presented with a blank sheet of paper and verbally instructed to “Draw a 10-cm diameter clock that says 11:10, with all numbers” in Japanese.
+Inclusion	1	Inclusion criteria included a diagnosis of probable AD (amnestic presentation) according to the National Institute on Aging-Alzheimer's Association criteria
 Abnormal	1	and Abnormal Involuntary Movements Scale (AIMS).
+DSM	1	DSM IV-TR
 Statistical	1	who met the Diagnostic and Statistical Manual-IV (DSM-IV) criteria for depressive disorders,
+Stroop Task	1	Stroop Task, which provides participants with 3 different conditions (word reading, color naming
+WMS DR	1	Left hippocampal GMV correlated with memory tasks (WMS IR, WMS DR, WL IR, WL DR)
 Faces	1	Warrington Recognition Memory for Faces;
-SNþ	1	To identify which items of UPDRS part II correlated with SNþ, Spearman's correlation analysis was performed and this indicated
+Barratt Impulsivity Scale	1	the Barratt Impulsivity Scale
+Palm Trees	1	Pyramids and Palm Trees
+Subjects	1	Subjects performed a block design version of the RVIP task.
+Letter Fluency	1	Letter Fluency (CFL:
 BSPS	1	DAT-BP was significantly correlated to scores on BSPS for right putamen
+Moderate	1	Moderate, but statistically significant correlations, were obtained for the BNT and both L and R hippocampal volumes
+DVR	1	tively related to performance on DVR as well
 VRT	1	The only common measure of delayed recall available for all the study subjects was the VRT.
+Salmon	1	Salmon et al. [9]
 lIPS	1	For the core regions in the DAN, the resting activity intensity in the left IPS (lIPS) and left FEF (lFEF) are sensitive and specific to the disease
 Active	1	The sentence-repetition task included five sentences each of six sentence types (Active, Passive, Object-Subject, Object-Object, Subject-Subject, and Subject-Object) for a total of 30
+Amnestic Mild Cognitive Impairment	1	Amnestic Mild Cognitive Impairment (aMCI)
 RBD1Q	1	RBD Single-Question screen (RBD1Q
 Comparison	1	Comparison of hippocampal gray matter density between PD+VH and controls showed significant differences only in the head of hippocampus (Table 3).
+Center	1	The stimuli used in the action and object picture-naming tasks were taken from the Center for Research in Language-International Picture-Naming Project corpus CRL-IPNP
 Spearman	1	To identify which items of UPDRS part II correlated with SNþ, Spearman's correlation analysis was performed and this indicated
 LFPs	1	We recorded LFPs from the VLp and surface EMGs from the contralateral forearm during implantation of DBS electrodes in patients with ET and tremordominant PD
-Illness	1	mulative Illness Rating Scale (CIRS)
-MC	1	MC (n = 54)
+Beck Anxiety Inventory	1	Beck Anxiety Inventory (BAI)
+Word List	1	Word List Learning, Constructional Praxis, Word List recall and Word List Recognition
+PSP Rating Scale	1	PSP Rating Scale
 Tesla	1	Tesla scanner
 Elderly	1	ambridge Mental Disorders of the Elderly Examination
-Communication	1	National Institute of Neurological and Communication Disorders and Stroke/Alzheimer Disease and Related Disorders Association (NINCDS-ADRDA
+Questionnaire	1	Questionnaire for Impulsive-Compulsive Disorders in Parkinson’s disease (QUIP)-short form
+Communicative Disease	1	National Institute of Neurological and Communicative Disease and Stroke and Alzheimer’s disease (NINCDS-ADRDA)
+Additional	1	Additional significant activations were observed in the calcarine sulcus (primary visual cortex V1),
 AIP	1	parietal cortex, the SPL, SMG, and the inferior parietal lobe, including the AIP, showed a specification for the tool conditions compared with bars
+Word List Generation	1	verbal fluency and language comprehension (Word List Generation, Token Test) a
 RCS	1	The Rouleau Clock Scoring quantitative scale (RCS) 5 was used for the rating of clock drawings
 WASI	1	Wechsler Abbreviated Scale of Intelligence (WASI
+Brain Bank	1	Brain Bank criteria
 WST	1	Abstract reasoning was evaluated by Weigl’s sorting test (WST)
-Assessment	1	Assessment Scale Word List Learning test and 30 minute delayed recall, 14
-SOG	1	The network involved in controlling a functional grip and the manipulation of an object included the left LOC, a cluster in the left lateral part of the superior occipital gyrus (SOG) close to the parietal-occipital sulcus, SPL, and left PMd, the latter two matched the areas also described for the planning phase.
-Barratt	1	the Barratt Impulsivity Scale
+Wechsler Abbreviated Scale	1	Wechsler Abbreviated Scale of Intelligence (WASI
+Luria Mental Rotation Test	1	Spatial thinking was assessed with the Luria Mental Rotation Test
 PPN	1	Therefore, the aim of the present retrospective study was to investigate the PPN region and one of its projection areas, the thalamus, by means of voxel-based morphometry in these patients.
+Blinking	1	Blinking was recorded
+Montreal Cognitive Assessment	1	Montreal Cognitive Assessment (MoCA)
+Geriatric Depression Scale	1	the Geriatric Depression Scale
+Copy	1	Copy of the Rey figure
 PDSBB	1	All patients fulfilled the UK PD Society Brain Bank (PDSBB) criteria for PD
+Wechsler Adult Intelligence	1	Wechsler Adult Intelligence Scale-III
+Grey	1	Grey matter volume in patients with Alzheimer’s disease was significantly decreased in the left and right parahippocampal gyri and in the right thalamus when compared to controls.
+IV	1	UPDRS part I, II, III, IV, V, and VI
+Activity	1	Activity in the right inferior frontal gyrus extended across the premotor cortex
+Dementia Rating Scale	1	The Dementia Rating Scale
+UPDRS II	1	items 5 and 17 of the UPDRS II
+Wechsler Logical Memory	1	Wechsler Logical Memory test
+Braak	1	in the DLPFC to determine how they relate to psychosis, Braak stage, and cognition
+Aphasia Battery	1	Western Aphasia Battery (WAB)
+United Kingdon	1	diagnostic criteria of the Parkinson’s Disease Society Brain Bank of the United Kingdon
+Table	1	SVLT immediate recall score was correlated with left superior temporal gyrus and Rey CFT delayed recall score was correlated with left inferior frontal gyrus (BA 47), right inferior frontal gyrus, and left lentiform nucleus by xjView, as shown in Table
+Mattis Dementia Rating Scal	1	Mattis Dementia Rating Scal
 Physical	1	The Physical Self-Maintenance Scale
+ERAD	1	ERAD
 BA	1	the contrary, significant hypometabolic clusters were found in aMCI subgroup in comparison with CTR in left (Brodmann areas = BA; BA7, BA19) and right (BA7) precuneus, in left inferior parietal lobule (BA39) and in left cingulate gyrus
-DRS	1	DRS Initiation/Perseveration
+Global Deterioration Scal	1	Global Deterioration Scal
+aSyn	1	a strong association was found between aSyn burden in the amygdaloid complex
+TD Client	1	and TD Client.
 Handwriting	1	Handwriting was assessed “off” medication after an overnight withdrawal of dopaminergic medication
 FSCRT	1	Three-dimensional hippocampal maps showed significant positive correlations between scores in both free and total recall on the FSCRT and atrophy in regions approximately corresponding to the CA1 field of the left hippocampus, and to a smaller extent with the right hippocampus
+CERAD Drawing	1	The assessment of constructional praxis in the CERAD Drawing test requires copying four line drawings of figures of increasing complexity (a circle, a diamond, intersecting rectangles, and a cube);
+Diagnostic	1	who met the Diagnostic and Statistical Manual-IV (DSM-IV) criteria for depressive disorders,
+rCBF SPECT	1	two rCBF SPECT scans within the same session
 ADLs	1	Activities of daily living (ADLs)/Instrumental Activities of daily living (IADLs)
+Memory Test	1	erbal Learning and Memory Test (
+United Kingdom Brain Bank	1	United Kingdom Brain Bank Criter
+Mini Mental	1	(as measured by the Mini Mental
 Nelson	1	Sorting Test using Nelson's
+Rey Osterrieth Complex Figure	1	and the Rey Osterrieth Complex Figure (ROCF) test
+England	1	Schwab and England scale (S&E)
 AnCOVA	1	VBM analyses, investigating the neuroanatomical changes occurring when the three groups were analyzed together (one-way AnCOVA analysis), revealed the presence of two significant clusters (surviving threshold corrected for multiple comparisons within ROIs): bilateral OFC and ACC
+SNþ	1	To identify which items of UPDRS part II correlated with SNþ, Spearman's correlation analysis was performed and this indicated
 Smaller	1	Smaller clusters were found in the right middle and inferior frontal gyri, the left superior frontal gyrus and the left rectal gyrus.
-Geriatric	1	the Geriatric Depression Scale
+Digit Span Backwards	1	Digit Span Backwards test
 VEGETABLES	1	One target category was natural (VEGETABLES) and one manufactured (TOOLS);
+CERAD Delayed Word Recall Test	1	The number of words (out of 10) recalled on the CERAD Delayed Word Recall Test provided the measure of delayed verbal recall used as the dependent variable in the analyses.
 FSS	1	Fatigue Severity Scale (FSS),
 Identify	1	Identify cognitive-behavioral profiles of LBD and tauopathies using the neuropsychological test battery described by the Consortium to Establish a Registry of Alzheimer’s Disease (CERAD).
+Rouleau CDT	1	The Rouleau CDT and CLOX1 scored the clock drawings for the free-drawn method; the Shulman CDT scored the clock drawings for the pre-drawn method
 Pentagon	1	Pentagon drawings of Mini-Mental-State-Examination
+Wechsler Memory Scales	1	Wechsler Memory Scales,
 Longitudinal	1	Longitudinal data with
-Sun	1	confrontation naming, naming from definition and reading tasks using Sun Java Swing
-CTC	1	In the current study, we applied ReHo method to explore regional brain activity in TD and AR types during resting state, and hypothesized that parkinsonian tremor is mediated by a distinct neural network primarily involving the CTC pathway.
+Disease Society Brain Bank Clinical	1	the UK Parkinson's Disease Society Brain Bank Clinical diagnostic criteria
 Controls	1	Controls (n = 30
 Between	1	Between group comparison of cerebral glucose metabolism revealed in the MCI patients compared to the controls a significant reduction of glucose metabolism in the left parietal cortex
 EEG	1	Here, we report our findings of the spectral analysis of the EEG and hippocampal volumes measured in a magnetic resonance imaging (MRI) scan for two subgroups of AD
+Line Orientation	1	Judgement of Line Orientation Test 26
+Life	1	evaluate the benefit of bilateral STN stimulation on quality of life using a health-specific scale, the PD Quality of Life (PDQL) scale
+Line Orienta	1	visualespatial skills (Judgment of Line Orienta
 Pittsburgh	1	Pittsburgh sleep quality index (PSQI) questionnaire
-DVR	1	tively related to performance on DVR as well
+Evaluation	1	Evaluation was, however, performed only once 1 month before surgery and at 1, 3, 6, and 12 months after surgery
+Mini Mental State Examinati	1	Mini Mental State Examinati
+Fifteen	1	Fifteen Alzheimer’s patients were recruited from the Alzheimer’s Disease
+Daily Living Inventory	1	Alzheimer’s Disease Cooperative Study-Activities of Daily Living Inventory (ADCS-ADL
+Trail Making Task	1	Trail Making Task
+Clinical Dementia Rating Scale	1	Clinical Dementia Rating Scale
+FRONTIER	1	Consecutive participants diagnosed as either PPA or amnestic AD were recruited through FRONTIER
+Demential Rating Scale	1	Global and Memory scores, as well as Demential Rating Scale score, correlated with the number of neurons in CA1
 Hoen	1	Hoen and Yahr stage was 3.8 ^ 0.7
 CMRglc	1	The purpose of this study is to determine whether there are any anatomical correlates of disorientation for time and place in patients with Alzheimer’s disease by using PET studies of regional cerebral glucose metabolism (CMRglc).
+Naming	1	Naming was tested by asking the participant to name 30 different color photographs of graded difficulty.
 SUP	1	between SUP and metabolic activity of right IFG, pars triangularis, left SFG, right supplementary motor area (SMA), right IFG, pars opercularis, left middle cingulate, and left angular gyrus.
-Cookie	1	The Cookie Theft picture from the Boston Diagnostic Aphasia Examination
-Danish	1	the Danish Prostate Symptom Scor
+England ADL	1	Hoehn and Yahr staging, Schwab and England ADL, timed tests including time to walk 4.5 m,
+Korean	1	reading, writing, comprehension, repetition, confrontational naming using the Korean version of the Boston Naming Test
+Korean Version	1	Korean Version of the Consortium to Establish a Registry for Alzheimer’s Disease Assessment Packet
+Rapid Visual Information	1	iations of the Rapid Visual Information Processing task [
 GMP	1	voxel-wise correlation analysis revealed a significant correlation after correction for gray matter probability (GMP) – between AB size and D2-like receptor binding in the dorsal striatum, bilaterally and in the vicinity of the caudate nucleus and globus pallidus
 CIRS	1	mulative Illness Rating Scale (CIRS)
 GDS	1	The GDS score was positively correlated with NFT densities in areas 7, 9, 24 and 23
+Word List Learning	1	Word List Learning, Constructional Praxis, Word List recall and Word List Recognition
+Ten	1	Ten
 LEI	1	Learning Efficiency Index (LEI)
 WRTM	1	Warrington short recognition memory tests (WRTM) for words and faces,
 Gastrointestinal	1	Gastrointestinal (GI) dysfunction is one of the most common non-motor symptom of Parkinson's disease
+Beck Depression Inventory Scale	1	Beck Depression Inventory Scale (
 Immunocytochemistry	1	Immunocytochemistry
+Fluency Tests	1	Verbal Fluency Tests
 BA20	1	The Low-BNT group showed a circumscribed area of greater atrophy in the left anterior fusiform gyrus extending into the adjacent inferior temporal gyrus [within Brodmann area 20 (BA20)] at each of the three time points
 MSQ	1	Mayo sleep questionnaire (MSQ
+Stroop Word	1	Stroop Word
 MSE	1	MSE
-Map	1	quiet place in the waiting room and were first asked to draw the route on a map (Map Drawing).
-Type	1	Movement Disorders Consensus Statement on Tremor Type I or Type II classification
+PD Rating Scale Part	1	Unified PD Rating Scale Part III.
+SPECT Imaging All	1	SPECT Imaging All patients and/or
+Movement Disorders Consensus Statement	1	Movement Disorders Consensus Statement on Tremor Type I or Type II classification
 Mayo	1	Mayo sleep questionnaire (MSQ
+Modified Boston	1	Animal Naming, Modified Boston Naming Test [BNT
+Fatigue	1	Fatigue is a common problem in the general population
+England Test	1	The Schwab and England Test was used to evaluate the daily living activities (ADL)
 LFVT	1	Letter fluency verbal (LFVT)
+rCBF of AD	1	study, we aimed to compare the rCBF of AD patients with good and poor performances on the TMT-A, and to investigate the neural substrate involved in the performance of AD patients on the TMT-A.
 FPC	1	the left FPC,
-Edinburgh	1	Edinburgh Handedness Inventory [28].
+Goldberg Graphical Sequence	1	Goldberg Graphical Sequence Test-Dementia Version
+Neuropsychiatric Inventory	1	Neuropsychiatric Inventory (NPI
 AR	1	In contrast to TD patients, AR subjects exhibited higher ReHo v
 BA40	1	that metabolism in left anterior temporal [Brodmann’s area (BA) 21/38], posterior inferior temporal (BA37), inferior parietal (BA40) and medial occipital (BA19) areas was correlated with both verbal and nonverbal semantic performance.
+Surface EMG	1	Surface EMG was used to measure the neuromuscular activity in the extensor digitorum and the flexor digitorum superficialis
 GFA	1	general fractional anisotropy (GFA)
 VST	1	the visual search test (VST), which assesses sustained attention
-Color	1	Color Trails Tests Parts I and II
-Sleep	1	nternational Classification of Sleep Disorders-II criteria
+Efficiency Index	1	Learning Efficiency Index (LEI)
+Verbal Fluency	1	Verbal Fluency modified Boston Naming Test
 BVRT	1	Benton Visual Retention Test (BVRT)
 Spanish	1	VH was rated using the Spanish version of the neuropsychiatric inventory (NPI) (subscale hallucinations).
 PSMS	1	PSMS
