@@ -4,6 +4,14 @@
 		tmining = {
 			server_prefix: "http://honghan.info/pn-tmining/summaries/",
 
+			load_text: function(file_path){
+				var url = tmining.server_prefix + file_path
+				console.log(url)
+				$('#loadDiv').load(url, function(){
+					alert('done loading.')
+				});
+			},
+
 			load_script: function(file_path, method, sendData, success, error){
 				var url = tmining.server_prefix + file_path
 				console.log(url)
