@@ -22,7 +22,7 @@ thread_num_highlights = 10
 # extract highlights from a PDF file
 def extract_pdf_highlights(pdf_path, output_path):
     p, f = split(pdf_path)
-    result_file = join(output_path, f[:f.find('.')] + '_ht.json')
+    result_file = join(output_path, f[:f.rfind('.')] + '_ht.json')
     if isfile(result_file):
         print('{} highlights extracted previously, skip'.format(result_file))
         return
