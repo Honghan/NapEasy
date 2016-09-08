@@ -11,6 +11,7 @@ import nltk
 from nltk.parse.stanford import StanfordParser
 import ann_utils as utils
 import threading
+import pickle
 
 # the lock for gain access to the shared variable
 thread_lock = threading.Lock()
@@ -21,7 +22,7 @@ stanford_language_model_file = "/Users/jackey.wu/Documents/working/libraries/" \
                    "edu/stanford/nlp/models/lexparser/englishPCFG.ser.gz"
 
 # pattern output folder
-pattern_output_folder = './training/patterns/'
+pattern_output_folder = './training/'
 
 
 class SubjectPredicate:
@@ -169,12 +170,21 @@ def analysis_ann(ann_file):
         plt.savefig(os.path.join(path, base + '_ontos.pdf'))
 
 
-def plot_two_sets_data(y1_values, y2_values):
-    x1_values = [random.uniform(0, 10) for y in y1_values]
-    x2_values = [random.uniform(0, 10) for y in y2_values]
+def plot_two_sets_data(value_pairs, file_to_save=None):
+
     plt.clf()
-    all_sents = plt.scatter(x1_values, y1_values, s=80, facecolors='none', edgecolors='r')
-    ht_sents = plt.scatter(x2_values, y2_values, s=80, facecolors='none', edgecolors='g', marker='^')
+    i = 0
+    f, axarr = plt.subplots(len(value_pairs), sharex=True)
+    for pair in value_pairs:
+        x1_values = [random.uniform(0, 10) for y in pair[0]]
+        x2_values = [random.uniform(0, 10) for y in pair[1]]
+        axarr[i].scatter(x1_values, pair[0], s=80, facecolors='none', edgecolors='r')
+        axarr[i].scatter(x2_values, pair[1], s=80, facecolors='none', edgecolors='g', marker='^')
+        if len(pair) >= 3:
+            axarr[i].set_title(pair[2])
+        i += 1
+    if file_to_save is not None:
+        pickle.dump(axarr, file(file_to_save, 'w'))
     plt.show()
 
 
@@ -184,7 +194,7 @@ def extract_cd_nouns_nes(ht, cd_nouns, name_entities, noun_evidence=None, ne_evd
     namedEnt = nltk.ne_chunk(pr, binary=True)
     for ent in namedEnt:
         if type(ent) == nltk.tree.Tree and ent.label() == 'NE':
-            e = ent[0][0]
+            e = u' '.join(e[0] for e in ent)
             name_entities[e] = 1 if e not in name_entities else 1 + name_entities[e]
             if ne_evd is not None and name_entities[e] == 1:
                 ne_evd[e] = ht
@@ -223,9 +233,9 @@ def analyse_highlighted_text(ht_file):
 
     print('cardinal noun and named entity patterns saved')
 
-    sp_container = {}
-    utils.multi_thread_tasking(anns, 15, analysis_sentence_struct, args=[sp_container],
-                               callback_func=serialise_pred_obj_json)
+    # sp_container = {}
+    # utils.multi_thread_tasking(anns, 15, analysis_sentence_struct, args=[sp_container],
+    #                            callback_func=serialise_pred_obj_json)
 
 
 def serialise_text_file(data_dict, evd_dict, file_name):
@@ -327,6 +337,7 @@ def sort_sub_pred(sp_file):
     print(json.dumps(sps))
 
 if __name__ == "__main__":
-    analyse_highlighted_text('./training/hts.json')
+    analyse_highlighted_text('./training/full_hts.json')
     # sort_sub_pred('./training/sub_pred.json')
+
 
