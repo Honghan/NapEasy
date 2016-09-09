@@ -10,7 +10,7 @@
 		$('#file_list').on('change', function() {
 			tmining.load_text(this.value);
 		});
-
+		$('#file_list option:eq(0)').prop('selected', true);
 		tmining.load_text($("#file_list option:selected").text());
 	})
 
