@@ -44,7 +44,7 @@
 				if (summ.hasOwnProperty('findings'))
 					s += tmining.render_typed_sentence('findings', summ.findings);
 				if (summ.hasOwnProperty('general'))
-					s += tmining.render_typed_sentence('general', summ.findings);
+					s += tmining.render_typed_sentence('general', summ.general);
 				$('.summary').html(s);
 			},
 
