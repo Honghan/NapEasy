@@ -6,16 +6,13 @@
 			cur_file: "",
 			load_text: function(file_path){
 				tmining.cur_file = file_path;
-				// var url = tmining.server_prefix + file_path;
-				// console.log(url)
-				// $('#loadDiv').load(url, function(){
-				// 	eval("var summ = " + $('#loadDiv').html());
-				// 	console.log(summ);
-				// 	tmining.render_summary(summ);
-				// });
-				eval("var summ = " + $('#loadDiv').html());
-				console.log(summ);
-				tmining.render_summary(summ);
+				var url = tmining.server_prefix + file_path;
+				console.log(url)
+				$('#loadDiv').load(url, function(){
+					eval("var summ = " + $('#loadDiv').html());
+					console.log(summ);
+					tmining.render_summary(summ);
+				});
 			},
 
 			load_script: function(file_path, method, sendData, success, error){
