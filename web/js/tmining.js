@@ -6,7 +6,7 @@
 			cur_file: "",
 			load_text: function(file_path){
 				tmining.cur_file = file_path;
-				var url = tmining.server_prefix + file_path;
+				var url = tmining.server_prefix + encodeURIComponent(file_path);
 				console.log(url)
 				$('#loadDiv').load(url, function(){
 					eval("var summ = " + $('#loadDiv').html());
