@@ -18,8 +18,7 @@ h1{font-size: 26px;}
 
 .div-table{
   display:table;         
-  width:auto;              
-  border:1px solid  #666666;         
+  width:100%;                       
   border-spacing:5px;/*cellspacing:poor IE support for  this*/
 }
 .div-table-row{
@@ -30,9 +29,11 @@ h1{font-size: 26px;}
 .div-table-col{
   float:left;/*fix for  buggy browsers*/
   display:table-column;
+  text-align: center;
 }
 .div-table-col.flist{width: 300px}
 .div-table-col.summ{width: 600px}
+.label {font-size: 16px;margin: 6px;text-align: center;}
 </style>
 </head>
 
@@ -41,10 +42,12 @@ h1{font-size: 26px;}
       <div class="div-table">
              <div class="div-table-row">
                 <div class="div-table-col flist" align="center">
+                	<div class="label">Paper List</div>
                 	<select id='file_list' size="20">
                 	</select>
                 </div>
                 <div  class="div-table-col summ">
+                	<div class="label">Paper Summarisation</div>
                 	<h1 class="title"></h1>
 					<div class="summary"></div>
 				</div>
