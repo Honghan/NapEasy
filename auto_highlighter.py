@@ -2,7 +2,7 @@ import json
 import ann_analysor as aa
 import codecs
 import ann_utils as utils
-from os.path import split, join
+from os.path import split, join, isfile
 
 res_file_cd = './resources/cardinal_Noun_patterns.txt'  #'./training/patterns/cardinal_noun.txt'
 res_file_ne = './resources/named_entities.txt' # './training/patterns/named_entities.txt'
@@ -46,7 +46,7 @@ class HighLighter:
             scores['sp'] = 0
         scores['total'] = scores['cd'] + scores['ne'] + scores['sp']
         scores['pattern'] = {'cds': cd_nouns, 'nes': named_entities}
-        if sub is not None and pred is not None:
+        if sub is not None or pred is not None:
             scores['pattern']['sub'] = sub
             scores['pattern']['pred'] = pred
             scores['pattern']['sp_index'] = -1 if sp not in self.sp else self.sp[sp]['index']
@@ -59,38 +59,49 @@ class HighLighter:
             container.append(scores)
         return scores
 
-    def summarise(self, sentences, src=None, sids=None):
+    def get_sentence_cat(self, scores):
+        cats = []
+        if 'sp_index' in scores['pattern']:
+            if scores['pattern']['sp_index'] != -1:
+                for cat in self.sp_cats:
+                    if scores['pattern']['sp_index'] in self.sp_cats[cat]:
+                        cats.append(cat)
+        if len(cats) == 0:
+            if scores['cd'] > 0 or scores['ne'] > 0:
+                cats.append('method')
+        if len(cats) == 0:
+            cats.append('general')
+        return cats[0]
+
+    def summarise(self, sentences, src=None, sids=None, score_dict=None):
         threshold = 1
         summary = {}
         i = 0
         scores_list = []
         for sent in sentences:
             cats = []
-            scores = self.score(sent, doc_id=src, sid=None if sids is None else sids[i])
+            sid = None if sids is None else sids[i]
+            sent = sent.replace('\n', '').strip()
+
+            scores = score_dict[str(i+1)] if score_dict is not None and sid is not None else \
+                self.score(sent, doc_id=src, sid=sid)
+            # scores = self.score(sent, doc_id=src, sid=sid)
+            scores['sid'] = str(i+1)
+            i += 1
             scores_list.append(scores)
             if scores['total'] < threshold:
                 continue
-            if 'sp_index' in scores['pattern']:
-                if scores['pattern']['sp_index'] != -1:
-                    for cat in self.sp_cats:
-                        if scores['pattern']['sp_index'] in self.sp_cats[cat]:
-                            cats.append(cat)
-            if len(cats) == 0:
-                if scores['cd'] > 0 or scores['ne'] > 0:
-                    cats.append('method')
-            if len(cats) == 0:
-                cats.append('general')
-
-            cat = cats[0]
+            cat = self.get_sentence_cat(scores)
             summary[cat] = [(sent, scores)] if cat not in summary else summary[cat] + [(sent, scores)]
-            i += 1
+            # i += 1
 
         if 'goal' in summary and 'method' in summary and 'general' in summary:
             summary.pop('general', None)
 
+        num_sents_per_cat = 2
         for cat in summary:
-            summary[cat] = HighLighter.pick_top_k(summary[cat], 2) if cat == 'goal' \
-                else HighLighter.pick_top_k(summary[cat], 2)
+            summary[cat] = HighLighter.pick_top_k(summary[cat], 100) if cat == 'findings' \
+                else HighLighter.pick_top_k(summary[cat], num_sents_per_cat)
         print json.dumps(summary)
         return summary, scores_list
 
@@ -189,19 +200,34 @@ def visualise_result(f1, f2):
 def summ(ann_file, highlighter, out_path):
     anns = utils.load_json_data(ann_file)
     p, fn = split(ann_file)
-    summary, scores = highlighter.summarise([s['text'] for s in anns], src=ann_file, sids=[s['sid'] for s in anns])
-    utils.save_json_array(scores, join(out_path, fn[:fn.rfind('.')] + '_scores.json'))
+    score_file = join(out_path, fn[:fn.rfind('.')] + '_scores.json')
+    sid_to_score = None
+    # if isfile(score_file):
+    #     stored_scores = utils.load_json_data(score_file)
+    #     i = 1
+    #     for score in stored_scores:
+    #         sid_to_score[str(i)] = score
+    #         i += 1
+
+    summary, scores = highlighter.summarise([s['text'] for s in anns], src=ann_file, sids=[s['sid'] for s in anns],
+                                            score_dict=sid_to_score)
+    # if not isfile(score_file):
+    utils.save_json_array(scores, score_file)
     utils.save_json_array(summary, join(out_path, fn[:fn.rfind('.')] + '.sum'))
 
 
 def summarise_all_papers(ann_path, summ_path):
     her = HighLighter.get_instance()
-    utils.multi_thread_process_files(ann_path, '', 10, summ,
+    utils.multi_thread_process_files(ann_path, '', 6, summ,
                                      args=[her, summ_path],
                                      file_filter_func=lambda f: f.endswith('_ann.json'))
 
-# visualise_result('./training/test/non_hts_scores.json', './training/test/hts_scores.json')
-summarise_all_papers('./anns_v2/', './summaries/')
-# summ('./anns_v2/Allert et al., (2011) - Role of dysphagia in evaluating PD for STN-DBS._annotated_ann.json',
-#     HighLighter.get_instance(),
-#      './summaries/')
+if __name__ == "__main__":
+    # visualise_result('./training/test/non_hts_scores.json', './training/test/hts_scores.json')
+    summarise_all_papers('./anns_v2/', './summaries/')
+    # summ('./anns_v2/Ahn et al., (2011) - The cortical neuroanatomy of neuropsychological deficits in MCI and AD_annotated_ann.json',
+    #     HighLighter.get_instance(),
+    #      './summaries/')
+    # ht = HighLighter.get_instance()
+    # sum, scores = ht.summarise([u'This is in agreement with findings from volumetric magnetic resonance ima- ging (MRI) studies which to date have provided clear evidence that hippocampal atrophy is a valuable method to support the clinical diagnosis of early AD [14, 22, 27, 28, 37].'])
+    # print scores
