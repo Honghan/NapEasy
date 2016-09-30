@@ -12,6 +12,7 @@ res_file_spcat = './resources/sub_pred_categories.json'
 
 parser_lock = threading.RLock()
 
+
 class HighLighter:
 
     def __init__(self, parser, ne_res, cardinal_noun_res, sub_pred_res, sub_pred_cats=None):
@@ -40,8 +41,8 @@ class HighLighter:
             if 10 < slen < 500:
                 sub = None
                 pred = None
-                with parser_lock:
-                    sub, pred = aa.analysis_sentence_text(self.stanford_parser, sent_text)
+                # with parser_lock:
+                sub, pred = aa.analysis_sentence_text(self.stanford_parser, sent_text)
                 sp = aa.SubjectPredicate(sub, pred)
                 scores['sp'] = 0 if sp not in self.sp else self.sp[sp]['freq']
             else:
@@ -155,21 +156,25 @@ def load_resources(ne_file, cd_file, sp_file, sp_cat_file=None):
     return ne, cd, sp, sp_cats
 
 
-def score_sentence(item, her, container, out_file=None):
+def score_sentence(her, item, container, out_file=None):
     her.score(item['text'], doc_id=item['src'], sid=item['sid'], container=container)
 
 
 def do_highlight(test_file):
-    print('initialising highlighter instance...')
-    her = HighLighter.get_instance()
-    print('highlighter instance initialised')
+    thread_nums = 5
+    hters = []
+    for i in range(thread_nums):
+        print('initialising highlighter instance...')
+        hters.append(HighLighter.get_instance())
+        print('highlighter instance initialised')
     data = None
     with codecs.open(test_file, encoding='utf-8') as rf:
         data = json.load(rf)
     scores = []
     out_file = test_file[:test_file.rfind('.')] + "_scores.json"
     print('multithreading...')
-    utils.multi_thread_tasking(data, 5, score_sentence, args=[her, scores, out_file],
+    utils.multi_thread_tasking(data, thread_nums, score_sentence, args=[scores, out_file],
+                               thread_wise_objs=hters,
                                callback_func=lambda hl, s, of: utils.save_json_array(s, of))
     print('multithreading started')
 
@@ -204,7 +209,7 @@ def visualise_result(f1, f2):
                                                       threshold)
 
 
-def summ(ann_file, highlighter, out_path):
+def summ(highlighter, ann_file, out_path):
     anns = utils.load_json_data(ann_file)
     p, fn = split(ann_file)
     score_file = join(out_path, fn[:fn.rfind('.')] + '_scores.json')
@@ -224,9 +229,13 @@ def summ(ann_file, highlighter, out_path):
 
 
 def summarise_all_papers(ann_path, summ_path):
-    her = HighLighter.get_instance()
-    utils.multi_thread_process_files(ann_path, '', 6, summ,
-                                     args=[her, summ_path],
+    thread_num = 6
+    hters = []
+    for i in range(thread_num):
+        hters.append(HighLighter.get_instance())
+    utils.multi_thread_process_files(ann_path, '', thread_num, summ,
+                                     args=[summ_path],
+                                     thread_wise_objs=hters,
                                      file_filter_func=lambda f: f.endswith('_ann.json'))
 
 if __name__ == "__main__":

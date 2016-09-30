@@ -24,7 +24,8 @@ relation_pos_list = [
 # list files in a folder and put them in to a queue for multi-threading processing
 def multi_thread_process_files(dir_path, file_extension, num_threads, process_func,
                                proc_desc='processed', args=None, multi=None,
-                               file_filter_func=None, callback_func=None):
+                               file_filter_func=None, callback_func=None,
+                               thread_wise_objs=None):
     onlyfiles = [f for f in listdir(dir_path) if isfile(join(dir_path, f))]
     num_pdfs = 0
     files = None if multi is None else []
@@ -42,12 +43,14 @@ def multi_thread_process_files(dir_path, file_extension, num_threads, process_fu
             num_pdfs += 1
     if files is not None and len(files) > 0:
         lst.append(files)
-    multi_thread_tasking(lst, num_threads, process_func, proc_desc, args, multi, file_filter_func, callback_func)
+    multi_thread_tasking(lst, num_threads, process_func, proc_desc, args, multi, file_filter_func,
+                         callback_func,
+                         thread_wise_objs=thread_wise_objs)
 
 
 def multi_thread_tasking(lst, num_threads, process_func,
                                proc_desc='processed', args=None, multi=None,
-                               file_filter_func=None, callback_func=None):
+                               file_filter_func=None, callback_func=None, thread_wise_objs=None):
     num_pdfs = len(lst)
     pdf_queque = Queue.Queue(num_pdfs)
     print('putting list into queue...')
@@ -58,7 +61,12 @@ def multi_thread_tasking(lst, num_threads, process_func,
     arr.insert(0, pdf_queque)
     print('queue filled, threading...')
     for i in range(thread_num):
-        t = threading.Thread(target=multi_thread_do, args=tuple(arr))
+        tarr = arr[:]
+        thread_obj = None
+        if thread_wise_objs is not None and isinstance(thread_wise_objs, list):
+            thread_obj = thread_wise_objs[i]
+        tarr.insert(0, thread_obj)
+        t = threading.Thread(target=multi_thread_do, args=tuple(tarr))
         t.daemon = True
         t.start()
 
@@ -69,11 +77,14 @@ def multi_thread_tasking(lst, num_threads, process_func,
         callback_func(*tuple(args))
 
 
-def multi_thread_do(q, func, *args):
+def multi_thread_do(thread_obj, q, func, *args):
     while True:
         p = q.get()
         try:
-            func(p, *args)
+            if thread_obj is not None:
+                func(thread_obj, p, *args)
+            else:
+                func(p, *args)
         except Exception, e:
             print u'error doing {0} on {1} \n{2}'.format(func, p, str(e))
         q.task_done()
