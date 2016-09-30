@@ -3,23 +3,26 @@ import ann_analysor as aa
 import codecs
 import ann_utils as utils
 from os.path import split, join, isfile
+import threading
 
 res_file_cd = './resources/cardinal_Noun_patterns.txt'  #'./training/patterns/cardinal_noun.txt'
 res_file_ne = './resources/named_entities.txt' # './training/patterns/named_entities.txt'
 res_file_sp = './resources/sub_pred.txt' # './training/patterns/sub_pred.json'
 res_file_spcat = './resources/sub_pred_categories.json'
 
+parser_lock = threading.RLock()
 
 class HighLighter:
 
-    def __init__(self, ne_res, cardinal_noun_res, sub_pred_res, sub_pred_cats=None):
+    def __init__(self, parser, ne_res, cardinal_noun_res, sub_pred_res, sub_pred_cats=None):
         self.ne = ne_res
         self.card = cardinal_noun_res
         self.sp = sub_pred_res
         self.sp_cats = sub_pred_cats
-        print('loading stanford parser...')
-        self.stanford_parser = aa.create_stanford_parser_inst()
-        print('stanford parser loaded')
+        self.stanford_parser = parser
+        # print('loading stanford parser...')
+        # self.stanford_parser = aa.create_stanford_parser_inst()
+        # print('stanford parser loaded')
 
     def score(self, sent_text, doc_id=None, sid=None, container=None):
         scores = {'cd': 0, 'ne': 0, 'sp': 0}
@@ -35,7 +38,10 @@ class HighLighter:
         try:
             slen = len(sent_text)
             if 10 < slen < 500:
-                sub, pred = aa.analysis_sentence_text(self.stanford_parser, sent_text)
+                sub = None
+                pred = None
+                with parser_lock:
+                    sub, pred = aa.analysis_sentence_text(self.stanford_parser, sent_text)
                 sp = aa.SubjectPredicate(sub, pred)
                 scores['sp'] = 0 if sp not in self.sp else self.sp[sp]['freq']
             else:
@@ -117,8 +123,9 @@ class HighLighter:
     # get the instance of this class
     @staticmethod
     def get_instance():
+        parser = aa.create_stanford_parser_inst()
         ne, cd, sp, cats = load_resources(res_file_ne, res_file_cd, res_file_sp, res_file_spcat)
-        return HighLighter(ne, cd, sp, cats)
+        return HighLighter(parser, ne, cd, sp, cats)
 
 
 def read_text_res(res_file):
