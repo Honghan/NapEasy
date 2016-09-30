@@ -5,6 +5,15 @@ import threading
 import json
 import codecs
 import nltk
+import requests
+import re
+from pyquery import PyQuery as pq
+
+# ncbi etuils url
+ncbi_service_url = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?' \
+                   'db=pubmed&term={}&field=title&retmode=json'
+ncbi_pubmed_url = 'https://www.ncbi.nlm.nih.gov/pubmed/?term={}'
+ncbi_host = 'https://www.ncbi.nlm.nih.gov'
 
 relation_pos_list = [
                 'RB', 'RBR', 'RBS',
@@ -65,8 +74,8 @@ def multi_thread_do(q, func, *args):
         p = q.get()
         try:
             func(p, *args)
-        except:
-            print u'error doing {0} on {1}'.format(func, p)
+        except Exception, e:
+            print u'error doing {0} on {1} \n{2}'.format(func, p, str(e))
         q.task_done()
 
 
@@ -149,13 +158,77 @@ def save_sentences(non_hts, hts, output_path):
     print('all done [training size: {0}, testing size: {1}]'.format(trainin_len, total_num - trainin_len))
 
 
+def add_pmcid_to_sum(sum_file_path):
+    summ = load_json_data(sum_file_path)
+    # if 'PMID' in summ:
+    #     return
+    p, fn = split(sum_file_path)
+    m = re.match(r'[^()]+\(\d+\) \- (.+)_annotated_ann\.sum', fn)
+    pmcid = None
+    journal = None
+    if m is not None:
+        # ret = json.loads(requests.get(ncbi_service_url.format(m.group(1))).content)
+        cnt = requests.get(ncbi_pubmed_url.format(m.group(1))).content
+        doc = pq(cnt)
+
+        # check whether it is a list of search results
+        results = doc(".result_count.left").eq(0)
+        if results.html() is not None:
+            dom_str = doc(".rslt > .title").eq(0)
+            if dom_str is not None and dom_str.html() is not None:
+                pmcid = extract_pubmed(dom_str.html())
+
+            j_elem = doc(".jrnl").eq(0)
+            if j_elem is not None and j_elem.html() is not None:
+                journal = j_elem.html()
+        else:
+            dom_str = doc(".rprtid").eq(0)
+            if dom_str is not None and dom_str.html() is not None:
+                pmcid = extract_pubmed(dom_str.html())
+            j_elem = doc(".cit").eq(0)
+            if j_elem is not None and j_elem.html() is not None:
+                m1 = re.findall(r'alterm="([^"]*)"', str(j_elem.html()))
+                if m1 is not None:
+                    if len(m1) > 0:
+                        journal = m1[0][0:len(m1[0])-1]
+        # if p is not None and len(p.strip()) > 0:
+
+        # if ret is None or len(ret['esearchresult']['idlist']) == 0:
+        #     print 'no pmc id found for {}'.format(sum_file_path)
+        # else:
+        #     pmcid = ret['esearchresult']['idlist']
+    summ['PMID'] = pmcid
+    if journal is not None:
+        journal = pq(journal).text()
+    summ['journal'] = journal
+    print pmcid, journal, sum_file_path
+    save_json_array(summ, sum_file_path)
+
+
+def extract_pubmed(html_str):
+    pmcid = None
+    m1 = re.findall(u'("/pubmed/(\d+)")|(PMID:</dt>.+XInclude">(\d+)</dd>)', html_str)
+    if m1 is not None:
+        if len(m1[0][1]) > 0:
+            pmcid = m1[0][1]
+        elif len(m1[0][3]) > 0:
+            pmcid = m1[0][3]
+    return pmcid
+
+
+def process_pmcids(sum_folder):
+    multi_thread_process_files(sum_folder, 'sum', 3, add_pmcid_to_sum)
+
+
 def main():
-    ann_to_training('./anns_v2', './training')
+    # ann_to_training('./anns_v2', './training')
     # sents = [
     #     'The control group was comprised of 15 elderly community dwelling individuals of comparable age and educational background',
     #     'This resulted in data of 172 participants to be included in the present study.'
     # ]
     # relation_patterns(sents[0])
+    add_pmcid_to_sum('./summaries/Foster et al., (1986) - Cerebral mapping of apraxia in AD by PET_annotated_ann.sum')
+    # process_pmcids('./summaries/')
 
 if __name__ == "__main__":
     main()
