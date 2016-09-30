@@ -12,6 +12,11 @@ from nltk.parse.stanford import StanfordParser
 import ann_utils as utils
 import threading
 import pickle
+import plotly.graph_objs as go
+import plotly.plotly as py
+from plotly import tools
+from auto_highlighter import HighLighter
+
 
 # the lock for gain access to the shared variable
 thread_lock = threading.Lock()
@@ -336,8 +341,117 @@ def sort_sub_pred(sp_file):
     sps = sorted(sps, cmp=lambda sp1, sp2: sp2[1] - sp1[1])
     print(json.dumps(sps))
 
+
+# parse the annotation results to extract geometric features
+def geometric_analysis(ann_file, container, out_file, highlighter):
+    p, fn = os.path.split(ann_file)
+
+    score_file = os.path.join('./summaries/', fn[0:fn.rfind('.')] + '_scores.json')
+    scores = utils.load_json_data(score_file)
+    sent_scores = {}
+    for s in scores:
+        sent_scores[s['sid']] = s
+
+    anns = utils.load_json_data(ann_file)
+    ht_obj = {'total': len(anns), 'ht_sids': [], 'sect_dict': {}, 'sects': {},
+              'page_dict': {}, 'total_page': 0, 'id': ann_file, 'sid_cat':{}}
+    sect = ''
+    last_sid = ''
+    for ann in anns:
+        if 'marked' in ann and len(ann['marked'])>0:
+            ht_obj['ht_sids'].append(ann['sid'])
+            if 'struct' in ann:
+                ht_obj['sect_dict'][ann['struct']] = [ann['sid']] if ann['struct'] not in ht_obj['sect_dict'] else \
+                    ht_obj['sect_dict'][ann['struct']] + [ann['sid']]
+            if 'page' in ann:
+                ht_obj['page_dict'][ann['page']] = [ann['sid']] if ann['page'] not in ht_obj['page_dict'] else \
+                    ht_obj['page_dict'][ann['page']] + [ann['sid']]
+            ht_obj['sid_cat'][ann['sid']] = highlighter.get_sentence_cat(sent_scores[ann['sid']])
+        if 'page' in ann:
+            ht_obj['total_page'] = ann['page']
+        if ann['struct'] != sect:
+            if sect.strip() != '':
+                ht_obj['sects'][sect]['end'] = last_sid
+            sect = ann['struct']
+            ht_obj['sects'][ann['struct']] = {'star': ann['sid']}
+        last_sid = ann['sid']
+        if int(ann['sid']) > ht_obj['total']:
+            ht_obj['total'] = int(ann['sid'])
+
+    ht_obj['sects'][sect]['end'] = last_sid
+    sum_file = os.path.join('./summaries/', fn[0:fn.rfind('.')] + '.sum')
+    sum = utils.load_json_data(sum_file)
+    if 'journal' in sum:
+        ht_obj['journal'] = sum['journal']
+    else:
+        ht_obj['journal'] = 'J.'
+    container.append(ht_obj)
+
+
+# used as call back functions when all (multi-threaded processed) geometric features are put in the container
+def post_process_geometric_analysis(container, output_file, hter):
+    print json.dumps(container)
+    utils.save_json_array(container, output_file)
+    print 'geometric features of all annotations extracted and saved'
+
+
+# entry function to extract geometric features from annotations
+def extract_geometrics(annotation_files_path, gm_feature_output_file):
+    ret_container = []
+    hter = HighLighter.get_instance()
+    utils.multi_thread_process_files(annotation_files_path, '', 10, geometric_analysis,
+                                     args=[ret_container, gm_feature_output_file, hter],
+                                     file_filter_func=lambda fn: fn.endswith('_ann.json'),
+                                     callback_func=post_process_geometric_analysis)
+
+
+def visualise_highlights_geometric(geo_feature_file, fn):
+    gms = utils.load_json_data(geo_feature_file)
+    subplots = {}
+    for paper in gms:
+        j = paper['journal']
+        if j not in subplots:
+            subplots[j] = []
+        traces = subplots[j]
+        y_vals = []
+        x_vals = []
+        sects = paper['sect_dict']
+        for y in sects:
+            for x in sects[y]:
+                x_vals.append(1.0 * int(x) / int(paper['total']))
+                y_vals.append(y)
+        traces.append({'x': x_vals, 'y': y_vals})
+    plots = []
+    for j in subplots:
+        if len(subplots[j]) >= 6 and j is not None:
+            m_x = []
+            m_y = []
+            for d in subplots[j]:
+                m_x += d['x']
+                m_y += d['y']
+            plots.append(go.Scatter(
+                x=m_x,
+                y=m_y,
+                mode='markers',
+                name=j if j is not None else 'unknown'
+            ))
+
+    fig = tools.make_subplots(rows=len(plots), cols=1, shared_xaxes=True)
+    for i in range(len(plots)):
+        fig.append_trace(plots[i], i + 1, 1)
+    fig['layout'].update(height=600, width=600)
+    py.plot(fig, filename=fn)
+
+
 if __name__ == "__main__":
-    analyse_highlighted_text('./training/full_hts.json')
+    # analyse_highlighted_text('./training/full_hts.json')
     # sort_sub_pred('./training/sub_pred.json')
+    extract_geometrics('./anns_v2/', './training/geo_features.json')
+    # hter = HighLighter.get_instance()
+    # ctn = []
+    # geometric_analysis('./anns_v2/Allert et al., (2011) - Role of dysphagia in evaluating PD for STN-DBS._annotated_ann.json',
+    #                    ctn, None, hter)
+    # print json.dumps(ctn)
+    # visualise_highlights_geometric('./training/geo_features.json', 'ht_geometric_features')
 
 
