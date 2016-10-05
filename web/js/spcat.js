@@ -11,7 +11,7 @@
 
             s += "<div class='pattern-content'>";
             for (var cat in sp_cats){
-                var idx = sp_cats[cat].indexOf(i);
+                var idx = sp_cats[cat].indexOf("" + i);
                 s += "<input type='checkbox' index='" + i + "' name='" + cat + "' " +
                     (idx >= 0 ? "checked" : "") + "/>" + cat + " ";
             }
