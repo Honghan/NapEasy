@@ -35,7 +35,7 @@
                     ret[cat] = [$(this).attr('index')];
             });
             $('#catJson').val($.toJSON(ret));
-            $('#catJson').slideDown();
+            $('#catJson').show();
 		});
 	})
 
