@@ -11,7 +11,7 @@
 
             s += "<div class='pattern-content'>";
             for (var cat in sp_cats){
-                var idx = sp_cats[cat].indexOf("" + i);
+                var idx = sp_cats[cat].indexOf(i);
                 s += "<input type='checkbox' index='" + i + "' name='" + cat + "' " +
                     (idx >= 0 ? "checked" : "") + "/>" + cat + " ";
             }
@@ -30,9 +30,9 @@
             $( "input:checked" ).each(function(){
                 var cat = $(this).attr('name');
                 if (cat in ret)
-                    ret[cat].push($(this).attr('index'));
+                    ret[cat].push(parseInt($(this).attr('index')));
                 else
-                    ret[cat] = [$(this).attr('index')];
+                    ret[cat] = [parseInt($(this).attr('index'))];
             });
             $('#catJson').val($.toJSON(ret));
             $('#catJson').show();
