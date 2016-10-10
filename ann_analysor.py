@@ -16,6 +16,7 @@ import plotly.graph_objs as go
 import plotly.plotly as py
 from plotly import tools
 from auto_highlighter import HighLighter
+import math
 
 
 # the lock for gain access to the shared variable
@@ -351,7 +352,6 @@ def geometric_analysis(ann_file, container, out_file, highlighter):
     sent_scores = {}
     for s in scores:
         sent_scores[s['sid']] = s
-
     anns = utils.load_json_data(ann_file)
     ht_obj = {'total': len(anns), 'ht_sids': [], 'sect_dict': {}, 'sects': {},
               'page_dict': {}, 'total_page': 0, 'id': ann_file, 'sid_cat':{}}
@@ -366,7 +366,7 @@ def geometric_analysis(ann_file, container, out_file, highlighter):
             if 'page' in ann:
                 ht_obj['page_dict'][ann['page']] = [ann['sid']] if ann['page'] not in ht_obj['page_dict'] else \
                     ht_obj['page_dict'][ann['page']] + [ann['sid']]
-            ht_obj['sid_cat'][ann['sid']] = highlighter.get_sentence_cat(sent_scores[ann['sid']])
+            ht_obj['sid_cat'][ann['sid']] = highlighter.get_sentence_cat_bd(sent_scores[ann['sid']])
         if 'page' in ann:
             ht_obj['total_page'] = ann['page']
         if ann['struct'] != sect:
@@ -405,7 +405,7 @@ def extract_geometrics(annotation_files_path, gm_feature_output_file):
                                      callback_func=post_process_geometric_analysis)
 
 
-def visualise_highlights_geometric(geo_feature_file, fn):
+def visualise_highlights_geometric(geo_feature_file, fn, cat):
     gms = utils.load_json_data(geo_feature_file)
     subplots = {}
     for paper in gms:
@@ -416,10 +416,12 @@ def visualise_highlights_geometric(geo_feature_file, fn):
         y_vals = []
         x_vals = []
         sects = paper['sect_dict']
+        sid_cat = paper['sid_cat']
         for y in sects:
             for x in sects[y]:
-                x_vals.append(1.0 * int(x) / int(paper['total']))
-                y_vals.append(y)
+                if sid_cat[x] == cat:
+                    x_vals.append(1.0 * int(x) / int(paper['total']))
+                    y_vals.append(y)
         traces.append({'x': x_vals, 'y': y_vals})
     plots = []
     for j in subplots:
@@ -443,15 +445,478 @@ def visualise_highlights_geometric(geo_feature_file, fn):
     py.plot(fig, filename=fn)
 
 
+def visualise_categorised_geometric(geo_feature_file, fn):
+    gms = utils.load_json_data(geo_feature_file)
+    journal2cat = {}
+    journal2papers = {}
+    # cat_trace = {}
+
+    for paper in gms:
+        j = paper['journal']
+        journal2cat[j] = {} if j not in journal2cat else journal2cat[j]
+        cat_trace = journal2cat[j]
+        journal2papers[j] = [j, 1] if j not in journal2papers else [j, 1 + journal2papers[j][1]]
+        sects = paper['sect_dict']
+        sid_cat = paper['sid_cat']
+        for y in sects:
+            for x in sects[y]:
+                cat = sid_cat[x]
+                if cat not in cat_trace:
+                    cat_trace[cat] = {'x':[], 'y':[]}
+                trace = cat_trace[cat]
+                trace['x'].append(1.0 * int(x) / int(paper['total']))
+                trace['y'].append(y)
+
+    sorted_journals = sorted([journal2papers[j] for j in journal2papers], cmp=lambda jp1, jp2 : jp2[1] - jp1[1])
+    print sorted_journals
+    print len(sorted_journals)
+
+    selected_j = sorted_journals[1][0]
+
+    cat_trace = journal2cat[selected_j] # skip the no-journal paper group
+    traces = []
+    for cat in cat_trace:
+        traces.append(go.Scatter(
+                x=cat_trace[cat]['x'],
+                y=cat_trace[cat]['y'],
+                mode='markers',
+                name=cat
+            ))
+    # print traces
+    layout = go.Layout(
+        title=selected_j + ' - language pattern breakdown'
+    )
+    fig = go.Figure(data=traces, layout=layout)
+    # py.plot(fig, filename=fn + ' - ' + selected_j)
+
+
+def get_general_highlights():
+    geos = utils.load_json_data('./training/geo_features.json')
+    sents = []
+    for g in geos:
+        f_ann = g['id']
+        sids = []
+        for sid in g['sid_cat']:
+            if g['sid_cat'][sid] == 'general':
+                sids.append(sid)
+        if len(sids) > 0:
+            anns = utils.load_json_data(f_ann)
+            for ann in anns:
+                if ann['sid'] in sids:
+                    sents.append({'text': ann['text'], 'marked': ann['marked'] if 'marked' in ann else ''})
+    utils.save_json_array(sents, './training/general_highlights.json')
+
+
+def get3DCords(score_file, container, out_file, hter):
+    scores = utils.load_json_data(score_file)
+    anns = utils.load_json_data(scores[0]['doc_id'])
+    sids = []
+    for ann in anns:
+        if 'marked' in ann:
+            sids.append(ann['sid'])
+    for s in scores:
+        if s['sid'] not in sids:
+            continue
+        cat = hter.get_sp_type(s)
+        p = s['pattern']
+        nes = sorted(list(set([k for k in p['nes']])))
+        cds = sorted(list(set([k for k in p['cds']])))
+        container.append({'x': cat,
+            #                   'N/A' if 'sp_index' not in p or p['sp_index'] == -1 else \
+            # '-'.join(p['sub'] if p['sub'] is not None else []) + ' ' + \
+            # '-'.join(p['pred'] if p['pred'] is not None else []),
+                          'y': len(nes),
+                          'z': len(cds)
+                          # 'y': 'N/A' if len(p['nes']) == 0 else ' '.join(nes),
+                          # 'z': 'N/A' if len(p['cds']) == 0 else ' '.join(cds),
+                          })
+
+
+def pp_3D(container, out_file, hter):
+    x = []
+    y = []
+    z = []
+    marker2freq = {}
+    max_freq = 0
+    keys = []
+    for p in container:
+        k = '{} {} {}'.format(p['x'], p['y'], p['z'])
+        if k not in marker2freq:
+            x.append(p['x'])
+            y.append(p['y'])
+            z.append(p['z'])
+            marker2freq[k] = 1
+            keys.append(k)
+        else:
+            marker2freq[k] += 1
+        if marker2freq[k] > max_freq:
+            max_freq = marker2freq[k]
+
+    print 'max freq is %s ' % max_freq
+    print json.dumps(marker2freq)
+    markers = []
+    for k in keys:
+        markers.append(int(math.log(1024 * marker2freq.get(k), 2)))
+    trace2 = go.Scatter3d(
+        x=x,
+        y=y,
+        z=z,
+        mode='markers',
+        marker=dict(
+            size=markers,
+            line=dict(
+                color='rgba(217, 217, 217, 0.14)',
+                width=0.5
+            ),
+            opacity=0.8
+        )
+    )
+    layout = go.Layout(
+        margin=dict(
+            l=0,
+            r=0,
+            b=0,
+            t=0
+        ),
+        scene=dict(
+            xaxis=dict(
+                title='Sub-Pred Type'
+            ),
+            yaxis=dict(
+                title='#Named Entities'
+            ),
+            zaxis=dict(
+                title='#Cardinal Nouns'
+            )
+        )
+    )
+
+    fig = go.Figure(data=[trace2], layout=layout)
+    py.plot(fig, filename='3D')
+    # utils.save_json_array(container, out_file)
+
+
+def visualise_highlights_3D(annotation_files_path, out_file):
+    ret_container = []
+    hter = HighLighter.get_instance()
+    utils.multi_thread_process_files(annotation_files_path, '', 10, get3DCords,
+                                     args=[ret_container, out_file, hter],
+                                     file_filter_func=lambda fn: fn.endswith('_scores.json'),
+                                     callback_func=pp_3D)
+
+
+def get_stats_obj():
+    return {'ht': {'sp': {}, 'ne': {}, 'cd': {}}, 'nm': {'sp': {}, 'ne': {}, 'cd': {}}, 's_nm': 0, 's_ht': 0}
+
+
+def get_language_pattern_stats(score_file, container, out_file, hter):
+    scores = utils.load_json_data(score_file)
+    max_sid = int(scores[len(scores) - 1]['sid'])
+    units = 5
+    offset = int(1.0 * max_sid / units)
+    anns = utils.load_json_data(scores[0]['doc_id'])
+
+    b_marked = False
+    ranges = []
+    r = {'sids': [], 's': 0, 'seq': 0}
+    ranges.append(r)
+    for i in range(len(anns)):
+        if (i + 1) % offset == 0:
+            r['e'] = i - 1
+            r = {'sids': [], 's': i, 'seq': (i + 1) / offset}
+            ranges.append(r)
+        ann = anns[i]
+        if 'marked' in ann:
+            b_marked = True
+            r['sids'].append(ann['sid'])
+    r['e'] = len(anns) - 1
+
+    if not b_marked:
+        return
+
+    for r in ranges:
+        sids = r['sids']
+        stats = get_stats_obj()
+        stats['s_nm'] = r['e'] - r['s'] - len(sids)
+        stats['s_ht'] = len(sids)
+        for i in range(r['s'], r['e']):
+            s = scores[i]
+            sent_type = 'ht' if s['sid'] in sids else 'nm'
+            stat = stats[sent_type]['sp']
+
+            all_sp_types = []
+            cat = hter.get_sp_type(s, all_types=all_sp_types)
+            if len(all_sp_types)>0:
+                for t in all_sp_types:
+                    stat[t] = 1 if t not in stat else 1 + stat[t]
+            else:
+                # count not typed as well
+                stat[cat] = 1 if cat not in stat else 1 + stat[cat]
+            p = s['pattern']
+            nes = sorted(list(set([k for k in p['nes']])))
+            cds = sorted(list(set([k for k in p['cds']])))
+
+            stat = stats[sent_type]['ne']
+            for ptn in nes:
+                if ptn in hter.get_named_entities():
+                    stat[ptn] = 1 if ptn not in stat else 1 + stat[ptn]
+            stat = stats[sent_type]['cd']
+            for ptn in cds:
+                if ptn in hter.get_cardinal_nouns():
+                    stat[ptn] = 1 if ptn not in stat else 1 + stat[ptn]
+        container.append({'r%s' % r['seq']: stats})
+
+
+def merge_key_freq(container, data, l1, l2):
+    for ptn in data[l1][l2]:
+        freq = data[l1][l2][ptn]
+        m = container[l1][l2]
+        m[ptn] = freq if ptn not in m else m[ptn] + freq
+
+
+def pp_pattern_stats(container, out_file, hter):
+    range2stats = {}
+    for stats in container:
+        for k in stats:
+            range2stats[k] = [stats[k]] if k not in range2stats else [stats[k]] + range2stats[k]
+
+    range2merged = {}
+    for r in range2stats:
+        merged = {'ht': {'sp': {}, 'ne': {}, 'cd': {}}, 'nm': {'sp': {}, 'ne': {}, 'cd': {}}, 's_ht': 0, 's_nm': 0}
+        for stats in range2stats[r]:
+            merge_key_freq(merged, stats, 'ht', 'sp')
+            merge_key_freq(merged, stats, 'ht', 'ne')
+            merge_key_freq(merged, stats, 'ht', 'cd')
+            merge_key_freq(merged, stats, 'nm', 'sp')
+            merge_key_freq(merged, stats, 'nm', 'ne')
+            merge_key_freq(merged, stats, 'nm', 'cd')
+            merged['s_ht'] += stats['s_ht']
+            merged['s_nm'] += stats['s_nm']
+        range2merged[r] = merged
+    utils.save_json_array(range2merged, out_file)
+
+
+def analyse_language_pattern_stats(score_files_path, out_file):
+    ret_container = []
+    hter = HighLighter.get_instance()
+    utils.multi_thread_process_files(score_files_path, '', 10, get_language_pattern_stats,
+                                     args=[ret_container, out_file, hter],
+                                     file_filter_func=lambda fn: fn.endswith('_scores.json'),
+                                     callback_func=pp_pattern_stats)
+
+
+def score_language_patterns(normals, highlights, num_normals, num_highlights):
+    epsiton = 0.015
+    keys = sorted([k for k in highlights])
+    scores = []
+    for key in keys:
+        ht = 1.0 * highlights[key]/num_highlights
+        nm = 0.0 if key not in normals else 1.0 * normals[key]/num_normals
+        scores.append(math.log((ht + epsiton) / (nm + epsiton), 2))
+    return keys, scores
+
+
+def visualise_lp_stats(stat_file, cat, title, skips=None, score_output_file=None):
+    stats = utils.load_json_data(stat_file)
+    total_normal = stats['s_nm']
+    total_highlights = stats['s_ht']
+    keys, scores = score_language_patterns(stats['nm'][cat], stats['ht'][cat],
+                                           total_normal, total_highlights)
+    if score_output_file is None:
+        trace1 = go.Bar(
+            x=keys,
+            y=scores,
+            name='Highlighted Sentences / Other Sentences'
+        )
+        data = [trace1]
+        layout = go.Layout(
+            barmode='group',
+            title=title
+        )
+
+        fig = go.Figure(data=data, layout=layout)
+        py.plot(fig, filename='language pattern stats - ' + cat)
+    else:
+        data = {}
+        for i in range(len(keys)):
+            data[keys[i]] = scores[i]
+        utils.save_json_array(data, score_output_file)
+
+
+def visualise_lp_ranged_stats(stat_file, cat, title, skips=None, score_output_file=None):
+    r2stats = utils.load_json_data(stat_file)
+    data = []
+    data2save = {}
+    for r in r2stats:
+        stats = r2stats[r]
+        total_normal = stats['s_nm']
+        total_highlights = stats['s_ht']
+        keys, scores = score_language_patterns(stats['nm'][cat], stats['ht'][cat],
+                                           total_normal, total_highlights)
+        if score_output_file is None:
+            trace1 = go.Bar(
+                x=keys,
+                y=scores,
+                name=r
+            )
+            data.append(trace1)
+        else:
+            data2save[r] = {}
+            for i in range(len(keys)):
+                data2save[r][keys[i]] = scores[i]
+    if score_output_file is None:
+        layout = go.Layout(
+            barmode='group',
+            title=title
+        )
+
+        fig = go.Figure(data=data, layout=layout)
+        py.plot(fig, filename='language pattern ranged stats - ' + cat)
+    else:
+        utils.save_json_array(data2save, score_output_file)
+
+
+def plot_ly_login():
+    tools.set_credentials_file(username='silverash', api_key='w58w2j7j2k')
+
+
+# doing paper-wise language pattern distribution and highlighted sentence distribution analysis
+# the idea is to categorise papers to guide the highlights generation - e.g., how many findings
+# need to be generated for a particular sentence
+def paper_language_pattern_dist(score_file, container, hter, out_file):
+    scores = utils.load_json_data(score_file)
+    anns = utils.load_json_data(scores[0]['doc_id'])
+
+    b_marked = False
+    hts = []
+    for i in range(len(anns)):
+        ann = anns[i]
+        if 'marked' in ann:
+            b_marked = True
+            hts.append(ann['sid'])
+
+    if not b_marked or 15 > len(hts) < 10:
+        return
+
+    max_sid = int(scores[len(scores) - 1]['sid'])
+    stat = {'ht': {}, 'all': {}, 'max_sid': max_sid}
+    for s in scores:
+        all_sp_types = []
+        cat = hter.get_sp_type(s, all_types=all_sp_types)
+        for t in all_sp_types:
+            stat['all'][t] = 1 if t not in stat['all'] else 1 + stat['all'][t]
+            if s['sid'] in hts:
+                stat['ht'][t] = 1 if t not in stat['ht'] else 1 + stat['ht'][t]
+        p = s['pattern']
+        if len(p['nes']) > 0:
+            t = 'NE'
+            stat['all'][t] = 1 if t not in stat['all'] else 1 + stat['all'][t]
+            if s['sid'] in hts:
+                stat['ht'][t] = 1 if t not in stat['ht'] else 1 + stat['ht'][t]
+        if len(p['cds']) > 0:
+            t = 'CDS'
+            stat['all'][t] = 1 if t not in stat['all'] else 1 + stat['all'][t]
+            if s['sid'] in hts:
+                stat['ht'][t] = 1 if t not in stat['ht'] else 1 + stat['ht'][t]
+    container.append(stat)
+
+
+def lp_dist_cb(ctn, hter, out_file):
+    print json.dumps(ctn)
+    x = []
+    y = []
+    pt2freq = {}
+    keys = []
+
+    goals = 0
+    methods = 0
+    findings = 0
+    all = 0
+    for p in ctn:
+        g = 0 if 'goal' not in p['ht'] else p['ht']['goal']
+        m = 0 if 'method' not in p['ht'] else p['ht']['method']
+        f = 0 if 'findings' not in p['ht'] else p['ht']['findings']
+        all += p['max_sid']
+        goals += g
+        methods += m
+        findings += f
+        print '{}\t{}\t{}'.format(
+            g,
+            m,
+            f)
+        x1 = 0 if 'method' not in p['ht'] else p['ht']['method'] #round(p['ht']['method'] * 1.0 / p['max_sid'], 4))
+        y1 = 0 if 'method' not in p['all'] else p['all']['method'] #round(p['ht']['findings'] * 1.0 / p['max_sid'], 4))
+        x.append(x1)
+        y.append(y1)
+        k = '{} {}'.format(x1, y1)
+        pt2freq[k] = 1 if k not in pt2freq else 1 + pt2freq[k]
+        keys.append(k)
+    print '{}\t{}\t{}\t{}'.format(1.0*goals/len(ctn), 1.0*methods/len(ctn), 1.0*findings/len(ctn), 1.0*all/len(ctn))
+    markers = []
+    for k in keys:
+        markers.append(pt2freq[k] + 3)
+
+    trace = go.Scatter(
+        x=x,
+        y=y,
+        marker=dict(
+            size=markers,
+            line=dict(
+                color='rgba(217, 217, 217, 0.14)',
+                width=0.5
+            ),
+            opacity=0.8
+        ),
+        mode='markers',
+        name='LP Dist'
+    )
+    data = [trace]
+    py.plot(data, filename='LP Dist')
+
+
+def lp_dist_cal(score_files_path, out_file):
+    ret_container = []
+    hter = HighLighter.get_instance()
+    utils.multi_thread_process_files(score_files_path, '', 10, paper_language_pattern_dist,
+                                     args=[ret_container, hter, out_file],
+                                     file_filter_func=lambda fn: fn.endswith('_scores.json'),
+                                     callback_func=lp_dist_cb)
+
+
 if __name__ == "__main__":
+    # plot_ly_login()
     # analyse_highlighted_text('./training/full_hts.json')
     # sort_sub_pred('./training/sub_pred.json')
-    extract_geometrics('./anns_v2/', './training/geo_features.json')
+    # extract_geometrics('./anns_v2/', './training/geo_features.json')
     # hter = HighLighter.get_instance()
     # ctn = []
-    # geometric_analysis('./anns_v2/Allert et al., (2011) - Role of dysphagia in evaluating PD for STN-DBS._annotated_ann.json',
+    # geometric_analysis('./anns_v2/Altug et al., (2011) - The influence of subthalamic nucleus DBS on daily living activities in PD_annotated_ann.json',
     #                    ctn, None, hter)
     # print json.dumps(ctn)
-    # visualise_highlights_geometric('./training/geo_features.json', 'ht_geometric_features')
-
-
+    # visualise_highlights_geometric('./training/geo_features.json', 'ht_geometric_features_method', 'method')
+    # visualise_categorised_geometric('./training/geo_features.json', 'ht_geometric_features_categorised')
+    # get_general_highlights()
+    # visualise_highlights_3D('./summaries/', './training/3d.json')
+    # analyse_language_pattern_stats('./summaries/', './training/language_pattern_stats_ranged.json')
+    # test the lp stats on a paper
+    # ctn = []
+    # get_language_pattern_stats('./summaries/Ahn et al., (2011) - The cortical neuroanatomy of neuropsychological deficits in MCI and AD_annotated_ann_scores.json',
+    #                            ctn, '', HighLighter.get_instance())
+    # print json.dumps(ctn)
+    # visualise_lp_stats('./training/language_pattern_stats.json', 'sp', 'sub-pred patterns', skips=['No-SP-Cat'],
+    #                    score_output_file='./training/scores_sp.json')
+    # visualise_lp_stats('./training/language_pattern_stats.json', 'ne', 'Name Entities',
+    #                    score_output_file='./training/scores_nes.json')
+    # visualise_lp_stats('./training/language_pattern_stats.json', 'cd', 'cardinal nouns',
+    #                    score_output_file='./training/scores_cd.json')
+    # visualise_lp_ranged_stats('./training/language_pattern_stats_ranged.json', 'cd', 'cardinal nouns',
+    #                           score_output_file='./training/scores_ranged_cd.json')
+    # visualise_lp_ranged_stats('./training/language_pattern_stats_ranged.json', 'ne', 'Name Entities',
+    #                           score_output_file='./training/scores_ranged_nes.json')
+    # visualise_lp_ranged_stats('./training/language_pattern_stats_ranged.json', 'sp', 'sub-pred patterns')
+                              # score_output_file='./training/scores_ranged_sp.json')
+    # ctn = []
+    # paper_language_pattern_dist('./summaries/Ahn et al., (2011) - The cortical neuroanatomy of neuropsychological deficits in MCI and AD_annotated_ann_scores.json',
+    #                            ctn, HighLighter.get_instance())
+    # print ctn
+    lp_dist_cal('./summaries/', '')
