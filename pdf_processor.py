@@ -70,7 +70,7 @@ def sapienta_annotate(pdf_path, output_path):
     ann_file_name = fname + '_annotated.xml'
 
     if isfile(join(output_path, ann_file_name)):
-        print('{} annotation result exits, skip.'.format(pdf_path))
+        print('{ } annotation result exits, skip.'.format(pdf_path))
         return
 
     arr = ["pdfxconv", "-a"] + pdf_path if isinstance(pdf_path, list) else  ["pdfxconv", "-a", pdf_path]
