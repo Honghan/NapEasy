@@ -6,6 +6,7 @@ from os.path import split, join, isfile
 import threading
 import numpy as np
 import math
+import article_ann as pann
 
 res_file_cd = './resources/cardinal_Noun_patterns.txt'  #'./training/patterns/cardinal_noun.txt'
 res_file_ne = './resources/named_entities.txt' # './training/patterns/named_entities.txt'
@@ -19,10 +20,15 @@ score_file_ranged_cd = './training/scores_ranged_cd.json'
 score_file_ranged_nes = './training/scores_ranged_nes.json'
 score_file_ranged_sp = './training/scores_ranged_sp.json'
 
-parser_lock = threading.RLock()
+# parser_lock = threading.RLock()
 
 
 class HighLighter:
+    sent_type_boost = None
+    onto_name_scores = None
+    sub_pred_ne_stat = None
+    brain_regions = None
+    sub_pred = None
 
     def __init__(self, parser, ne_res, cardinal_noun_res, sub_pred_res,
                  score_nes, score_cd, score_sp,
@@ -39,15 +45,33 @@ class HighLighter:
         self.score_ranged_cd = score_ranged_cd
         self.score_ranged_nes = score_ranged_nes
         self.score_ranged_sp = score_ranged_sp
+        self.normalise_all()
         # print('loading stanford parser...')
         # self.stanford_parser = aa.create_stanford_parser_inst()
         # print('stanford parser loaded')
+
+    def normalise_all(self):
+        HighLighter.normalise_scores(self.score_cd)
+        HighLighter.normalise_scores(self.score_nes)
+        HighLighter.normalise_scores(self.score_sp)
+        HighLighter.normalise_regioned_scores(self.score_ranged_cd)
+        HighLighter.normalise_regioned_scores(self.score_ranged_nes)
+        HighLighter.normalise_regioned_scores(self.score_ranged_sp)
 
     def get_named_entities(self):
         return self.ne
 
     def get_cardinal_nouns(self):
         return self.card
+
+    def get_score_cd(self):
+        return self.score_cd
+
+    def get_score_nes(self):
+        return self.score_nes
+
+    def get_score_sp(self):
+        return self.score_sp
 
     def compute_language_patterns(self, sent_text, doc_id=None, sid=None, container=None):
         scores = {'cd': 0, 'ne': 0, 'sp': 0}
@@ -91,7 +115,7 @@ class HighLighter:
         return scores
 
     def score(self, score_obj, region=None):
-        single_score_threshold = 0.0000001
+        single_score_threshold = 0
         language_patterns = score_obj['pattern']
         sp_score = {}
         nes_score = 0
@@ -121,6 +145,39 @@ class HighLighter:
             if s >= single_score_threshold:
                 cds_score += s
         return {'sp': sp_score, 'nes': nes_score, 'cds': cds_score, 'all_sps': all_sp_types}
+
+    def get_vector(self, score_obj, region=None):
+        vect = {}
+        language_patterns = score_obj['pattern']
+        all_sp_types = []
+        sp_type = self.get_sp_type(score_obj, all_sp_types)
+
+        res_score_sp = self.score_sp
+        res_score_cds = self.score_cd
+        res_score_nes = self.score_nes
+        if region is not None:
+            res_score_sp = self.score_ranged_sp[region]
+            res_score_cds = self.score_ranged_cd[region]
+            res_score_nes = self.score_ranged_nes[region]
+
+        sp_score = 0
+        nes_score = 0
+        cds_score = 0
+
+        if sp_type != 'No-SP-Cat':
+            for t in all_sp_types:
+                s = res_score_sp[t] if t in res_score_sp else 0
+                vect[t] = s
+                sp_score += s
+        for ne in language_patterns['nes']:
+            s = 0 if ne not in res_score_nes else res_score_nes[ne]
+            vect[ne] = s
+            nes_score += s
+        for cd in language_patterns['cds']:
+            s = 0 if cd not in res_score_cds else res_score_cds[cd]
+            vect[cd] = s
+            cds_score += s
+        return vect, sp_score + nes_score + cds_score
 
     def get_sentence_cat(self, scores):
         cats = []
@@ -201,6 +258,28 @@ class HighLighter:
         return summary, scores_list
 
     @staticmethod
+    def normalise_scores(scores):
+        m_score = -1000
+        for k in scores:
+            if scores[k] > m_score:
+                m_score = scores[k]
+        for k in scores:
+            scores[k] = 1.0 * scores[k] / m_score
+
+    @staticmethod
+    def normalise_regioned_scores(regioned_scores):
+        m_score = -1000
+        for r in regioned_scores:
+            scores = regioned_scores[r]
+            for k in scores:
+                if scores[k] > m_score:
+                    m_score = scores[k]
+        for r in regioned_scores:
+            scores = regioned_scores[r]
+            for k in scores:
+                scores[k] = 1.0 * scores[k] / m_score
+
+    @staticmethod
     def pick_top_k(sents, k):
         if len(sents) == 0:
             return sents
@@ -208,6 +287,39 @@ class HighLighter:
         sorted_sents = sorted(sents, cmp=lambda s1, s2: s2[1]['total'] - s1[1]['total'])
         return sorted_sents[:k] if 'sid' not in sorted_sents[0][1] \
             else sorted(sorted_sents[:k], cmp=lambda s1, s2: int(s1[1]['sid']) - int(s2[1]['sid']))
+
+    # load sentence type boost setting
+    @staticmethod
+    def get_sent_type_boost():
+        if HighLighter.sent_type_boost is None:
+            HighLighter.sent_type_boost = utils.load_json_data('./resources/sent_type_region_boost.json')
+        return HighLighter.sent_type_boost
+
+    # get onto name scores
+    @staticmethod
+    def get_onto_name_scores():
+        if HighLighter.onto_name_scores is None:
+            HighLighter.onto_name_scores = utils.load_json_data('./training/score_ncbo_ontos.json')
+        return HighLighter.onto_name_scores
+
+    # get sub_pred_ne_stat
+    @staticmethod
+    def get_sub_pred_ne_stat():
+        if HighLighter.sub_pred_ne_stat is None:
+            HighLighter.sub_pred_ne_stat = utils.load_json_data('./resources/sub_pred_ne_stat.json')
+        return HighLighter.sub_pred_ne_stat
+
+    @staticmethod
+    def get_brain_regions():
+        if HighLighter.brain_regions is None:
+            HighLighter.brain_regions = utils.load_text_file('./resources/brain-regions.txt')
+        return HighLighter.brain_regions
+
+    @staticmethod
+    def get_sub_pred():
+        if HighLighter.sub_pred is None:
+            HighLighter.sub_pred = utils.load_json_data('./resources/sub_pred.txt')
+        return HighLighter.sub_pred
 
     # get the instance of this class
     @staticmethod
@@ -360,6 +472,14 @@ def sort_complement(list1, list2, threshold, cmp=None):
         return l
 
 
+def sort_by_threshold(list1, threshold, cmp=None):
+    l = sorted(list1, cmp=cmp)
+    for i in range(len(l)):
+        if l[i][1] < threshold:
+            return l[:i]
+    return l
+
+
 def score_paper(score_file, container, out_file, hter, threshold):
     units = 5
     scores = utils.load_json_data(score_file)
@@ -439,6 +559,248 @@ def score_paper(score_file, container, out_file, hter, threshold):
                       'predicted': len(prediction), 'correct': num_correct, 'hts': len(hts)})
 
 
+def logistic_rescore(x, x0):
+    k = 0.2
+    return 1 / (1 + math.exp(k * (x - x0)))
+
+
+def rerank(prediction, threshold, t2freq):
+    if prediction[len(prediction) - 1][1] < threshold:
+        prediction = sorted(prediction, cmp=lambda p1, p2 : 1 if p2[1] > p1[1] else 0 if p2[1] == p1[1] else -1)
+        # print prediction
+        max_ht = 0
+        for i in range(len(prediction)):
+            so = prediction[i]
+            if so[1] < threshold:
+                max_ht = i
+
+        ht_t2num = {}
+        for i in range(len(prediction)):
+            so = prediction[i]
+            if len(so[2]) == 0:
+                so[1] *= 0.7
+                continue
+            typed_ratio = 0
+            if so[2] not in ht_t2num:
+                ht_t2num[so[2]] = 0
+            else:
+                ht_t2num[so[2]] += 1
+                typed_ratio = 1.0 * ht_t2num[so[2]] / max_ht
+            so[1] = logistic_rescore(typed_ratio, t2freq[so[2]]) * so[1]
+    return prediction
+
+
+def naive_ne(t):
+    t = t.lower().replace('\n', ' ')
+    for r in HighLighter.get_brain_regions():
+        if t.find(r.strip().lower()) >= 0:
+            return True
+    return False
+
+
+def score_paper_threshold(score_file, container, out_file, hter, threshold):
+    units = 5
+    scores = utils.load_json_data(score_file)
+    max_sid = int(scores[len(scores) - 1]['sid'])
+    offset = int(1.0 * max_sid / units)
+
+    anns = utils.load_json_data(scores[0]['doc_id'])
+    hts = []
+    sid2ann = {}
+    sid2onto = {}
+    ne_sids = []
+    for ann in anns:
+        if 'marked' in ann:
+            hts.append(ann['sid'])
+        sid2ann[ann['sid']] = ann
+        if 'ncbo' in ann:
+            matched_ontos = []
+            for ncbo in ann['ncbo']:
+                for name in pann.onto_name:
+                    if name not in matched_ontos and ncbo['uri'].startswith(pann.onto_name[name]):
+                        matched_ontos.append(name)
+                    if name in matched_ontos:
+                        break
+            if len(matched_ontos) > 0:
+                comb = '-'.join(sorted(matched_ontos))
+                sid2onto[ann['sid']] = comb
+        if naive_ne(ann['text']):
+            ne_sids.append(ann['sid'])
+
+    if len(hts) == 0:
+        return
+
+    prediction = []
+    num_correct = 0
+    r = 0
+    t2freq = {}
+    sp_ne_stat = HighLighter.get_sub_pred_ne_stat()
+
+    precedent_sp = []
+    precedent_threshold = 1
+
+    sentence_level_details = []
+    for i in range(len(scores)):
+        score = scores[i]
+        r = (i + 1) / offset
+        score_ret = hter.score(score, region='r' + str(r))
+        sent_type = '-'.join(sorted(score_ret['all_sps']))
+        t2freq[sent_type] = 1 if sent_type not in t2freq else t2freq[sent_type] + 1
+
+        onto2scores = HighLighter.get_onto_name_scores()
+        onto_score = 0 if score['sid'] not in sid2onto else \
+            0 if sid2onto[score['sid']] not in onto2scores \
+                else onto2scores[sid2onto[score['sid']]]
+        confidence = 0 if 'confidence' not in score['pattern'] else score['pattern']['confidence']
+        sp_index = '-1' if 'sp_index' not in score['pattern'] else str(score['pattern']['sp_index'])
+        sp_ne_freq = 0 if sp_index not in sp_ne_stat else sp_ne_stat[sp_index]
+
+        other_ne = score['sid'] in ne_sids
+
+        if (len(score_ret['sp']) > 0) \
+                or (score_ret['cds'] + score_ret['nes'] > 0) \
+                or other_ne \
+                or onto_score > .2:
+            s_sp = 0.0
+            if len(score_ret['sp']) > 0:
+                if len(score_ret['sp']) == 1:
+                    for t in score_ret['sp']:
+                        s_sp = score_ret['sp'][t]
+                else:
+                    type_score = []
+                    for t in score_ret['sp']:
+                        type_score.append([t, score_ret['sp'][t]])
+                    type_score = sorted(type_score, cmp=lambda p1, p2 : 1 if p2[1] > p1[1] else 0 if p2[1] == p1[1] else -1 )
+                    s_sp = type_score[0][1]
+
+            # s = (s_sp + score_ret['cds'] + score_ret['nes'])/3
+            # s = 0.40 * s_sp + 0.2 * score_ret['cds'] + 0.4 * score_ret['nes']
+            # s = 0.45 * s_sp + 0.4 * score_ret['cds'] + 0.25 * score_ret['nes']
+            # s = 0.01 * s_sp + 0.29 * (score_ret['cds'] + (0.03 if other_ne else 0)) + 0.7 * score_ret['nes']
+            # s = .1 * s_sp + .5 * score_ret['cds'] + .3 * ((0.3 if other_ne else 0) + score_ret['nes']) + .1 * onto_score
+            s = 3 * score_ret['cds'] + 7 * (score_ret['nes'] + (0.05 if other_ne else 0)) + .01 * s_sp
+
+            # F5: frequency of sub-pred patterns that associated with positive named entities
+            if sp_ne_freq > 0:
+                s += sp_ne_freq / 30 * s_sp
+
+            # F4: sub-pred frequency scoring
+            if int(sp_index) >= 0:
+                sp_freq = hter.get_sub_pred()[int(sp_index)][1]
+                s += 0 if sp_freq < 2 else sp_freq / 7 * s_sp
+
+            # F1: neighbourhood boosting
+            precedent_sp_freq = 0
+            precedent_boost = 1
+            for p_sp in precedent_sp:
+                precedent_sp_freq += 0 if p_sp == 0 else 1
+            precedent_boost = precedent_sp_freq + precedent_boost
+            # s += 0 if s_sp == 0 or precedent_sp_freq == 0 else s_sp
+            # s *= precedent_boost
+
+            # F2: voting enhancement
+            voted = 0.06
+            if score_ret['nes'] > 0 or other_ne:
+                voted += 1
+            if score_ret['cds'] > 0:
+                voted += 1
+            s *= voted
+
+            # F3: type regional boosting (spatial features)
+            type_boost = .7 if r in [0, 1] else .3 if r in [2, 3] else 0.05
+            region = 'r%s' % r
+            sent_boost = HighLighter.get_sent_type_boost()
+            if sent_type in sent_boost:
+                type_boost = sent_boost[sent_type][region] if region in sent_boost[sent_type] else 0.001
+            type_boost = math.pow(type_boost, 10.5)
+            s *= type_boost
+
+            prediction.append([score['sid'], s, sent_type])
+
+            # push current sp info
+            while len(precedent_sp) >= precedent_threshold:
+                precedent_sp.pop()
+            precedent_sp.append(s_sp)
+
+            if score['sid'] in hts or s > threshold:
+                sentence_level_details.append(
+                    u'[{}]\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}'.format(
+                        score['sid'],
+                        'H' if score['sid'] in hts else '-',
+                        'P' if s > threshold else '-',
+                        sent_type,
+                        '{}'.format(s, type_boost),
+                        '{}/{}'.format(s_sp, confidence),
+                        '{}'.format(score_ret['cds']),
+                        score_ret['nes'],
+                        anns[i]['text'].replace('\n', '').replace('\t', '')
+                    )
+                )
+        else:
+            if score['sid'] in hts:
+                sentence_level_details.append(
+                    u'[{}]\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}'.format(
+                        score['sid'],
+                        'H' if score['sid'] in hts else '-',
+                        '-',
+                        '-',
+                        '-',
+                        '-',
+                        '-',
+                        '-',
+                        anns[i]['text'].replace('\n', '').replace('\t', '')
+                    )
+                )
+
+    # calculate type stats
+    # for t in t2freq:
+    #     t2freq[t] = 1.0 * (t2freq[t] + 1) / max_sid
+
+    # do reranking
+    # for i in range(10):
+    #     prediction = rerank(prediction, threshold, t2freq)
+
+    prediction = sort_by_threshold(prediction, threshold,
+                            cmp=lambda p1, p2 : 1 if p2[1] > p1[1] else 0 if p2[1] == p1[1] else -1)
+
+    for s in prediction:
+        if s[0] in hts:
+            num_correct += 1
+    # print 'precision: {}, recall: {}'.format(1.0 * num_correct / len(prediction), 1.0 * num_correct / len(hts))
+
+    container.append({'paper': scores[0]['doc_id'],
+                      'predicted': len(prediction), 'correct': num_correct, 'hts': len(hts), 'max_sid': max_sid})
+    return sentence_level_details
+
+
+def get_sents_by_threshold(score_file, container, out_file, hter, threshold):
+    units = 5
+    scores = utils.load_json_data(score_file)
+    max_sid = int(scores[len(scores) - 1]['sid'])
+    offset = int(1.0 * max_sid / units)
+
+    anns = utils.load_json_data(scores[0]['doc_id'])
+    hts = []
+    sid2ann = {}
+    for ann in anns:
+        if 'marked' in ann:
+            hts.append(ann['sid'])
+        sid2ann[ann['sid']] = ann
+
+    if len(hts) == 0:
+        return
+
+    prediction = []
+    num_correct = 0
+    r = 0
+    for i in range(len(scores)):
+        score = scores[i]
+        r = (i + 1) / offset
+        score_ret = hter.score(score, region='r' + str(r))
+        if len(score_ret['sp']) > 0 or (score_ret['cds'] + score_ret['nes'] > 0):
+            container.append({'ht': score['sid'] in hts, 'text': sid2ann[score['sid']]['text'].replace('\n', '').replace('\t', '')})
+
+
 def score_paper_by_type(score_file, container, out_file, hter, sent_type, threshold):
     units = 5
     scores = utils.load_json_data(score_file)
@@ -447,9 +809,11 @@ def score_paper_by_type(score_file, container, out_file, hter, sent_type, thresh
 
     anns = utils.load_json_data(scores[0]['doc_id'])
     hts = []
+    sid2ann = {}
     for ann in anns:
         if 'marked' in ann:
             hts.append(ann['sid'])
+        sid2ann[ann['sid']] = ann
 
     if len(hts) == 0:
         return
@@ -464,7 +828,7 @@ def score_paper_by_type(score_file, container, out_file, hter, sent_type, thresh
     for i in range(len(scores)):
         score = scores[i]
         r = (i + 1) / offset
-        score_ret = hter.score(score) #, region='r' + str(r))
+        score_ret = hter.score(score, region='r' + str(r))
         if sent_type in score_ret['sp']:
             other_score = score_ret['cds'] + score_ret['nes']
             if score['sid'] in hts:
@@ -473,15 +837,17 @@ def score_paper_by_type(score_file, container, out_file, hter, sent_type, thresh
                 single_typed.append([score['sid'], score_ret['sp'][sent_type] + other_score])
             else:
                 multi_typed.append([score['sid'], score_ret['sp'][sent_type] + other_score])
-            # print '{}\t{}\t{}\t{}\t{}\t{}'.format(score['sid'] in typed_hts, '-'.join(score_ret['sp']),
-            #                                               score_ret['sp'][sent_type],
-            #                                               'r' + str(r),
-            #                                               score_ret['cds'], score_ret['nes'])
+            print u'{}\t{}\t{}\t{}\t{}\t{}\t{}'.format(score['sid'] in typed_hts, '-'.join(score_ret['sp']),
+                                                      score_ret['sp'][sent_type],
+                                                      'r' + str(r),
+                                                      score_ret['cds'], score_ret['nes'],
+                                                      sid2ann[score['sid']]['text']
+                                                      )
 
     if len(typed_hts) == 0:
         return # do not count if there is no such highlighted sentences
 
-    prediction = sort_complement(single_typed, multi_typed, threshold,
+    prediction = sort_complement([], single_typed+multi_typed, threshold,
                             cmp=lambda p1, p2 : 1 if p2[1] > p1[1] else 0 if p2[1] == p1[1] else -1)
 
     for p in prediction:
@@ -492,34 +858,92 @@ def score_paper_by_type(score_file, container, out_file, hter, sent_type, thresh
                       'predicted': len(prediction), 'correct': num_correct, 'hts': len(typed_hts)})
 
 
+def represent_doc_as_vector(score_file, container, out_file, hter):
+    units = 5
+    scores = utils.load_json_data(score_file)
+    max_sid = int(scores[len(scores) - 1]['sid'])
+    offset = int(1.0 * max_sid / units)
+
+    anns = utils.load_json_data(scores[0]['doc_id'])
+    hts = []
+    sid2ann = {}
+    for ann in anns:
+        if 'marked' in ann:
+            hts.append(ann['sid'])
+        sid2ann[ann['sid']] = ann
+
+    if len(hts) == 0:
+        return
+
+    for i in range(len(scores)):
+        score = scores[i]
+        r = (i + 1) / offset
+        vect, total = hter.get_vector(score, region='r' + str(r))
+        if total > 0:
+            container.append({'v': vect, 'ht': 1 if score['sid'] in hts else -1})
+
+
 def pp_score_exp(container, out_file, hter, threshold):
     should = 0
     correct = 0
     predicted = 0
+    total = 0
 
-    print 'precision\trecall\t#highlighted\t#predicted\tpaper'
+    # print 'precision\trecall\t#highlighted\t#predicted\tpaper'
     for p in container:
         should += p['hts']
         correct += p['correct']
         predicted += p['predicted']
-        print '{:.2f}\t{:.2f}\t{}\t{}\t{}'.format(1.0 * p['correct'] / p['predicted'],
-                                      1.0 * p['correct'] / p['hts'],
-                                      p['hts'], p['predicted'], p['paper'])
+        total += p['max_sid'] if 'max_sid' in p else 0
+        # print '{:.2f}\t{:.2f}\t{}\t{}\t{}'.format(1.0 * p['correct'] / p['predicted'] if p['predicted'] > 0 else 0,
+        #                               1.0 * p['correct'] / p['hts'],
+        #                               p['hts'], p['predicted'], p['paper'])
 
-    precision = 1.0 * correct / predicted
-    recall = 1.0 * correct / should
-    print 'precision\trecall\tF1'
-    print '{}\t{}\t{}'.format(precision, recall, 2 * precision * recall / (precision + recall))
-    # utils.save_json_array(container, out_file)
+    if predicted == 0:
+        print '{}\t-\t-\t-'.format(threshold)
+    else:
+        precision = 1.0 * correct / predicted
+        recall = 1.0 * correct / should
+        # print 'precision\trecall\tF1'
+        print '{}\t{}\t{}\t{}\t{}'.format(threshold, precision, recall,
+                                          '-' if total == 0 else (1.0 * predicted - correct)/(total - correct),
+                                          2 * precision * recall / (precision + recall))
+        # utils.save_json_array(container, out_file)
+
+
+def pp_get_sents(container, out_file, hter, threshold):
+    hts = []
+    nhts = []
+    for s in container:
+        if s['ht']:
+            hts.append({'text': s['text']})
+        else:
+            nhts.append({'text': s['text']})
+    ratio = 0.8
+    ht_training = int(ratio*len(hts))
+    nht_training = int(ratio*len(nhts))
+    utils.save_json_array(hts[:ht_training], out_file + 'ht_training.json')
+    utils.save_json_array(hts[ht_training:], out_file + 'ht_testing.json')
+    utils.save_json_array(nhts[:nht_training], out_file + 'nht_training.json')
+    utils.save_json_array(nhts[nht_training:], out_file + 'nht_testing.json')
 
 
 def score_exp(score_files_path, out_file, threshold):
     ret_container = []
     hter = HighLighter.get_instance()
-    utils.multi_thread_process_files(score_files_path, '', 10, score_paper,
+    utils.multi_thread_process_files(score_files_path, '', 10, score_paper_threshold,
                                      args=[ret_container, out_file, hter, threshold],
                                      file_filter_func=lambda fn: fn.endswith('_scores.json'),
                                      callback_func=pp_score_exp)
+
+
+def get_sent_exp(score_files_path, out_file, threshold):
+    ret_container = []
+    hter = HighLighter.get_instance()
+    utils.multi_thread_process_files(score_files_path, '', 10, get_sents_by_threshold,
+                                     args=[ret_container, out_file, hter, threshold],
+                                     file_filter_func=lambda fn: fn.endswith('_scores.json'),
+                                     callback_func=pp_get_sents)
 
 
 def pp_score_typed_exp(container, out_file, hter, sent_type, threshold):
@@ -533,7 +957,7 @@ def pp_score_typed_exp(container, out_file, hter, sent_type, threshold):
         should += p['hts']
         correct += p['correct']
         predicted += p['predicted']
-        # print '{:.2f}\t{:.2f}\t{}\t{}\t{}'.format(0 if p['predicted'] == 0 else 1.0 * p['correct'] / p['predicted'],
+        # print '{:.2f}\t{:.2f}\t{}\t{}\t{}\t{}'.format(0 if p['predicted'] == 0 else 1.0 * p['correct'] / p['predicted'],
         #                               1.0 * p['correct'] / p['hts'],
         #                               p['hts'], p['predicted'], p['paper'])
 
@@ -542,6 +966,50 @@ def pp_score_typed_exp(container, out_file, hter, sent_type, threshold):
     # print 'precision\trecall\tF1'
     print '{}.\t{}\t{}\t{}'.format(threshold, precision, recall, 2 * precision * recall / (precision + recall))
     # utils.save_json_array(container, out_file)
+
+
+def pp_vectorise(container, out_file, hter):
+    dims = []
+    # for k in hter.get_score_cd():
+    #     dims.append(k)
+    for k in hter.get_score_nes():
+        dims.append(k)
+    for k in hter.get_score_sp():
+        dims.append(k)
+
+    hts = []
+    nhts = []
+    for v in container:
+        if v['ht'] == 1:
+            hts.append(v)
+        else:
+            nhts.append(v)
+
+    learning_ratio = 0.8
+    b_ht = int(learning_ratio * len(hts))
+    b_nht = int(learning_ratio * len(nhts))
+
+    s = '{} {} {}\n'.format(b_ht + b_nht, len(dims), 2)
+    for v in hts[:b_ht]:
+        r = ''
+        for d in dims:
+            r += '{}'.format('0' if d not in v['v'] else v['v'][d])
+            r += ' '
+        r = r.strip()
+        r += '\n'
+        r += '1 0\n'
+        s += r
+    for v in nhts[:b_nht]:
+        r = ''
+        for d in dims:
+            r += '{}'.format('0' if d not in v['v'] else v['v'][d])
+            r += ' '
+        r = r.strip()
+        r += '\n'
+        r += '0 1\n'
+        s += r
+    utils.save_text_file(s, out_file)
+    utils.save_json_array({'dims': dims, 'data': hts[b_ht:] + nhts[b_nht:]}, out_file + '_testing')
 
 
 def score_exp_typed(score_files_path, sent_type, out_file, threshold):
@@ -553,21 +1021,70 @@ def score_exp_typed(score_files_path, sent_type, out_file, threshold):
                                      callback_func=pp_score_typed_exp)
 
 
+def vectorise_export(score_files_path, out_file):
+    ret_container = []
+    hter = HighLighter.get_instance()
+    utils.multi_thread_process_files(score_files_path, '', 10, represent_doc_as_vector,
+                                     args=[ret_container, out_file, hter],
+                                     file_filter_func=lambda fn: fn.endswith('_scores.json'),
+                                     callback_func=pp_vectorise)
+
+
+def dump_file_results(files, out_file):
+    ht = HighLighter.get_instance()
+    ctn = []
+    s = 'sid\thighlighted\tpredicted\ttype\toverall score\tsub-pred score/confidence\tCD Score\tNE Score\ttext\n'
+    for f in files:
+        s += '\n\n{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\n'.format(
+            '**','**','**','**','**','**','**','**', f)
+        s += '\n'.join(score_paper_threshold(f, ctn, '', ht, 0.003))
+        print '%s done' % f
+    utils.save_text_file(s, out_file)
+
+
+def random_pick_files():
+    test_files = [
+        './20-test-papers/summaries/10561930_annotated_ann_scores.json',
+        './20-test-papers/summaries/10791835_annotated_ann_scores.json',
+        './20-test-papers/summaries/11277563_annotated_ann_scores.json',
+        './20-test-papers/summaries/12124484_annotated_ann_scores.json',
+        './20-test-papers/summaries/12673603_annotated_ann_scores.json',
+        './20-test-papers/summaries/15178945_annotated_ann_scores.json',
+        './20-test-papers/summaries/15377698_annotated_ann_scores.json',
+        './20-test-papers/summaries/15645532_annotated_ann_scores.json',
+        './20-test-papers/summaries/15661114_annotated_ann_scores.json',
+        './20-test-papers/summaries/15942197_annotated_ann_scores.json',
+    ]
+
+    training_files = [
+        './summaries/Bartova et al., (2010) - Correlation between substantia nigra features detected by sonography and PD_annotated_ann_scores.json',
+        './summaries/Bilello et al., (2015) - Correlating cognitive decline with white matter lesions and atrophy in AD_annotated_ann_scores.json',
+        './summaries/Forster et al., (2011) - Effects of a 6 month cognitive intervention program on brain metabolism in aMCI and mild AD_annotated_ann_scores.json',
+        './summaries/Giannakopoulous et al., (2000) - Neural substrates of spatial and temporal disorientation in AD_annotated_ann_scores.json',
+        './summaries/Sunwoo et al., (2013) - Thalamic volume and related visual recognition are associated with FOG in PD_annotated_ann_scores.json',
+        './summaries/Ibarretxe-Bilbao et al., (2009) - Differential progression of brain atrophy in PD with and without VH_annotated_ann_scores.json',
+        './summaries/Iranzo et al., (2002) - Sleep symptoms and polysomnographic architecture in advanced PD after chronic bilateral STN stimulation_annotated_ann_scores.json',
+        './summaries/Lawrence et al., (2003) - Multiple neuronal networks mediate sustained attention_annotated_ann_scores.json',
+        './summaries/Nee et al., (2014) - Prefrontal cortex organisation. Dissociating effects of temporal abstraction, relational abstraction and integration with fMRI_annotated_ann_scores.json',
+        './summaries/Tan et al., (2015) - Pain in PD_annotated_ann_scores.json',
+    ]
+    dump_file_results(test_files, './results/sample_test_files.tsv')
+
 if __name__ == "__main__":
     # visualise_result('./training/test/non_hts_scores.json', './training/test/hts_scores.json')
-    # summarise_all_papers('./anns_v2/', './summaries/')
+    # summarise_all_papers('./30-test-papers/', './30-test-papers/summaries/')
     # summ('./anns_v2/Ahn et al., (2011) - The cortical neuroanatomy of neuropsychological deficits in MCI and AD_annotated_ann.json',
     #     HighLighter.get_instance(),
     #      './summaries/')
-    # sum, scores = ht.summarise([u'This is in agreement with findings from volumetric magnetic resonance ima- ging (MRI) studies which to date have provided clear evidence that hippocampal atrophy is a valuable method to support the clinical diagnosis of early AD [14, 22, 27, 28, 37].'])
-    # print scores
-    # ht = HighLighter.get_instance()
-    # ctn = []
-    # score_paper('./summaries/Xie et al., (2005) - Patterns of brain activation in patients with mild AD during performance of substraction._annotated_ann_scores.json',
+    # sum, scores = ht.summarise([u'This is in agreement with findings from volumetric magnetic resonance ima- ging (MRI) studies which to date have provided clear evidence that hippocampal atrophy is a valuable method to support the clinical diagnosis of early AD [14, 22, 27, 28, 37].'])'./results/sample_test_files.txt')
     #             ctn, '', ht, {'goal': 2, 'findings': 0.02, 'method': 0.05})
-    # score_paper_by_type('./summaries/Xie et al., (2005) - Patterns of brain activation in patients with mild AD during performance of substraction._annotated_ann_scores.json',
-    #                     ctn, '', ht, 'goal', 2)
+    # score_paper_threshold('./20-test-papers/summaries/12673603_annotated_ann_scores.json',
+    #                     [], '', HighLighter.get_instance(), 0.003)
     # print ctn
-    for i in np.arange(1, 21, 1):
-    # score_exp('./summaries/', './training/auto_ht_results.json', {'goal': 2, 'findings': 0.02, 'method': 0.05})
-        score_exp_typed('./summaries/', 'method', './training/auto_ht_results.json', i)
+    # for i in np.arange(0, 1, 0.0005):
+    #     score_exp('./20-test-papers/summaries/', './training/auto_ht_results.json', i)
+    # score_exp('./30-test-papers/summaries/', './training/auto_ht_results.json', 0.0035)
+    # score_exp_typed('./summaries/', 'goal', './training/auto_ht_results.json', 2)
+    # get_sent_exp('./summaries/', './training/second_it_', 0.2)
+    # vectorise_export('./summaries/', './training/vect_sents.json')
+    random_pick_files()
