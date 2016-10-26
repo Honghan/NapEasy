@@ -9,14 +9,15 @@ import os
 import re
 import nltk
 from nltk.parse.stanford import StanfordParser
-import ann_utils as utils
 import threading
 import pickle
 import plotly.graph_objs as go
 import plotly.plotly as py
 from plotly import tools
-from auto_highlighter import HighLighter
+import auto_highlighter as ah
 import math
+import ann_utils as utils
+from nltk.tag.stanford import StanfordNERTagger
 
 
 # the lock for gain access to the shared variable
@@ -29,6 +30,9 @@ stanford_language_model_file = "/Users/jackey.wu/Documents/working/libraries/" \
 
 # pattern output folder
 pattern_output_folder = './training/'
+
+# cardinal english words
+cardinal_words = ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen", "twenty", "twenty-one", "twenty-two", "twenty-three", "twenty-four", "twenty-five", "twenty-six", "twenty-seven", "twenty-eight", "twenty-nine", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety", "one hundred", "a hundred and one", "a hundred and ten", "a hundred and twenty", "two hundred"]
 
 
 class SubjectPredicate:
@@ -194,8 +198,41 @@ def plot_two_sets_data(value_pairs, file_to_save=None):
     plt.show()
 
 
-def extract_cd_nouns_nes(ht, cd_nouns, name_entities, noun_evidence=None, ne_evd=None):
-    text = nltk.word_tokenize(ht.replace('\n', '').strip())
+def replace_cardinal_english_words(text):
+    pp = re.compile('|'.join(['({})'.format(re.escape(w)) for w in cardinal_words[::-1]]), re.IGNORECASE)
+    return pp.sub('123', text)
+
+
+def match_ne_dictionary(tokens, nes):
+    lst = [t.lower() for t in tokens]
+    matched = []
+    for k in nes:
+        if len(nes[k]) > 1:
+            # do case incensitive when multiple words in the named entity
+            if contains_sublist(lst, [w.lower() for w in nes[k]]):
+                matched.append(k)
+        elif len(nes[k]) == 1:
+            # otherwise, do case sensitive matching
+            if contains_sublist(tokens, nes[k]):
+                matched.append(k)
+    return matched
+
+
+def contains_sublist(lst, sublst):
+    n = len(sublst)
+    return any((sublst == lst[i:i+n]) for i in xrange(len(lst)-n+1))
+
+
+def get_ht_named_entity_dictionary():
+    hter = ah.HighLighter.get_instance()
+    ne2list = {}
+    for ne in hter.get_named_entities():
+        ne2list[ne] = [w for w in ne.split(' ')]
+    return ne2list
+
+
+def extract_cd_nouns_nes(ht, cd_nouns, name_entities, noun_evidence=None, ne_evd=None, ne_dict=None):
+    text = nltk.word_tokenize(replace_cardinal_english_words(ht.replace('\n', '').strip()))
     pr = nltk.pos_tag(text)
     namedEnt = nltk.ne_chunk(pr, binary=True)
     for ent in namedEnt:
@@ -204,13 +241,17 @@ def extract_cd_nouns_nes(ht, cd_nouns, name_entities, noun_evidence=None, ne_evd
             name_entities[e] = 1 if e not in name_entities else 1 + name_entities[e]
             if ne_evd is not None and name_entities[e] == 1:
                 ne_evd[e] = ht
-
+    if ne_dict is not None:
+        m_nes = match_ne_dictionary(text, ne_dict)
+        for new_ne in m_nes:
+            if new_ne not in name_entities:
+                name_entities[new_ne] = 1
     pr_str = ''
     for i in range(len(pr)):
         pr_str += pr[i][1] + str(i) + ' '
     # print(pr_str)
     pr_str = pr_str.strip()
-    so_it = re.finditer(r'CD\d+ ((NN\d+|NNS\d+|VBG\d+|JJ\d+|RB\d+|NNP\d+|NNPS\d+|CC\d+) )*(NN|NNS|NNP|NNPS)(\d+)',
+    so_it = re.finditer(r'CD\d+ ((NN\d+|NNS\d+|VBG\d+|VBN\d+|JJ\d+|RB\d+|NNP\d+|NNPS\d+|CC\d+) )*(NN|NNS|NNP|NNPS)(\d+)',
                         pr_str, re.M | re.I)
     for so in iter(so_it):
         n = pr[int(so.group(4).strip())][0]
@@ -398,7 +439,7 @@ def post_process_geometric_analysis(container, output_file, hter):
 # entry function to extract geometric features from annotations
 def extract_geometrics(annotation_files_path, gm_feature_output_file):
     ret_container = []
-    hter = HighLighter.get_instance()
+    hter = ah.HighLighter.get_instance()
     utils.multi_thread_process_files(annotation_files_path, '', 10, geometric_analysis,
                                      args=[ret_container, gm_feature_output_file, hter],
                                      file_filter_func=lambda fn: fn.endswith('_ann.json'),
@@ -606,7 +647,7 @@ def visualise_highlights_3D(annotation_files_path, out_file):
 
 
 def get_stats_obj():
-    return {'ht': {'sp': {}, 'ne': {}, 'cd': {}}, 'nm': {'sp': {}, 'ne': {}, 'cd': {}}, 's_nm': 0, 's_ht': 0}
+    return {'ht': {'sp': {}, 'ne': {}, 'cd': {}, 'sp_breakdown':{}}, 'nm': {'sp': {}, 'ne': {}, 'cd': {}, 'sp_breakdown':{}}, 's_nm': 0, 's_ht': 0}
 
 
 def get_language_pattern_stats(score_file, container, out_file, hter):
@@ -647,14 +688,19 @@ def get_language_pattern_stats(score_file, container, out_file, hter):
             all_sp_types = []
             cat = hter.get_sp_type(s, all_types=all_sp_types)
             if len(all_sp_types)>0:
-                for t in all_sp_types:
-                    stat[t] = 1 if t not in stat else 1 + stat[t]
+                t = '-'.join(sorted(all_sp_types))
+                stat[t] = 1 if t not in stat else 1 + stat[t]
             else:
                 # count not typed as well
                 stat[cat] = 1 if cat not in stat else 1 + stat[cat]
             p = s['pattern']
             nes = sorted(list(set([k for k in p['nes']])))
             cds = sorted(list(set([k for k in p['cds']])))
+
+            if len(all_sp_types) > 0:
+                sp = '-'.join(p['sub'] if p['sub'] is not None else '') + ' ' + '-'.join(p['pred'] if p['pred'] is not None else '')
+                stat = stats[sent_type]['sp_breakdown']
+                stat[sp] = 1 if sp not in stat else 1 + stat[sp]
 
             stat = stats[sent_type]['ne']
             for ptn in nes:
@@ -682,14 +728,16 @@ def pp_pattern_stats(container, out_file, hter):
 
     range2merged = {}
     for r in range2stats:
-        merged = {'ht': {'sp': {}, 'ne': {}, 'cd': {}}, 'nm': {'sp': {}, 'ne': {}, 'cd': {}}, 's_ht': 0, 's_nm': 0}
+        merged = {'ht': {'sp': {}, 'ne': {}, 'cd': {}, 'sp_breakdown':{}}, 'nm': {'sp': {}, 'ne': {}, 'cd': {}, 'sp_breakdown':{}}, 's_ht': 0, 's_nm': 0}
         for stats in range2stats[r]:
             merge_key_freq(merged, stats, 'ht', 'sp')
             merge_key_freq(merged, stats, 'ht', 'ne')
             merge_key_freq(merged, stats, 'ht', 'cd')
+            merge_key_freq(merged, stats, 'ht', 'sp_breakdown')
             merge_key_freq(merged, stats, 'nm', 'sp')
             merge_key_freq(merged, stats, 'nm', 'ne')
             merge_key_freq(merged, stats, 'nm', 'cd')
+            merge_key_freq(merged, stats, 'nm', 'sp_breakdown')
             merged['s_ht'] += stats['s_ht']
             merged['s_nm'] += stats['s_nm']
         range2merged[r] = merged
@@ -698,7 +746,7 @@ def pp_pattern_stats(container, out_file, hter):
 
 def analyse_language_pattern_stats(score_files_path, out_file):
     ret_container = []
-    hter = HighLighter.get_instance()
+    hter = ah.HighLighter.get_instance()
     utils.multi_thread_process_files(score_files_path, '', 10, get_language_pattern_stats,
                                      args=[ret_container, out_file, hter],
                                      file_filter_func=lambda fn: fn.endswith('_scores.json'),
@@ -876,12 +924,179 @@ def lp_dist_cb(ctn, hter, out_file):
 
 def lp_dist_cal(score_files_path, out_file):
     ret_container = []
-    hter = HighLighter.get_instance()
+    hter = ah.HighLighter.get_instance()
     utils.multi_thread_process_files(score_files_path, '', 10, paper_language_pattern_dist,
                                      args=[ret_container, hter, out_file],
                                      file_filter_func=lambda fn: fn.endswith('_scores.json'),
                                      callback_func=lp_dist_cb)
 
+
+def compute_sp_type_statics():
+    sp2ratio = {}
+    stats = utils.load_json_data('./training/language_pattern_stats_ranged.json')
+    total = 0
+    for r in stats:
+        total += stats[r]['s_ht'] + stats[r]['s_nm']
+        for p in stats[r]['ht']['sp']:
+            print p, stats[r]['ht']['sp'][p]
+            sp2ratio[p] = stats[r]['ht']['sp'][p] if p not in sp2ratio else stats[r]['ht']['sp'][p] + sp2ratio[p]
+
+    print json.dumps(sp2ratio)
+    for p in sp2ratio:
+        sp2ratio[p] = sp2ratio[p] * 1.0 / total
+    print json.dumps(sp2ratio)
+
+
+def compute_sp_type_regioned_weights():
+    sp2ratio = {}
+    stats = utils.load_json_data('./training/language_pattern_stats_ranged.json')
+    total = 0
+    for r in stats:
+        total += stats[r]['s_ht'] + stats[r]['s_nm']
+        for p in stats[r]['ht']['sp']:
+            sp2ratio[p] = {} if p not in sp2ratio else sp2ratio[p]
+            sp2ratio[p][r] = stats[r]['ht']['sp'][p]
+            sp2ratio[p]['max'] = stats[r]['ht']['sp'][p] \
+                if 'max' not in sp2ratio[p] or sp2ratio[p]['max'] < stats[r]['ht']['sp'][p] \
+                else sp2ratio[p]['max']
+
+    for p in sp2ratio:
+        for k in sp2ratio[p]:
+            m = sp2ratio[p]['max']
+            if k != 'max':
+                sp2ratio[p][k] = 1.0 * sp2ratio[p][k] / m
+
+    print json.dumps(sp2ratio)
+
+
+# compute the ncbo stats in highlighted and non-highlighted sentences
+def get_ncbo_stats(ann_file, container):
+    anns = utils.load_json_data(ann_file)
+    onto2freq = {'ht': {}, 'nm': {}}
+    total_nm = 0
+    total_ht = 0
+    for ann in anns:
+        if 'marked' in ann:
+            total_ht += 1
+        else:
+            total_nm += 1
+        if 'ncbo' in ann:
+            matched_ontos = []
+            for ncbo in ann['ncbo']:
+                for name in pann.onto_name:
+                    if name not in matched_ontos and ncbo['uri'].startswith(pann.onto_name[name]):
+                        matched_ontos.append(name)
+                    if name in matched_ontos:
+                        break
+            # for name in matched_ontos:
+            #     ctn = onto2freq['ht'] if 'marked' in ann else onto2freq['nm']
+            #     ctn[name] = 1 if name not in ctn else 1 + ctn[name]
+            if len(matched_ontos) > 0:
+                comb = '-'.join(sorted(matched_ontos))
+                ctn = onto2freq['ht'] if 'marked' in ann else onto2freq['nm']
+                ctn[comb] = 1 if comb not in ctn else 1 + ctn[comb]
+    container.append({'total_nm': total_nm, 'total_ht': total_ht, 'freqs': onto2freq})
+
+
+def pp_ncbo_stat(container):
+    t_nm = 0
+    t_ht = 0
+    overall_freqs = {'ht':{}, 'nm':{}}
+    for c in container:
+        t_ht += c['total_ht']
+        t_nm += c['total_nm']
+        for k in c['freqs']['ht']:
+            p = c['freqs']['ht']
+            overall_freqs['ht'][k] = p[k] if k not in overall_freqs['ht'] else p[k] + overall_freqs['ht'][k]
+        for k in c['freqs']['nm']:
+            p = c['freqs']['nm']
+            overall_freqs['nm'][k] = p[k] if k not in overall_freqs['nm'] else p[k] + overall_freqs['nm'][k]
+
+    scores = {}
+    for k in overall_freqs['nm']:
+        overall_freqs['nm'][k] = 1.0 * overall_freqs['nm'][k] / t_nm
+    for k in overall_freqs['ht']:
+        overall_freqs['ht'][k] = 1.0 * overall_freqs['ht'][k] / t_ht
+        scores[k] = math.log(overall_freqs['ht'][k] / overall_freqs['nm'][k], 2)
+    print json.dumps(scores)
+
+
+    # trace1 = go.Bar(
+    #     x=[k for k in overall_freqs['ht']],
+    #     y=[overall_freqs['ht'][k] for k in overall_freqs['ht']],
+    #     name='Highlighted'
+    # )
+    # trace2 = go.Bar(
+    #     x=[k for k in overall_freqs['nm']],
+    #     y=[overall_freqs['nm'][k] for k in overall_freqs['nm']],
+    #     name='Others'
+    # )
+    # data = [trace1, trace2]
+    # py.plot(data, filename='NCBO Onto Distribute-180')
+
+
+def compute_overall_ncbo_stat(ann_files_path):
+    ret_container = []
+    utils.multi_thread_process_files(ann_files_path, '', 10, get_ncbo_stats,
+                                     args=[ret_container],
+                                     file_filter_func=lambda fn: fn.endswith('_ann.json'),
+                                     callback_func=pp_ncbo_stat)
+
+
+def get_sp_ne_associations(score_file, container):
+    scores = utils.load_json_data(score_file)
+    sp2ne = {}
+    for s in scores:
+        p = s['pattern']
+        if 'sp_index' in p and p['sp_index'] > -1 and s['ne'] > 0:
+            sp2ne[p['sp_index']] = 1 if p['sp_index'] not in sp2ne else 1 + sp2ne[p['sp_index']]
+    container.append(sp2ne)
+
+
+def pp_sp_ne_asso(container):
+    merged = {}
+    for c in container:
+        for k in c:
+            merged[k] = c[k] if k not in merged else c[k] + merged[k]
+
+    print merged[0]
+    print json.dumps(merged)
+
+
+def compute_sp_ne_stat(score_files_path):
+    ret_container = []
+    utils.multi_thread_process_files(score_files_path, '', 10, get_sp_ne_associations,
+                                     args=[ret_container],
+                                     file_filter_func=lambda fn: fn.endswith('_scores.json'),
+                                     callback_func=pp_sp_ne_asso)
+
+
+# basic stats of the corpus
+def paper_stat(ann_file, container):
+    path, fn = utils.split(ann_file)
+    sums = utils.load_json_data(utils.join('./20-test-papers/summaries/', fn[:fn.rfind('.')] + '.sum'))
+    anns = utils.load_json_data(ann_file)
+    total_ht = 0
+    for ann in anns:
+        if 'marked' in ann:
+            total_ht += 1
+    container.append({'f': ann_file, 'ht': total_ht, 'nm': len(anns) - total_ht, 'total': len(anns),
+                      'PMID': sums['PMID'] if 'PMID' in sums else '',
+                      'Journal': sums['journal'] if 'journal' in sums else ''})
+
+
+def pp_paper_stat(ctn):
+    print '\n'.join(['{}\t{}\t{}\t{}\t{}\t{}'.format(s['PMID'], s['Journal'], s['total'], s['nm'], s['ht'], s['f']) for s in ctn])
+    print json.dumps(ctn)
+
+
+def corpus_simple_stat(ann_files_path):
+    ret_container = []
+    utils.multi_thread_process_files(ann_files_path, '', 10, paper_stat,
+                                     args=[ret_container],
+                                     file_filter_func=lambda fn: fn.endswith('_ann.json'),
+                                     callback_func=pp_paper_stat
+    )
 
 if __name__ == "__main__":
     # plot_ly_login()
@@ -897,7 +1112,7 @@ if __name__ == "__main__":
     # visualise_categorised_geometric('./training/geo_features.json', 'ht_geometric_features_categorised')
     # get_general_highlights()
     # visualise_highlights_3D('./summaries/', './training/3d.json')
-    # analyse_language_pattern_stats('./summaries/', './training/language_pattern_stats_ranged.json')
+    # analyse_language_pattern_stats('./summaries/', './training/language_pattern_stats_ranged_new.json')
     # test the lp stats on a paper
     # ctn = []
     # get_language_pattern_stats('./summaries/Ahn et al., (2011) - The cortical neuroanatomy of neuropsychological deficits in MCI and AD_annotated_ann_scores.json',
@@ -919,4 +1134,22 @@ if __name__ == "__main__":
     # paper_language_pattern_dist('./summaries/Ahn et al., (2011) - The cortical neuroanatomy of neuropsychological deficits in MCI and AD_annotated_ann_scores.json',
     #                            ctn, HighLighter.get_instance())
     # print ctn
-    lp_dist_cal('./summaries/', '')
+    # lp_dist_cal('./summaries/', '')
+    # compute_sp_type_statics()
+    # compute_sp_type_regioned_weights()
+    # get_ncbo_stats('./30-test-papers/10561930_annotated_ann.json', [])
+    # compute_overall_ncbo_stat('./anns_v2/')
+    # compute_sp_ne_stat('./summaries/')
+    # corpus_simple_stat('./20-test-papers/')
+
+    t = u'Separate two-way repeated measures ANOVAs (with groups and free recall vs. delayed free recall as the two factors) demonstrated that AD patients differed significantly from controls in the recall of verbal as well as spatial information (F(1,46) 99.91, P 0.0001, and F(1,46) 22.86, P 0.0001, respectively).'
+    hter = ah.HighLighter.get_instance()
+    ne2list = {}
+    for ne in hter.get_named_entities():
+        ne2list[ne] = [w for w in ne.split(' ')]
+    cds = {}
+    nes = {}
+    extract_cd_nouns_nes(t, cds, nes, ne_dict=ne2list)
+    print cds
+    print nes
+    # Stanford_ner(u'In 29 patients with probable AD, CDT performance was significantly related to right-, but not left-hemisphere, regional gray matter volume.')
