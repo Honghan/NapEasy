@@ -8,6 +8,13 @@ import nltk
 import requests
 import re
 from pyquery import PyQuery as pq
+from nltk.corpus import wordnet as wn
+from nltk.data import load
+from nltk.tokenize.treebank import TreebankWordTokenizer
+from nltk.corpus import stopwords
+from nltk.stem.wordnet import WordNetLemmatizer
+import auto_highlighter as ah
+import ann_analysor as aa
 
 # ncbi etuils url
 ncbi_service_url = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?' \
@@ -53,13 +60,13 @@ def multi_thread_tasking(lst, num_threads, process_func,
                                file_filter_func=None, callback_func=None, thread_wise_objs=None):
     num_pdfs = len(lst)
     pdf_queque = Queue.Queue(num_pdfs)
-    print('putting list into queue...')
+    # print('putting list into queue...')
     for item in lst:
         pdf_queque.put_nowait(item)
     thread_num = min(num_pdfs, num_threads)
     arr = [process_func] if args is None else [process_func] + args
     arr.insert(0, pdf_queque)
-    print('queue filled, threading...')
+    # print('queue filled, threading...')
     for i in range(thread_num):
         tarr = arr[:]
         thread_obj = None
@@ -70,9 +77,9 @@ def multi_thread_tasking(lst, num_threads, process_func,
         t.daemon = True
         t.start()
 
-    print('waiting jobs to finish')
+    # print('waiting jobs to finish')
     pdf_queque.join()
-    print('{0} files {1}'.format(num_pdfs, proc_desc))
+    # print('{0} files {1}'.format(num_pdfs, proc_desc))
     if callback_func is not None:
         callback_func(*tuple(args))
 
@@ -136,11 +143,24 @@ def save_json_array(lst, file_path):
         json.dump(lst, wf, encoding='utf-8')
 
 
+def save_text_file(text, file_path):
+    with codecs.open(file_path, 'w', encoding='utf-8') as wf:
+        wf.write(text)
+
+
 def load_json_data(file_path):
     data = None
     with codecs.open(file_path, encoding='utf-8') as rf:
         data = json.load(rf, encoding='utf-8')
     return data
+
+
+def load_text_file(file_path):
+    data = []
+    with codecs.open(file_path, encoding='utf-8') as rf:
+        data = rf.readlines()
+    return data
+
 
 def save_sentences(non_hts, hts, output_path):
     training_testing_ratio = 0.6
@@ -177,11 +197,17 @@ def add_pmcid_to_sum(sum_file_path):
     m = re.match(r'[^()]+\(\d+\) \- (.+)_annotated_ann\.sum', fn)
     pmcid = None
     journal = None
+    cnt = None
     if m is not None:
         # ret = json.loads(requests.get(ncbi_service_url.format(m.group(1))).content)
         cnt = requests.get(ncbi_pubmed_url.format(m.group(1))).content
+    else:
+        m = re.match(r'(\d+)_annotated_ann\.sum', fn)
+        if m is not None:
+            pmcid = m.group(1)
+            cnt = requests.get(ncbi_pubmed_url.format(m.group(1))).content
+    if cnt is not None:
         doc = pq(cnt)
-
         # check whether it is a list of search results
         results = doc(".result_count.left").eq(0)
         if results.html() is not None:
@@ -193,9 +219,10 @@ def add_pmcid_to_sum(sum_file_path):
             if j_elem is not None and j_elem.html() is not None:
                 journal = j_elem.html()
         else:
-            dom_str = doc(".rprtid").eq(0)
-            if dom_str is not None and dom_str.html() is not None:
-                pmcid = extract_pubmed(dom_str.html())
+            if pmcid is None:
+                dom_str = doc(".rprtid").eq(0)
+                if dom_str is not None and dom_str.html() is not None:
+                    pmcid = extract_pubmed(dom_str.html())
             j_elem = doc(".cit").eq(0)
             if j_elem is not None and j_elem.html() is not None:
                 m1 = re.findall(r'alterm="([^"]*)"', str(j_elem.html()))
@@ -231,6 +258,183 @@ def process_pmcids(sum_folder):
     multi_thread_process_files(sum_folder, 'sum', 3, add_pmcid_to_sum)
 
 
+def check_score_func_sids(score_file, container):
+    scores = load_json_data(score_file)
+    anns = load_json_data(scores[0]['doc_id'])
+    prob_pairs = []
+    for i in range(len(scores)):
+        if scores[i]['sid'] != anns[i]['sid']:
+            scores[i]['sid'] = anns[i]['sid']
+            prob_pairs.append({'score_sid': scores[i]['sid'], 'ann_sid': anns[i]['sid']})
+    if len(prob_pairs) > 0:
+        container.append({'f':score_file, 'p':prob_pairs})
+        save_json_array(scores, score_file)
+
+
+def sid_check_cb(probs):
+    print json.dumps(probs)
+
+
+def check_all_scores_sids(sum_folder):
+    probs = []
+    multi_thread_process_files(sum_folder, 'json', 3, check_score_func_sids,
+                               args=[probs],
+                               callback_func=sid_check_cb)
+
+
+_treebank_word_tokenize = TreebankWordTokenizer().tokenize
+# stemmer instance
+porter = nltk.PorterStemmer()
+stop_words = stopwords.words('english')
+
+def word_tokenize(text, language='english'):
+    """
+    Return a tokenized copy of *text*,
+    using NLTK's recommended word tokenizer
+    (currently :class:`.TreebankWordTokenizer`
+    along with :class:`.PunktSentenceTokenizer`
+    for the specified language).
+
+    :param text: text to split into sentences
+    :param language: the model name in the Punkt corpus
+    """
+    return [token for sent in sent_tokenize(text, language)
+            for token in _treebank_word_tokenize(sent)]
+
+
+# Standard sentence tokenizer.
+def sent_tokenize(text, language='english'):
+    """
+    Return a sentence-tokenized copy of *text*,
+    using NLTK's recommended sentence tokenizer
+    (currently :class:`.PunktSentenceTokenizer`
+    for the specified language).
+
+    :param text: text to split into sentences
+    :param language: the model name in the Punkt corpus
+    """
+    tokenizer = load('tokenizers/punkt/{0}.pickle'.format(language))
+    return tokenizer.tokenize(text)
+
+
+def token_text(text, pos='n'):
+    words = []
+    for t in word_tokenize(text):
+        if len(t) > 1 and t not in stop_words:
+            words.append(t)
+    return [WordNetLemmatizer().lemmatize(t.lower(), pos) for t in words]
+
+
+def word_similarity(w1, w2, pos=wn.NOUN):
+    if len(w1) == 0 or len(w2) == 0:
+        return 0, None
+    set1 = wn.synsets(w1, pos=pos)
+    set2 = wn.synsets(w2, pos=pos)
+    max = 0
+    p = []
+    for s1 in set1:
+        for s2 in set2:
+            sim = s1.path_similarity(s2)
+            if sim > max:
+                max = sim
+                p = [s1, s2]
+    return max, p
+
+
+def phrase_similarity(p1, p2, pos='n'):
+    if p1.strip() == p2.strip():
+        return 1
+    arr1 = token_text(p1, pos)
+    arr2 = token_text(p2, pos)
+    m = 0
+    for t1 in arr1:
+        for t2 in arr2:
+            sim, p = word_similarity(t1, t2, wn.NOUN if 'n' == pos else wn.VERB)
+            if sim > m:
+                m = sim
+    return m
+
+
+def match_sp_type(sp_patterns, sp_cats, subs, preds):
+    idx2score = {}
+    p2score = {}
+    for p in sp_cats:
+        m = 0
+        m_idx = -1
+        for idx in sp_cats[p]:
+            s = 0
+            if idx in idx2score:
+                s = idx2score[idx]
+            else:
+                sp = sp_patterns[idx][0]
+                s_score = phrase_similarity(' '.join(subs) if subs is not None else '',
+                                            ' '.join(sp['s'] if sp['s'] is not None else ''))
+                p_score = phrase_similarity(' '.join(preds) if preds is not None else '',
+                                            ' '.join(sp['p'] if sp['p'] is not None else ''), 'v')
+                s = min(s_score, p_score)
+                idx2score[idx] = s
+            if s > m:
+                m = s
+                m_idx = idx
+        p2score[p] = {'m': m, 'idx': m_idx}
+    mp = ''
+    m = 0
+    m_idx = -1
+    for p in p2score:
+        if p2score[p]['m'] > m:
+            m = p2score[p]['m']
+            mp = p
+            m_idx = p2score[p]['idx']
+    if m < 0.5:
+        return None, None, None
+    return m, mp, m_idx
+
+
+def semantic_fix_scores(score_file, sp_patterns, sp_cats):
+    print 'working on %s...' % score_file
+    scores = load_json_data(score_file)
+    for s in scores:
+        p = s['pattern']
+        if 'sp_index' in p and p['sp_index'] == -1 and 'sub' in p:
+            m, mp, m_idx = match_sp_type(sp_patterns, sp_cats, p['sub'], p['pred'])
+            if m is not None:
+                p['sp_index'] = m_idx
+                print s['sid'], p['sub'], p['pred'], mp
+    save_json_array(scores, score_file)
+    print '%s done.' % score_file
+
+
+def semantic_fix_scores_confidence(score_file, sp_patterns, sp_cats, hter):
+    print 'working on %s...' % score_file
+    scores = load_json_data(score_file)
+    for s in scores:
+        p = s['pattern']
+        if 'sp_index' in p and p['sp_index'] != -1:
+            sp = aa.SubjectPredicate(p['sub'], p['pred'])
+            if sp in hter.sp:
+                p['sp_index'] = hter.sp[sp]['index']
+                p['confidence'] = 2
+                print sp, p['sp_index']
+
+            continue
+            m, mp, m_idx = match_sp_type(sp_patterns, sp_cats, p['sub'], p['pred'])
+            if m is not None:
+                p['sp_index'] = m_idx
+                p['confidence'] = m
+                print s['sid'], p['sub'], p['pred'], mp
+    save_json_array(scores, score_file)
+    print '%s done.' % score_file
+
+
+def semantic_fix_all_scores():
+    hter = ah.HighLighter.get_instance()
+    sp_patterns = load_json_data('./resources/sub_pred.txt')
+    sp_cats = load_json_data('./resources/sub_pred_categories.json')
+    multi_thread_process_files('./20-test-papers/summaries/', '', 1, semantic_fix_scores_confidence,
+                                     args=[sp_patterns, sp_cats, hter],
+                                     file_filter_func=lambda fn: fn.endswith('_scores.json'))
+
+
 def main():
     # ann_to_training('./anns_v2', './training')
     # sents = [
@@ -238,8 +442,16 @@ def main():
     #     'This resulted in data of 172 participants to be included in the present study.'
     # ]
     # relation_patterns(sents[0])
-    add_pmcid_to_sum('./summaries/Foster et al., (1986) - Cerebral mapping of apraxia in AD by PET_annotated_ann.sum')
-    # process_pmcids('./summaries/')
+    # add_pmcid_to_sum('./20-test-papers/summaries/10561930_annotated_ann.sum')
+    # process_pmcids('./20-test-papers/summaries/')
+    # check_score_func_sids('./summaries/Altug et al., (2011) - The influence of subthalamic nucleus DBS on daily living activities in PD_annotated_ann_scores.json')
+    # check_all_scores_sids('./summaries/')
+    # phrase_similarity('were included', 'were made', 'v')
+    # sp_patterns = load_json_data('./resources/sub_pred.txt')
+    # sp_cats = load_json_data('./resources/sub_pred_categories.json')
+    # print match_sp_type(sp_patterns, sp_cats, ['conclusions'], ['drawn'])
+    # semantic_fix_scores('./30-test-papers/summaries/10561930_annotated_ann_scores.json', sp_patterns, sp_cats)
+    semantic_fix_all_scores()
 
 if __name__ == "__main__":
     main()
