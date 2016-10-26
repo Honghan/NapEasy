@@ -196,9 +196,11 @@ def merge_NCBO_ann(ncbo_file, ann):
 
 
 def normalise_highlighted_text(ht_text):
-    ht_text = ht_text.strip().replace('- ', '')
-    ht_text = ht_text.replace(u'\ufb01', 'fi').replace(u'\ufb02', 'fl')
+    ht_text = ht_text.strip().replace(u'- ', '')
+    ht_text = ht_text.replace(u'\ufb01', 'fi').replace(u'\ufb02', 'fl').replace(u'\u2013', '-').replace(u'\u2019', u'’').replace(u'\u2afb ', '').replace(u'\u2afd ', '').replace(u'123 tion', u'tion').replace(u'\ufb00', 'ff').replace(u'\u201c', u'“').replace(u'\u201d', u'”')
         # .replace(u'\xb1', '±').replace(u'\xbc', '¼')
+    if ht_text.endswith('-'):
+        ht_text = ht_text[:len(ht_text) - 1]
     return ht_text
 
 
@@ -206,21 +208,24 @@ def merge_highlights(ann, ht):
     matched = 0
     total = 0
     last_matched_page = 1
+    for a in ann:
+        if 'marked' in a:
+            a['marked'] = []
     for page in ht:
         total += len(ht[page])
         for ht_text in ht[page]:
             ht_text = normalise_highlighted_text(ht_text)
             b_matched = False
             for a in ann:
-                if 'page' in a:
+                if True: #'page' in a:
                     # if int(a['page'])>=last_matched_page:
-                    if a['text'].find(ht_text) >=0:
+                    if normalise_highlighted_text(a['text']).find(ht_text) >=0:
                         if 'marked' in a:
                             a['marked'].append(ht_text)
                         else:
                             a['marked'] = [ht_text]
                         matched += 1
-                        last_matched_page = int(a['page'])
+                        # last_matched_page = int(a['page'])
                         b_matched = True
                         break
             if not b_matched:
@@ -230,6 +235,7 @@ def merge_highlights(ann, ht):
                     #     print(page, ht_text)
                     #     break
     print ('total {0}, mateched {1}'.format(total, matched))
+
 
 def binarySearch(sents, start, end):
     if len(sents) > 0:
@@ -303,15 +309,48 @@ def ann_article(file_path):
         json.dump(ann, write_file)
 
 
+def test_merge_highlight():
+    ht_file = './30-test-papers/11274654_ht.json'
+    ann_file = './30-test-papers/11274654_annotated_ann.json'
+    ann = util.load_json_data(ann_file)
+    for a in ann:
+        if 'marked' in a:
+            a['marked'] = []
+    ht = read_highlights_json(ht_file)
+    merge_highlights(ann, ht)
+    util.save_json_array(ann, ann_file)
+
+
+def append_abstract_label(xml_file):
+    p, f = os.path.split(xml_file)
+    ann_file = os.path.join(p, f[:f.rfind('.')] + '_ann.json')
+    tree = ET.parse(xml_file)
+    root = tree.getroot()
+    abstracts = root.findall(".//abstract")
+    if len(abstracts) > 0:
+        ab_sents = abstracts[0].findall("s")
+        max_ab_sid = int(ab_sents[len(ab_sents)-1].attrib['sid'])
+        if max_ab_sid >= 0:
+            anns = util.load_json_data(ann_file)
+            for ann in anns:
+                if int(ann['sid']) <= max_ab_sid:
+                    ann['abstract-title'] = True
+            util.save_json_array(anns, ann_file)
+
+
+def append_abstract_label_for_all(xml_path):
+    util.multi_thread_process_files(xml_path, 'xml', 10, append_abstract_label)
+
 def main():
-    path = './anns_v2/'
-    num_threads = 30
-    util.multi_thread_process_files(path, 'xml', num_threads, ann_article)
+    # path = './30-test-papers/'
+    # num_threads = 30
+    # util.multi_thread_process_files(path, 'xml', num_threads, ann_article)
 
     # onlyfiles = [f for f in listdir(path) if isfile(join(path, f))]
     # for f in onlyfiles:
     #     if f.endswith('_ann.json'):
     #         aa.analysis_ann(os.path.join(path, f))
+    append_abstract_label_for_all('./20-test-papers/')
 
 if __name__ == "__main__":
     main()
