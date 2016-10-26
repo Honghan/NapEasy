@@ -532,27 +532,19 @@ def score_paper_threshold(score_file, container, out_file, hter, threshold,
     hts = []
     sid2ann = {}
     sid2onto = {}
-    ne_sids = []
+    abstract_sents = []
     for ann in anns:
+        if ma is not None and 'max_abstract_sid' in ma and int(ann['sid']) <= ma['max_abstract_sid']:
+            abstract_sents.append(ann['sid'])
+            continue  # skipe the abstract sentences
+        # if 'abstract-title' in ann or ('struct' in ann and (ann['struct'] == 'DoCO:Abstract' or ann['struct'] == 'DoCO:Title')):
+        #     abstract_sents.append(ann['sid'])
+        #     continue  # skipe the abstract sentences
         if 'marked' in ann:
-            if ma is not None and 'max_abstract_sid' in ma and int(ann['sid']) <= ma['max_abstract_sid']:
-                continue # skipe the abstract sentences
             hts.append(ann['sid'])
         sid2ann[ann['sid']] = ann
-        # if 'ncbo' in ann:
-        #     matched_ontos = []
-        #     for ncbo in ann['ncbo']:
-        #         for name in pann.onto_name:
-        #             if name not in matched_ontos and ncbo['uri'].startswith(pann.onto_name[name]):
-        #                 matched_ontos.append(name)
-        #             if name in matched_ontos:
-        #                 break
-        #     if len(matched_ontos) > 0:
-        #         comb = '-'.join(sorted(matched_ontos))
-        #         sid2onto[ann['sid']] = comb
-        # if naive_ne(ann['text']):
-        #     ne_sids.append(ann['sid'])
 
+    # skip papers with no highlights
     if len(hts) == 0:
         return
 
@@ -561,23 +553,15 @@ def score_paper_threshold(score_file, container, out_file, hter, threshold,
 
     prediction = []
     num_correct = 0
-    r = 0
-    t2freq = {}
-    sp_ne_stat = HighLighter.get_sub_pred_ne_stat()
-
-    precedent_sp = []
-    precedent_threshold = 1
 
     sentence_level_details = []
-    ne2score = {}
     for i in range(len(scores)):
-        score = scores[i]
-        if ma is not None and 'max_abstract_sid' in ma and int(score['sid']) <= ma['max_abstract_sid']:
-            continue  # skipe the abstract sentences
         r = (i + 1) / offset
+        score = scores[i]
+        if score['sid'] in abstract_sents:
+            continue  # skip the abstract sentences
         score_ret = hter.score(score, region='r' + str(r))
         sent_type = '-'.join(sorted(score_ret['all_sps']))
-        t2freq[sent_type] = 1 if sent_type not in t2freq else t2freq[sent_type] + 1
 
         onto2scores = HighLighter.get_onto_name_scores()
         onto_score = 0 if score['sid'] not in sid2onto else \
@@ -586,14 +570,9 @@ def score_paper_threshold(score_file, container, out_file, hter, threshold,
         confidence = 1 if 'confidence' not in score['pattern'] else score['pattern']['confidence']
         if confidence < 1:
             sent_type = ''
-        sp_index = '-1' if 'sp_index' not in score['pattern'] else str(score['pattern']['sp_index'])
-        sp_ne_freq = 0 if sp_index not in sp_ne_stat else sp_ne_stat[sp_index]
-
-        other_ne = score['sid'] in ne_sids
 
         if (len(score_ret['sp']) > 0) \
                 or (score_ret['cds'] + score_ret['nes'] > 0) \
-                or other_ne \
                 or onto_score > .2:
             s_sp = 0.0
             if len(score_ret['sp']) > 0:
@@ -606,35 +585,14 @@ def score_paper_threshold(score_file, container, out_file, hter, threshold,
                         type_score.append([t, score_ret['sp'][t]])
                     type_score = sorted(type_score, cmp=lambda p1, p2 : 1 if p2[1] > p1[1] else 0 if p2[1] == p1[1] else -1 )
                     s_sp = type_score[0][1]
-
+            # average combination
             # s = (s_sp + score_ret['cds'] + score_ret['nes'])/3
-            s = 0.20 * s_sp + 0.4 * score_ret['cds'] + 0.4 * score_ret['nes']
-            # s = 0.45 * s_sp + 0.4 * score_ret['cds'] + 0.25 * score_ret['nes']
-            # s = 0.01 * s_sp + 0.29 * (score_ret['cds'] + (0.03 if other_ne else 0)) + 0.7 * score_ret['nes']
-            # s = 3 * score_ret['cds'] + 10 * (score_ret['nes'] + (0.05 if other_ne else 0)) + .01 * s_sp
-            # s = 3 * score_ret['cds'] + 7 * (score_ret['nes'] + (0.05 if other_ne else 0)) + 0.01 * s_sp
-            # s *= 40
-            # F5: frequency of sub-pred patterns that associated with positive named entities
-            # if sp_ne_freq > 0:
-            #     s += sp_ne_freq / 30 * s_sp
-
-            # F4: sub-pred frequency scoring
-            # if int(sp_index) >= 0:
-            #     sp_freq = hter.get_sub_pred()[int(sp_index)][1]
-            #     s += 0 if sp_freq < 2 else sp_freq / 7 * s_sp
-
-            # F1: neighbourhood boosting
-            precedent_sp_freq = 0
-            precedent_boost = 1
-            for p_sp in precedent_sp:
-                precedent_sp_freq += 0 if p_sp == 0 else 1
-            precedent_boost = precedent_sp_freq + precedent_boost
-            # s += 0 if s_sp == 0 or precedent_sp_freq == 0 else s_sp
-            # s *= precedent_boost
+            # empirical setting
+            s = 0.4 * s_sp + .2 * score_ret['cds'] + .4 * score_ret['nes']
 
             # F2: voting enhancement
             voted = 0
-            if score_ret['nes'] > 0 or other_ne:
+            if score_ret['nes'] > 0:
                 voted += 1
             if score_ret['cds'] > 0:
                 voted += 1
@@ -643,26 +601,14 @@ def score_paper_threshold(score_file, container, out_file, hter, threshold,
             s *= voted / 2.18
 
             # F3: type regional boosting (spatial features)
-            type_boost = .7 if r in [0, 1] else .1 if r in [2, 3] else 0.05
+            type_boost = .3 if r in [0, 1] else .07 if r in [2, 3] else 0.005
             region = 'r%s' % r
             sent_boost = HighLighter.get_sent_type_boost()
             if sent_type in sent_boost:
                 type_boost = sent_boost[sent_type][region] if region in sent_boost[sent_type] else 0.001
-            type_boost = math.pow(type_boost, 1)
-            s *= type_boost
-            s *= 10
+            type_boost = math.pow(type_boost, 1.2)
+            s *= type_boost * 10
             prediction.append([score['sid'], s, sent_type])
-
-            # F6: create an index from NE to score object
-            if len(score_ret['scored_nes']) > 0:
-                solo_ne = score_ret['scored_nes'][0]
-                s_obj = {'s': s, 'sid': score['sid'], 'index': len(prediction) - 1}
-                ne2score[solo_ne] = [s_obj] if solo_ne not in ne2score else ne2score[solo_ne] + [s_obj]
-
-            # push current sp info
-            while len(precedent_sp) >= precedent_threshold:
-                precedent_sp.pop()
-            precedent_sp.append(s_sp)
 
             # if score['sid'] in hts or s > threshold:
             sentence_level_details.append(
@@ -694,31 +640,12 @@ def score_paper_threshold(score_file, container, out_file, hter, threshold,
                     )
                 )
 
-    # calculate type stats
-    # for t in t2freq:
-    #     t2freq[t] = 1.0 * (t2freq[t] + 1) / max_sid
-
-    # do reranking
-    # for i in range(10):
-    #     prediction = rerank(prediction, threshold, t2freq)
-
-    # F6: penalise the same NE if it has been selected by higher scored sentences
-    # nnpt = 1
-    # for solo_ne in ne2score:
-    #     solo_ne_so = ne2score[solo_ne]
-    #     if len(solo_ne_so) > nnpt:
-    #         solo_ne_so = sorted(solo_ne_so, cmp=lambda p1, p2 : 1 if p2['s'] > p1['s'] else 0 if p2['s'] == p1['s'] else -1)
-    #         for i in range(nnpt, len(solo_ne_so)):
-    #             so = solo_ne_so[i]
-    #             prediction[so['index']][1] *= .7
-
     prediction = sort_by_threshold(prediction, threshold,
                             cmp=lambda p1, p2 : 1 if p2[1] > p1[1] else 0 if p2[1] == p1[1] else -1)
 
     for s in prediction:
         if s[0] in hts:
             num_correct += 1
-    # print 'precision: {}, recall: {}'.format(1.0 * num_correct / len(prediction), 1.0 * num_correct / len(hts))
 
     container.append({'paper': scores[0]['doc_id'],
                       'predicted': len(prediction), 'correct': num_correct, 'hts': len(hts), 'max_sid': max_sid})
