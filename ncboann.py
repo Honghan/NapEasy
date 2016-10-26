@@ -4,6 +4,8 @@ import httplib2
 import json
 import os
 from pprint import pprint
+import ann_utils as utils
+import codecs
 
 REST_URL = "http://data.bioontology.org"
 # Honghan's api key
@@ -59,3 +61,32 @@ def test():
     print(json.dumps(annotations))
     # annotations = get_json(construct_url(text_to_annotate, ontologies))
 
+
+def match_concepts(text, concepts):
+    t = text.lower()
+    ret = []
+    for c in concepts:
+        p = t.find(c)
+        if p >= 0:
+            ret.append([c, p])
+    return ret
+
+
+def file_match_concepts(ann_file, concepts):
+    anns = utils.load_json_data(ann_file)
+    for ann in anns:
+        ret = match_concepts(ann['text'], concepts)
+        if len(ret) > 0:
+            print ret, ann['sid']
+
+
+def load_brain_regions(f):
+    concepts = []
+    with codecs.open(f, encoding='utf-8') as rf:
+        concepts = [r.split('\t')[1].replace('\n', '') for r in rf.readlines()]
+    return concepts
+
+
+if __name__ == "__main__":
+    concepts = load_brain_regions('./resources/brain-regions-without-fma.tsv')
+    file_match_concepts('./anns_v2/Chechko et al., (2014) - Neural correlates of unsuccessful memory performance in MCI_annotated_ann.json', concepts)
