@@ -12,12 +12,12 @@ res_file_ne = './resources/named_entities.txt' # './training/patterns/named_enti
 res_file_sp = './resources/sub_pred.txt' # './training/patterns/sub_pred.json'
 res_file_spcat = './resources/sub_pred_categories.json'
 
-score_file_cd = './training/scores_cd.json'
-score_file_nes = './training/scores_nes.json'
-score_file_sp = './training/scores_sp.json'
-score_file_ranged_cd = './training/scores_ranged_cd.json'
-score_file_ranged_nes = './training/scores_ranged_nes.json'
-score_file_ranged_sp = './training/scores_ranged_sp.json'
+score_file_cd = './resources/scores_cd.json'
+score_file_nes = './resources/scores_nes.json'
+score_file_sp = './resources/scores_sp.json'
+score_file_ranged_cd = './resources/scores_ranged_cd.json'
+score_file_ranged_nes = './resources/scores_ranged_nes.json'
+score_file_ranged_sp = './resources/scores_ranged_sp.json'
 
 # parser_lock = threading.RLock()
 
@@ -322,7 +322,7 @@ class HighLighter:
     @staticmethod
     def get_onto_name_scores():
         if HighLighter.onto_name_scores is None:
-            HighLighter.onto_name_scores = utils.load_json_data('./training/score_ncbo_ontos.json')
+            HighLighter.onto_name_scores = utils.load_json_data('./resources/score_ncbo_ontos.json')
         return HighLighter.onto_name_scores
 
     # get sub_pred_ne_stat
