@@ -1,3 +1,3 @@
 # psychometric_neuroatonomy
 
-A provisional brat installation for developing tests purpose only: [http://brat-silverash.rhcloud.com/brat/](http://brat-silverash.rhcloud.com/brat/)
+Automated PDF highlights to support faster curation of case studies and reviews on Parkinson's and Alzheimer's disease
