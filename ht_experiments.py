@@ -75,7 +75,9 @@ def pp_score_exp(container, out_file, hter, threshold, manual_ann):
     else:
         precision = 1.0 * correct / predicted
         recall = 1.0 * correct / should
-        print '{}\t{}\t{}\t{}\t{}'.format(threshold, precision, recall,
+        print '\nmicro-average result'
+        print 'threshold\tprecision\trecall\t#fallout\t#f measure'
+        print '{}\t{}\t{}\t{}\t{}\n--'.format(threshold, precision, recall,
                                           '-' if total == 0 else (1.0 * predicted - correct)/(total - correct),
                                           2 * precision * recall / (precision + recall))
         # utils.save_json_array(container, out_file)
