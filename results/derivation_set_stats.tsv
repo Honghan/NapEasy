@@ -7,11 +7,11 @@ PMID	Journal Title	#sentences	#not highlighted	#highlights	Paper Title
 27264343	Parkinsonism Relat Disord	137	128	9	./anns_v2/Arnaldi et al., (2016) - Functional neuroimaging and clinical features of drug naive patients with de novo PD and RBD_annotated_ann.json
 20031272	Neurobiol Aging	184	172	12	./anns_v2/Avila et al., (2011) - Effect of temporal lobe structure volume on memory in eldery depressed patients_annotated_ann.json
 25572161	J Neurol	126	107	19	./anns_v2/Benninger et al., (2008) - Morphological differences in PD with and without rest tremor_annotated_ann.json
-None	None	182	166	16	./anns_v2/Beyer et al., (2006) - MRI study of PD with MCI and dementia using VBM_annotated_ann.json
+17028119	J Neurol Neurosurg Psychiatry	182	166	16	./anns_v2/Beyer et al., (2006) - MRI study of PD with MCI and dementia using VBM_annotated_ann.json
 20040773	J Ultrasound Med	114	101	13	./anns_v2/Bartova et al., (2010) - Correlation between substantia nigra features detected by sonography and PD_annotated_ann.json
 26402108	J Alzheimers Dis	145	139	6	./anns_v2/Bilello et al., (2015) - Correlating cognitive decline with white matter lesions and atrophy in AD_annotated_ann.json
 19632335	Neuroimage	220	209	11	./anns_v2/Birn et al., (2010) - Neural systems supporting lexical search guided by letter and semantic category cues. A self-paced overt response fMRI study of verbal fluency._annotated_ann.json
-None	None	157	151	6	./anns_v2/Biundo et al., (2015) - Patterns of cortical thickness associated with ICD in PD_annotated_ann.json
+25649923	Mov Disord	157	151	6	./anns_v2/Biundo et al., (2015) - Patterns of cortical thickness associated with ICD in PD_annotated_ann.json
 25253863	J Neurosci	355	325	30	./anns_v2/Brandi et al., (2014) - The neural correlates of planning and executing actual tool use_annotated_ann.json
 25240405	Parkinsonism Relat Disord	170	158	12	./anns_v2/Cerasa et al., (2014) - Cortical volume and folding abnormalities in PD with pathological gambling_annotated_ann.json
 7964695	J Neural Transm Suppl	186	161	25	./anns_v2/Bologna et al., (2016) - Neural correlates of blinking abnormalities in patients with progressive supranuclear palsy_annotated_ann.json
@@ -33,17 +33,17 @@ None	None	157	151	6	./anns_v2/Biundo et al., (2015) - Patterns of cortical thick
 11595262	Neuropsychologia	580	580	0	./anns_v2/Devlin et al., (2002) - Is there an anatomical basis for category-specificity. Semantic memory studies in PET and fMRI_annotated_ann.json
 25596880	Parkinsonism Relat Disord	194	186	8	./anns_v2/Foki et al., (2015) - Finger dexterity deficits in PD_annotated_ann.json
 21116054	J Alzheimers Dis	161	154	7	./anns_v2/Dos Santos et al., (2011) - Morphological cerebral correlates of CERAD test performance in AD and MCI_annotated_ann.json
-None	None	201	196	5	./anns_v2/Florin et al., (2013) - Modulation of local field potential power of the subthalamic nucleus during isometric force generation in PD_annotated_ann.json
+23454540	Neuroscience	201	196	5	./anns_v2/Florin et al., (2013) - Modulation of local field potential power of the subthalamic nucleus during isometric force generation in PD_annotated_ann.json
 25361545	J Parkinsons Dis	121	107	14	./anns_v2/Erola et al., (2005) - Bilateral subthalamic nucleus stimulation improves health related quality of life in PD_annotated_ann.json
 19247239	Med Sci Monit	17	15	2	./anns_v2/Formisano et al., (2009) - Blink reflex changes in PD following severe traumatic brain injury correlates with diffuse axonal injury_annotated_ann.json
 10674796	Neuropsychology	400	383	17	./anns_v2/Fama et al., (2000) - Structural brain correlates of verbal and nonverbal fluency measures in AD_annotated_ann.json
 21498904	J Alzheimers Dis	160	156	4	./anns_v2/Forster et al., (2011) - Effects of a 6 month cognitive intervention program on brain metabolism in aMCI and mild AD_annotated_ann.json
 19875130	J Psychiatr Res	159	151	8	./anns_v2/Forster et al., (2010) - FDG-PET mapping the brain subtrates of visuoconstructive processing in AD_annotated_ann.json
 8234569	Psychol Med	153	144	9	./anns_v2/Forstl et al., (1993) - Neuropathological basis for drawing disability (constructional apraxia) in Alzheimer's disease_annotated_ann.json
-None	None	166	166	0	./anns_v2/Foster et al., (1986) - Cerebral mapping of apraxia in AD by PET_annotated_ann.json
+3485952	Ann Neurol	166	166	0	./anns_v2/Foster et al., (1986) - Cerebral mapping of apraxia in AD by PET_annotated_ann.json
 27474916	Cortex	366	357	9	./anns_v2/Foxe et al., (2016) - The neural correlates of auditory and visuospatial span in logopenic progressive aphasia and AD_annotated_ann.json
-None	None	180	152	28	./anns_v2/Garrido et al., (2002) - Relation between medial temporal atophy and functional braina activity during memory procressing in AD_annotated_ann.json
-None	None	118	115	3	./anns_v2/Fuente-Fernandex et al., (2001) - Biochemical variations in the synaptic level of dopamine precede motor fluctuations in PD_annotated_ann.json
+12397142	J Neurol Neurosurg Psychiatry	180	152	28	./anns_v2/Garrido et al., (2002) - Relation between medial temporal atophy and functional braina activity during memory procressing in AD_annotated_ann.json
+11261503	Ann Neurol	118	115	3	./anns_v2/Fuente-Fernandex et al., (2001) - Biochemical variations in the synaptic level of dopamine precede motor fluctuations in PD_annotated_ann.json
 27060962	J Alzheimers Dis	213	200	13	./anns_v2/Gardini et al., (2015) - Increased functional connectivity in the DMN in MCI_annotated_ann.json
 15351627	Neuropsychologia	139	124	15	./anns_v2/Gerton et al., (2004) - Shared and distinct neurophsyiological components of digits forward and backwards task._annotated_ann.json
 9829454	Microsc Res Tech	154	154	0	./anns_v2/Giannakopoulous et al., (1998) - Pathologic correlates of apraxia in AD_annotated_ann.json
@@ -56,16 +56,16 @@ None	None	118	115	3	./anns_v2/Fuente-Fernandex et al., (2001) - Biochemical vari
 23740899	Sci Transl Med	219	219	0	./anns_v2/Grady et al., (2001) - Altered brain functional connectivity and impaired STM in AD_annotated_ann.json
 19293396	Cereb Cortex	161	157	4	./anns_v2/Grogan et al., (2009) - Structural correlates of semantic and phonemic fluency ability_annotated_ann.json
 26680084	Transplant Proc	303	287	16	./anns_v2/Hagell et al., (1999) - Sequential bilateral transplantation in PD_annotated_ann.json
-None	None	496	496	0	./anns_v2/Grossman et al., (1996) - Progressive nonfluent aphasia. Language, cognitive and PET measures contrasted with AD_annotated_ann.json
-None	None	102	97	5	./anns_v2/Han et al., (2015) - Functional neural correlates of figure copy and recall task performance in cognitively impaired individuals. An 18FFDG-PET study_annotated_ann.json
-None	None	320	318	2	./anns_v2/Grossman et al., (2003) - Neural basis for semantic memory difficulty in AD_annotated_ann.json
+23971420	J Cogn Neurosci	496	496	0	./anns_v2/Grossman et al., (1996) - Progressive nonfluent aphasia. Language, cognitive and PET measures contrasted with AD_annotated_ann.json
+26509549	Neuroreport	102	97	5	./anns_v2/Han et al., (2015) - Functional neural correlates of figure copy and recall task performance in cognitively impaired individuals. An 18FFDG-PET study_annotated_ann.json
+12538399	Brain	320	318	2	./anns_v2/Grossman et al., (2003) - Neural basis for semantic memory difficulty in AD_annotated_ann.json
 21932265	Hum Brain Mapp	317	293	24	./anns_v2/Grasby et al., (1993) - Functional mapping of brain areas implicated in auditory-verbal memory function_annotated_ann.json
 24450147	Seishin Shinkeigaku Zasshi	122	110	12	./anns_v2/Hanganu et al., (2013) - MCI in PD associated with increased cortical degeneration_annotated_ann.json
 14761903	Brain	383	366	17	./anns_v2/Grossman et al., (2004) - Naming difficulty in AD, FTD and corticobasal degeneration._annotated_ann.json
 8986328	Behav Neurosci	401	376	25	./anns_v2/Helkala et al., (1996) - Slow wave activity in the spectral analysis of the EEG and volumes of hippocampus in AD_annotated_ann.json
 22663253	J Cogn Neurosci	184	173	11	./anns_v2/Heleen et al., (2012) - PET evidence for a role for striatal dopamine in the attentional blink_annotated_ann.json
 21709375	J Alzheimers Dis	236	233	3	./anns_v2/Hanggi et al., (2011) - Volumes of lateral temporal and parietal structures distinguish between healthy aging, MCI and AD_annotated_ann.json
-None	None	175	159	16	./anns_v2/Hellwig et al., (2013) - Neural correlates of cognitive dysfunction in LDB and tauopathies._annotated_ann.json
+21709375	J Alzheimers Dis	175	159	16	./anns_v2/Hellwig et al., (2013) - Neural correlates of cognitive dysfunction in LDB and tauopathies._annotated_ann.json
 17351722	J Neurol	106	97	9	./anns_v2/Happe et al., (2007) - Association of daytime sleepiness with nigrostriatal dopaminergic degeneration in PD_annotated_ann.json
 23864781	World J Gastroenterol	109	102	7	./anns_v2/Higginson et al., (2001) - Which symptoms of anxiety diminish after surgical interventions for PD_annotated_ann.json
 19895200	J Neurosurg	116	103	13	./anns_v2/Hellman et al., (2008) - Effect of DBS on comptocormia and postural abnormalities in PD_annotated_ann.json
@@ -75,23 +75,23 @@ None	None	175	159	16	./anns_v2/Hellwig et al., (2013) - Neural correlates of cog
 23369803	Neuropsychologia	233	206	27	./anns_v2/Hirni et al., (2013) - Distinct neuroanatomical base of episodic and semantic memory performance in AD_annotated_ann.json
 16725162	Neuropsychologia	280	275	5	./anns_v2/Hirshorn et al., (2006) - Role of the left infeiror frontal gyrus in covert word retrieval. Neural correlates of switching during verbal fluency_annotated_ann.json
 27520750	Neuroimage	152	134	18	./anns_v2/Hu et al., (2015) - Amygdala associated with depression in PD_annotated_ann.json
-None	None	138	127	11	./anns_v2/Hirono et al., (2001) - Neuronal substrates for semantic memory. A PET study in AD_annotated_ann.json
+11125237	Dement Geriatr Cogn Disord	138	127	11	./anns_v2/Hirono et al., (2001) - Neuronal substrates for semantic memory. A PET study in AD_annotated_ann.json
 18821043	J Neurol	145	136	9	./anns_v2/Ibarretxe-Bilbao et al., (2007) - Hippocampal head atrophy predominance in PD with hallucinations and dementia._annotated_ann.json
 12507726	Neurosci Res	113	107	6	./anns_v2/Ino et al., (2003) - Parieto-frontal networks for clock drawing revealed with fMRI_annotated_ann.json
-None	None	144	138	6	./anns_v2/Hirono et al., 1998 - Regional metabolism. Associations with dyscalculia in AD_annotated_ann.json
+9854970	J Neurol Neurosurg Psychiatry	144	138	6	./anns_v2/Hirono et al., 1998 - Regional metabolism. Associations with dyscalculia in AD_annotated_ann.json
 21717194	J Neurol	175	165	10	./anns_v2/Janzen et al., (2012) - The PPN is related to VH in PD. Results from a VBM study._annotated_ann.json
 11971059	J Neurol Neurosurg Psychiatry	165	148	17	./anns_v2/Iranzo et al., (2002) - Sleep symptoms and polysomnographic architecture in advanced PD after chronic bilateral STN stimulation_annotated_ann.json
 26581788	J Int Neuropsychol Soc	238	223	15	./anns_v2/Kas et al., (2011) - Neural correlates of cognitive impairment in posterior cortical atrophy_annotated_ann.json
 20110703	Dement Geriatr Cogn Disord	151	151	0	./anns_v2/Jessen et al., (2006) - Volume reduction of entorhinal cortex in subjective memory impairment_annotated_ann.json
 15127084	Neuropsychopharmacology	231	223	8	./anns_v2/Johannsen et al., (1999) - Cortical responses to sustained and divided attention in AD_annotated_ann.json
 19965847	J Neurol Neurosurg Psychiatry	315	305	10	./anns_v2/Ibarretxe-Bilbao et al., (2009) - Differential progression of brain atrophy in PD with and without VH_annotated_ann.json
-None	None	198	175	23	./anns_v2/Kaiser et al., (2012) - Neuropsychological and neuroimaging markers in early vs. late onset AD_annotated_ann.json
+22990206	Am J Alzheimers Dis Other Demen	198	175	23	./anns_v2/Kaiser et al., (2012) - Neuropsychological and neuroimaging markers in early vs. late onset AD_annotated_ann.json
 21782309	Brain Cogn	326	326	0	./anns_v2/Jacobson et al., (2011) - An fMRI investigation of a novel analogue to the TMT_annotated_ann.json
-None	None	232	222	10	./anns_v2/Kerchner et al., (2012) - Hippocampal CA1 apical neuopil atrophy and memory performance in AZ_annotated_ann.json
+22766164	Neuroimage	232	222	10	./anns_v2/Kerchner et al., (2012) - Hippocampal CA1 apical neuopil atrophy and memory performance in AZ_annotated_ann.json
 18313775	Arch Gerontol Geriatr	99	90	9	./anns_v2/Kim et al., (2009) - Relation between the clock drawing test and structural changes of brain in dementia._annotated_ann.json
-None	None	109	103	6	./anns_v2/Kitabayashi et al., (2001) - Relationship between regional cerebral blood flow and VF in AD_annotated_ann.json
-None	None	193	190	3	./anns_v2/Kalaitzakis et al., (2009) - Dementia and VH associated with limbi pathology in PD_annotated_ann.json
-None	None	200	200	0	./anns_v2/Kircher et al., (2011) - Neural correlates of rhyming versus lexical and semantic fluency_annotated_ann.json
+11555340	Psychiatry Clin Neurosci	109	103	6	./anns_v2/Kitabayashi et al., (2001) - Relationship between regional cerebral blood flow and VF in AD_annotated_ann.json
+18602855	Parkinsonism Relat Disord	193	190	3	./anns_v2/Kalaitzakis et al., (2009) - Dementia and VH associated with limbi pathology in PD_annotated_ann.json
+21447325	Brain Res	200	200	0	./anns_v2/Kircher et al., (2011) - Neural correlates of rhyming versus lexical and semantic fluency_annotated_ann.json
 21850388	J Neurol	144	134	10	./anns_v2/Kato et al., (2012) - Widespread cortical and subcortical brain atrophy in PD with EDS_annotated_ann.json
 9740363	Neuropsychologia	47	40	7	./anns_v2/Kohler et al., (1998) - Memory impairments associated with hippocampal versus parahippocampal-gyrus atrophy in AD_annotated_ann.json
 10530725	Neuropsychologia	232	230	2	./anns_v2/Keilp et al., (1999) - Cerebral blood flow patterns underlying the differential impairment in category vs letter fluency in AD_annotated_ann.json
@@ -106,14 +106,14 @@ None	None	200	200	0	./anns_v2/Kircher et al., (2011) - Neural correlates of rhym
 24662100	J Alzheimers Dis	208	189	19	./anns_v2/Leyton et al., (2014) - Verbal repetition in PPA and AD_annotated_ann.json
 12621318	Alzheimer Dis Assoc Disord	199	198	1	./anns_v2/Lekeu et al., (2003) - Brain correlates of performance in a free_cued recall task with semantic encoding in AD_annotated_ann.json
 25736510	J Geriatr Psychiatry Neurol	161	143	18	./anns_v2/Lee et al., (2015) - Functional neuroanatomical correlates of the FAB in AD. A FDG PET study_annotated_ann.json
-None	None	488	476	12	./anns_v2/Li et al., (2012) - The neuronal correlates of digits backward are revealed by VBM and RS-FMRI_annotated_ann.json
-None	None	144	139	5	./anns_v2/Lin et al., (2014) - Cingulum correlates of cognitive functions in MCI and AD_annotated_ann.json
-None	None	293	272	21	./anns_v2/Migo et al., (2015) Aging Neuropsychology and Cognition_annotated_ann.json
+22359639	PLoS One	488	476	12	./anns_v2/Li et al., (2012) - The neuronal correlates of digits backward are revealed by VBM and RS-FMRI_annotated_ann.json
+24414091	Brain Topogr	144	139	5	./anns_v2/Lin et al., (2014) - Cingulum correlates of cognitive functions in MCI and AD_annotated_ann.json
+26234803	Neuropsychol Dev Cogn B Aging Neuropsychol Cogn	293	272	21	./anns_v2/Migo et al., (2015) Aging Neuropsychology and Cognition_annotated_ann.json
 19296551	Int J Geriatr Psychiatry	258	235	23	./anns_v2/Melrose et al., (2009) - The neural correlates of naming and fluency deficits in AD_annotated_ann.json
 21055445	Neurosci Lett	112	98	14	./anns_v2/Matsuoka et al., (2011) - Neural correlates of performance on the different scoring systems of the CDT_annotated_ann.json
 21783205	J Neurol Sci	139	129	10	./anns_v2/Moriyama et al., (2011) - Increased dopamine transported density in PD with SAD_annotated_ann.json
 26163801	Neuroimage	289	289	0	./anns_v2/Lin, Chiu _ Gramann (2015) - EEG correlates of spatial orientation in human retrosplenial complex_annotated_ann.json
-None	None	174	172	2	./anns_v2/Mortimer et al., (2004) - Delated recall, hippocampal volume and AD_annotated_ann.json
+14872025	Neurology	174	172	2	./anns_v2/Mortimer et al., (2004) - Delated recall, hippocampal volume and AD_annotated_ann.json
 24270207	J Alzheimers Dis	219	209	10	./anns_v2/Murray et al., (2014) - Hyperphosphorylated tau is elevated in AD with psychosis_annotated_ann.json
 26178812	Geriatr Gerontol Int	159	148	11	./anns_v2/Nakashima et al., (2016) - Neuroanatomical correlates of error types on CDT in AD_annotated_ann.json
 27180794	J Nippon Med Sch	352	339	13	./anns_v2/Nielson et al., (1996) - Constructional apraxia in AD_annotated_ann.json
@@ -127,25 +127,25 @@ None	None	174	172	2	./anns_v2/Mortimer et al., (2004) - Delated recall, hippocam
 20402571	Int J Neurosci	177	173	4	./anns_v2/Parks et al., (2010) - Performance on the CDT correlates with fMRI response to a visuopstial task in AD_annotated_ann.json
 27683905	J Neurosci	697	697	0	./anns_v2/Patterson et al., (2007) - Representation of semantic knowledge in the human brain_annotated_ann.json
 22809566	Exp Neurol	246	234	12	./anns_v2/Pedrosa et al., (2012) - Essential tremor and tremor in PD are associated with distinct tremor clusters in ventral thalamus_annotated_ann.json
-None	None	172	166	6	./anns_v2/Palmer et al., (1995) - Postural finger tremor exhibited by PD and healthy controls_annotated_ann.json
+8552120	Mov Disord	172	166	6	./anns_v2/Palmer et al., (1995) - Postural finger tremor exhibited by PD and healthy controls_annotated_ann.json
 15135882	Neurosci Lett	88	81	7	./anns_v2/Pantel et al., (2004) - Distribution of cerebral atrophy assessed by MRI reflects patterns of neuropsychological deficits in AD_annotated_ann.json
 25461208	Epilepsy Behav	273	273	0	./anns_v2/Peer et al., (2014) - Orientation and disorientation. Lessons from patients with epilepsy._annotated_ann.json
 26090080	J Mov Disord	68	63	5	./anns_v2/Pellaprat et al., (2014) - Deep brain stimulation of STN improves pain in PD_annotated_ann.json
 27687251	Acta Radiol	218	197	21	./anns_v2/Pasquini et al., (2016) - AD and memory_annotated_ann.json
-None	None	132	114	18	./anns_v2/Perneczky et al., (2008) - Activities of daily living, cerebral glucose metabolism _ cognitive reserve in lewy body and PD_annotated_ann.json
+18984958	Dement Geriatr Cogn Disord	132	114	18	./anns_v2/Perneczky et al., (2008) - Activities of daily living, cerebral glucose metabolism _ cognitive reserve in lewy body and PD_annotated_ann.json
 26242705	Neurobiol Aging	229	218	11	./anns_v2/Peng et al., (2016) - Clinical and neuroimaging differences between posterior cortical atrophy and amnestic AD patients_annotated_ann.json
 23792693	J Alzheimers Dis	181	168	13	./anns_v2/Perri et al., (2013) - Word list and story recall elicit different patterns of memory deficit in patients with AD_annotated_ann.json
 26400852	Neuroradiology	179	159	20	./anns_v2/Pravata et al., (2016) - The neural correlates of anomia in the conversion from MCI to AD_annotated_ann.json
-None	None	251	244	7	./anns_v2/Peters et al., (2009) - The neural correlates of verbal STM in AD_annotated_ann.json
+19433442	Brain	251	244	7	./anns_v2/Peters et al., (2009) - The neural correlates of verbal STM in AD_annotated_ann.json
 26639978	Parkinsonism Relat Disord	117	106	11	./anns_v2/Ramirez-Ruiz et al., (2007) - Cerebral atrophy in PD with visual hallucinations_annotated_ann.json
 17717413	Dement Geriatr Cogn Disord	166	159	7	./anns_v2/Rami et al., (2007) - Cortical brain metabolism as measured by H-MRS is related to memory in aMCI and AD_annotated_ann.json
 27668883	PLoS One	327	296	31	./anns_v2/Remy et al., (2005) - Verbal episodic memory impairment in AD_annotated_ann.json
-None	None	166	166	0	./anns_v2/Randhawa et al., (2013) - Clinical Study Repetitive Transcranial Magnetic Stimulation Improves Handwriting in Parkinson’s Disease_annotated_ann.json
+23841021	Parkinsons Dis	166	166	0	./anns_v2/Randhawa et al., (2013) - Clinical Study Repetitive Transcranial Magnetic Stimulation Improves Handwriting in Parkinson’s Disease_annotated_ann.json
 24403280	J Neurol Neurosurg Psychiatry	268	259	9	./anns_v2/Robert et al., (2014) - Apathy and impaired emotional facial recognition networks overlap in PD._annotated_ann.json
 26300385	Neuropsychologia	164	157	7	./anns_v2/Rogalski et al., (2011) - Anatomy of language impairments in primary progressive aphasia._annotated_ann.json
 15931515	Eur J Nucl Med Mol Imaging	131	117	14	./anns_v2/Rodriguez et al., (2005) - Global cognitive impairment should be taken into account in SPECT-neuropsychology correlations in AD_annotated_ann.json
 27062691	Brain Lang	292	285	7	./anns_v2/Rodriguez et al., (2016) - Neuroanatomical correlates of verbal fluency in early AD and normal aging_annotated_ann.json
-None	None	197	185	12	./anns_v2/Rolinski et al., (2016) - Basal ganglia dysfuncion in REM sleeep behaviour disorder parallels that in PD_annotated_ann.json
+27297241	Brain	197	185	12	./anns_v2/Rolinski et al., (2016) - Basal ganglia dysfuncion in REM sleeep behaviour disorder parallels that in PD_annotated_ann.json
 26827646	Neurobiol Aging	105	93	12	./anns_v2/Rohrer et al., (2013) - Patterns of longitudinal brain atrophy in the logopenic variant of primary progressive aphasia_annotated_ann.json
 20847406	J Alzheimers Dis	153	142	11	./anns_v2/Sarazin et al., (2010) - The amnestic syndrome of hippocampal type in AD. An MRI study_annotated_ann.json
 26972578	Brain Imaging Behav	229	222	7	./anns_v2/Rombouts et al., (2005) - Altered resting state networks in MCI and AD. An fMRI study._annotated_ann.json
@@ -153,7 +153,7 @@ None	None	197	185	12	./anns_v2/Rolinski et al., (2016) - Basal ganglia dysfuncio
 21675596	Clin EEG Neurosci	8	8	0	./anns_v2/Schonknecht et al., (2011) - Bihemispheric cerebral FDG PET correlates of cognitive dysfunction as assessed by the CERAD in AD_annotated_ann.json
 22322075	Neurosci Lett	108	96	12	./anns_v2/Seidl et al., (2012) - Subcortical morphological correlates of impaired CDT performance_annotated_ann.json
 23888166	Dement Geriatr Cogn Dis Extra	127	118	9	./anns_v2/Shindo et al., (2013) - Trail making test Part A and brain perfusion imaging in mild AD_annotated_ann.json
-None	None	100	90	10	./anns_v2/Sakakibara et al., (2001) - SPECT imaging of the dopamine transport revealed marked decline of nigrostriatal dopaminergic function in PD with urinary dysfunctio_annotated_ann.json
+11440745	J Neurol Sci	100	90	10	./anns_v2/Sakakibara et al., (2001) - SPECT imaging of the dopamine transport revealed marked decline of nigrostriatal dopaminergic function in PD with urinary dysfunctio_annotated_ann.json
 11049667	Brain Lang	339	331	8	./anns_v2/Small et al., (2000) - Sentence repetition and processing resources in AD_annotated_ann.json
 24670399	J Alzheimers Dis	134	117	17	./anns_v2/Sexton et al., (2010) - MRI correlates of episodic memory in AD, mild cognitive impairment and healthy aging._annotated_ann.json
 10584671	Mov Disord	157	146	11	./anns_v2/Seinber et al., (1999) - Changes in Handwriting Resulting From Bilateral STN stimulation in PD_annotated_ann.json
@@ -170,12 +170,12 @@ None	None	100	90	10	./anns_v2/Sakakibara et al., (2001) - SPECT imaging of the d
 27679573	Front Pharmacol	129	116	13	./anns_v2/Tessitore et al., (2016) - Fatigue in PD_annotated_ann.json
 23938134	Parkinsonism Relat Disord	141	131	10	./anns_v2/Sunwoo et al., (2013) - Thalamic volume and related visual recognition are associated with FOG in PD_annotated_ann.json
 23830931	Psychiatry Res	181	170	11	./anns_v2/Terada et al., (2013) - Trail making test B and brain perfusion imaging in MCI and AD_annotated_ann.json
-None	None	133	117	16	./anns_v2/Toledo-Morrell et al., (2000) - Hemispheric difference in hippocampal volume predict verbal and spatial memory performance in patients with AD_annotated_ann.json
+10791835	Hippocampus	133	117	16	./anns_v2/Toledo-Morrell et al., (2000) - Hemispheric difference in hippocampal volume predict verbal and spatial memory performance in patients with AD_annotated_ann.json
 18763875	Neuropsychology	199	195	4	./anns_v2/Tranel et al., (2008) - Does the clock drawing test have focal neuroanatomical correlates._annotated_ann.json
 21831859	Am J Alzheimers Dis Other Demen	150	150	0	./anns_v2/Tsai et al., (2011) - Posterior cortical atrophy. Evidence for discrete syndromes of early onset AD_annotated_ann.json
-None	None	182	166	16	./anns_v2/Tijms et al., (2014) - Single subject GM graph properties and their relationship with cognitive impairment in AD_annotated_ann.json
+24735020	Brain Connect	182	166	16	./anns_v2/Tijms et al., (2014) - Single subject GM graph properties and their relationship with cognitive impairment in AD_annotated_ann.json
 25446003	Brain Res	277	272	5	./anns_v2/Tomasino et al., (2014) - How do conceptual representations interact with processing demands. An FMRI study on action and abstract related words_annotated_ann.json
-None	None	248	241	7	./anns_v2/Vasconcelos et al., (2013) - The thickness of posterior cortical areas is related to executive dysfunction in AD_annotated_ann.json
+24473557	Clinics (Sao Paulo)	248	241	7	./anns_v2/Vasconcelos et al., (2013) - The thickness of posterior cortical areas is related to executive dysfunction in AD_annotated_ann.json
 27618110	Brain Sci	148	141	7	./anns_v2/Voon et al., (2013) - Impulse control disorders in PD_annotated_ann.json
 15802915	Dement Geriatr Cogn Disord	99	91	8	./anns_v2/Ueda et al., (2002) - Clock drawing performance and rCBF in AD_annotated_ann.json
 24672452	Front Behav Neurosci	102	95	7	./anns_v2/Vlcek _ Laczo (2014) - Neural correlates of spatial navigation changes in MCI and AD_annotated_ann.json
@@ -183,7 +183,7 @@ None	None	248	241	7	./anns_v2/Vasconcelos et al., (2013) - The thickness of post
 24484280	Curr Alzheimer Res	147	128	19	./anns_v2/Weiler et al., (2014) - Default mode, EF and language functional connectivity networks are compromised in AD_annotated_ann.json
 21446782	Int J Neurosci	161	148	13	./anns_v2/Weis et al., (2011) - Functional neuoanatomy of sustained memory encoding performance in healthy aging and AD_annotated_ann.json
 20069587	Int J Geriatr Psychiatry	206	200	6	./anns_v2/Woo et al., (2009) - Executive deficits and regional brain metabolism in AD_annotated_ann.json
-None	None	193	183	10	./anns_v2/Winge et al., (2005) - Relationships between nigrostriatal dopaminergic degeneration, urinary symptoms and bladder control in PD._annotated_ann.json
+16241972	Eur J Neurol	193	183	10	./anns_v2/Winge et al., (2005) - Relationships between nigrostriatal dopaminergic degeneration, urinary symptoms and bladder control in PD._annotated_ann.json
 27247279	J Neural Eng	199	186	13	./anns_v2/Wu et al., (2012) - Attention related networks in AD_annotated_ann.json
 17954780	Neurology	156	150	6	./anns_v2/Xu et al., (2007) - Perfusion fMRI detects deficits in regional CBF during memory encoding tasks in MCI_annotated_ann.json
 15752963	Clin Imaging	109	102	7	./anns_v2/Xie et al., (2005) - Patterns of brain activation in patients with mild AD during performance of substraction._annotated_ann.json
