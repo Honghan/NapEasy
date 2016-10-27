@@ -1,0 +1,74 @@
+{
+  "10561930": {
+    "max_abstract_sid": 8,
+    "also_correct": [
+      137
+    ]
+  },
+  "10791835": {
+    "max_abstract_sid": 11,
+    "also_correct": [
+      34,
+      37,
+      38
+    ]
+  },
+  "11277563": {
+    "max_abstract_sid": 3,
+    "also_correct": []
+  },
+  "12124484": {
+    "max_abstract_sid": 10,
+    "also_correct": [
+      31,
+      32,
+      33,
+      37,
+      38
+    ]
+  },
+  "12673603": {
+    "max_abstract_sid": 17,
+    "also_correct": [
+      36,
+      57,
+      70
+    ]
+  },
+  "15178945": {
+    "max_abstract_sid": 11,
+    "also_correct": [
+      25,
+      30
+    ]
+  },
+  "15377698": {
+    "max_abstract_sid": 3,
+    "also_correct": [
+      57,
+      58
+    ]
+  },
+  "15645532": {
+    "max_abstract_sid": 20,
+    "also_correct": [
+      37
+    ]
+  },
+  "15661114": {
+    "max_abstract_sid": 17,
+    "also_correct": [
+      58,
+      82,
+      83
+    ]
+  },
+  "15942197": {
+    "max_abstract_sid": 11,
+    "also_correct": [
+      52,
+      55,
+      112
+    ]
+  }
+}
