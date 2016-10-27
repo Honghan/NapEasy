@@ -16,6 +16,7 @@ import xml.etree.ElementTree as ET
 from xlrd import open_workbook
 import ann_analysor as aa
 import ann_utils as util
+import sys
 
 
 ontologies = 'FMA,GO,HP,PATO'
@@ -341,8 +342,8 @@ def append_abstract_label(xml_file):
 def append_abstract_label_for_all(xml_path):
     util.multi_thread_process_files(xml_path, 'xml', 10, append_abstract_label)
 
-def main():
-    path = './anns_v2/'
+def main(path):
+    # path = './anns_v2/'
     num_threads = 30
     util.multi_thread_process_files(path, 'xml', num_threads, ann_article)
 
@@ -353,5 +354,5 @@ def main():
     # append_abstract_label_for_all('./20-test-papers/')
 
 if __name__ == "__main__":
-    main()
+    main(sys.argv[1])
 

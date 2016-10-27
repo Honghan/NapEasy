@@ -442,7 +442,7 @@ def summ(highlighter, ann_file, out_path):
     utils.save_json_array(summary, join(out_path, fn[:fn.rfind('.')] + '.sum'))
 
 
-def summarise_all_papers(ann_path, summ_path):
+def summarise_all_papers(ann_path, summ_path, callback=None):
     thread_num = 6
     hters = []
     for i in range(thread_num):
@@ -450,7 +450,8 @@ def summarise_all_papers(ann_path, summ_path):
     utils.multi_thread_process_files(ann_path, '', thread_num, summ,
                                      args=[summ_path],
                                      thread_wise_objs=hters,
-                                     file_filter_func=lambda f: f.endswith('_ann.json'))
+                                     file_filter_func=lambda f: f.endswith('_ann.json'),
+                                     callback_func=callback)
 
 
 def sort_complement(list1, list2, threshold, cmp=None):
@@ -568,8 +569,8 @@ def score_paper_threshold(score_file, container, out_file, hter, threshold,
             0 if sid2onto[score['sid']] not in onto2scores \
                 else onto2scores[sid2onto[score['sid']]]
         confidence = 1 if 'confidence' not in score['pattern'] else score['pattern']['confidence']
-        if confidence < 1:
-            sent_type = ''
+        # if confidence < 1:
+        #     sent_type = ''
 
         if (len(score_ret['sp']) > 0) \
                 or (score_ret['cds'] + score_ret['nes'] > 0) \
@@ -648,7 +649,8 @@ def score_paper_threshold(score_file, container, out_file, hter, threshold,
             num_correct += 1
 
     container.append({'paper': scores[0]['doc_id'],
-                      'predicted': len(prediction), 'correct': num_correct, 'hts': len(hts), 'max_sid': max_sid})
+                      'predicted': len(prediction), 'correct': num_correct, 'hts': len(hts), 'max_sid': max_sid,
+                      'highlights': prediction})
     return sentence_level_details
 
 
