@@ -648,7 +648,8 @@ def score_paper_threshold(score_file, container, out_file, hter, threshold,
             num_correct += 1
 
     container.append({'paper': scores[0]['doc_id'],
-                      'predicted': len(prediction), 'correct': num_correct, 'hts': len(hts), 'max_sid': max_sid})
+                      'predicted': len(prediction), 'correct': num_correct, 'hts': len(hts), 'max_sid': max_sid,
+                      'highlights': prediction})
     return sentence_level_details
 
 
