@@ -1,0 +1,19 @@
+PMID	Journal Title	#sentences	#not highlighted	#highlights	Paper Title
+10561930	J Int Neuropsychol Soc	196	176	20	./20-test-papers/10561930_annotated_ann.json
+10675575	J Neurol Sci	152	133	19	./20-test-papers/10675575_annotated_ann.json
+10791835	Hippocampus	133	117	16	./20-test-papers/10791835_annotated_ann.json
+11277563	Neuroreport	66	53	13	./20-test-papers/11277563_annotated_ann.json
+11410952	Hum Brain Mapp	326	295	31	./20-test-papers/11410952_annotated_ann.json
+12673603	Int J Geriatr Psychiatry	96	86	10	./20-test-papers/12673603_annotated_ann.json
+12948733	Neuroimage	391	376	15	./20-test-papers/12948733_annotated_ann.json
+14590589	Arch Clin Neuropsychol	253	235	18	./20-test-papers/14590589_annotated_ann.json
+15377698	J Neurol Neurosurg Psychiatry	83	74	9	./20-test-papers/15377698_annotated_ann.json
+12124484	Nucl Med Commun	118	108	10	./20-test-papers/12124484_annotated_ann.json
+15178945	Dement Geriatr Cogn Disord	81	63	18	./20-test-papers/15178945_annotated_ann.json
+15037129	Cognition	415	391	24	./20-test-papers/15037129_annotated_ann.json
+15629765	Exp Neurol	218	205	13	./20-test-papers/15629765_annotated_ann.json
+15645532	Mov Disord	112	94	18	./20-test-papers/15645532_annotated_ann.json
+15204497	Disabil Rehabil	228	213	15	./20-test-papers/15204497_annotated_ann.json
+15598550	Psychiatry Res	221	204	17	./20-test-papers/15598550_annotated_ann.json
+15942197	Dement Geriatr Cogn Disord	161	151	10	./20-test-papers/15942197_annotated_ann.json
+15661114	Clin Neurophysiol	213	193	20	./20-test-papers/15661114_annotated_ann.json
