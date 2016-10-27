@@ -568,8 +568,8 @@ def score_paper_threshold(score_file, container, out_file, hter, threshold,
             0 if sid2onto[score['sid']] not in onto2scores \
                 else onto2scores[sid2onto[score['sid']]]
         confidence = 1 if 'confidence' not in score['pattern'] else score['pattern']['confidence']
-        if confidence < 1:
-            sent_type = ''
+        # if confidence < 1:
+        #     sent_type = ''
 
         if (len(score_ret['sp']) > 0) \
                 or (score_ret['cds'] + score_ret['nes'] > 0) \
