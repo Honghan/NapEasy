@@ -588,7 +588,7 @@ def score_paper_threshold(score_file, container, out_file, hter, threshold,
             # average combination
             # s = (s_sp + score_ret['cds'] + score_ret['nes'])/3
             # empirical setting
-            s = 0.4 * s_sp + .2 * score_ret['cds'] + .4 * score_ret['nes']
+            s = 0.35 * s_sp + .2 * score_ret['cds'] + .45 * score_ret['nes']
 
             # F2: voting enhancement
             voted = 0

@@ -59,7 +59,7 @@ def pp_score_exp(container, out_file, hter, threshold, manual_ann):
     predicted = 0
     total = 0
 
-    # print 'precision\trecall\t#highlighted\t#predicted\tpaper'
+    print 'precision\trecall\t#highlighted\t#predicted\tpaper'
     for p in container:
         should += p['hts']
         correct += p['correct']
@@ -74,7 +74,7 @@ def pp_score_exp(container, out_file, hter, threshold, manual_ann):
     else:
         precision = 1.0 * correct / predicted
         recall = 1.0 * correct / should
-        print '{}\t{}\t{}\t{}\t{}\n\n'.format(threshold, precision, recall,
+        print '{}\t{}\t{}\t{}\t{}'.format(threshold, precision, recall,
                                           '-' if total == 0 else (1.0 * predicted - correct)/(total - correct),
                                           2 * precision * recall / (precision + recall))
         # utils.save_json_array(container, out_file)
@@ -107,5 +107,5 @@ if __name__ == "__main__":
     # exp_iterating_threshold(folder_10_manual_checked, get_manual_checked_result())
     # exp_iterating_threshold(folder_200_papers)
     exp_given_threshold(folder_200_papers, .4)
-    # exp_given_threshold(folder_18_papers, .4)
-    # exp_given_threshold(folder_10_manual_checked, .4, get_manual_checked_result())
+    exp_given_threshold(folder_18_papers, .4)
+    exp_given_threshold(folder_10_manual_checked, .4, get_manual_checked_result())
