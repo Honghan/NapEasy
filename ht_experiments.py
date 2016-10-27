@@ -107,5 +107,5 @@ if __name__ == "__main__":
     # exp_iterating_threshold(folder_10_manual_checked, get_manual_checked_result())
     # exp_iterating_threshold(folder_200_papers)
     exp_given_threshold(folder_200_papers, .4)
-    exp_given_threshold(folder_18_papers, .4)
-    exp_given_threshold(folder_10_manual_checked, .4, get_manual_checked_result())
+    # exp_given_threshold(folder_18_papers, .4)
+    # exp_given_threshold(folder_10_manual_checked, .4, get_manual_checked_result())

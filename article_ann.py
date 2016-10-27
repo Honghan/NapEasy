@@ -342,15 +342,15 @@ def append_abstract_label_for_all(xml_path):
     util.multi_thread_process_files(xml_path, 'xml', 10, append_abstract_label)
 
 def main():
-    # path = './30-test-papers/'
-    # num_threads = 30
-    # util.multi_thread_process_files(path, 'xml', num_threads, ann_article)
+    path = './anns_v2/'
+    num_threads = 30
+    util.multi_thread_process_files(path, 'xml', num_threads, ann_article)
 
     # onlyfiles = [f for f in listdir(path) if isfile(join(path, f))]
     # for f in onlyfiles:
     #     if f.endswith('_ann.json'):
     #         aa.analysis_ann(os.path.join(path, f))
-    append_abstract_label_for_all('./20-test-papers/')
+    # append_abstract_label_for_all('./20-test-papers/')
 
 if __name__ == "__main__":
     main()

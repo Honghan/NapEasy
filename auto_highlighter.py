@@ -526,7 +526,7 @@ def score_paper_threshold(score_file, container, out_file, hter, threshold,
     units = 5
     scores = utils.load_json_data(score_file)
     max_sid = int(scores[len(scores) - 1]['sid'])
-    offset = int(1.0 * max_sid / units)
+    offset = int(math.ceil(1.0 * len(scores) / units))
 
     anns = utils.load_json_data(scores[0]['doc_id'])
     hts = []

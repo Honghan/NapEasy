@@ -1074,7 +1074,7 @@ def compute_sp_ne_stat(score_files_path):
 # basic stats of the corpus
 def paper_stat(ann_file, container):
     path, fn = utils.split(ann_file)
-    sums = utils.load_json_data(utils.join('./20-test-papers/summaries/', fn[:fn.rfind('.')] + '.sum'))
+    sums = utils.load_json_data(utils.join('./summaries/', fn[:fn.rfind('.')] + '.sum'))
     anns = utils.load_json_data(ann_file)
     total_ht = 0
     for ann in anns:
@@ -1098,5 +1098,19 @@ def corpus_simple_stat(ann_files_path):
                                      callback_func=pp_paper_stat
     )
 
+
+def remove_ann_sentences(ann_file):
+    anns = utils.load_json_data(ann_file)
+    for ann in anns:
+        ann['text'] = ''
+    utils.save_json_array(anns, ann_file)
+
+
+def clean_ann_files(ann_files_path):
+    utils.multi_thread_process_files(ann_files_path, '', 10, remove_ann_sentences,
+                                     file_filter_func=lambda fn: fn.endswith('_ann.json')
+                                     )
+
+
 if __name__ == "__main__":
-    pass
+    clean_ann_files('./10-manual-checked/')
