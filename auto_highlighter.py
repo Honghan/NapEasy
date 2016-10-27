@@ -442,7 +442,7 @@ def summ(highlighter, ann_file, out_path):
     utils.save_json_array(summary, join(out_path, fn[:fn.rfind('.')] + '.sum'))
 
 
-def summarise_all_papers(ann_path, summ_path):
+def summarise_all_papers(ann_path, summ_path, callback=None):
     thread_num = 6
     hters = []
     for i in range(thread_num):
@@ -450,7 +450,8 @@ def summarise_all_papers(ann_path, summ_path):
     utils.multi_thread_process_files(ann_path, '', thread_num, summ,
                                      args=[summ_path],
                                      thread_wise_objs=hters,
-                                     file_filter_func=lambda f: f.endswith('_ann.json'))
+                                     file_filter_func=lambda f: f.endswith('_ann.json'),
+                                     callback_func=callback)
 
 
 def sort_complement(list1, list2, threshold, cmp=None):
