@@ -60,15 +60,15 @@ def pp_score_exp(container, out_file, hter, threshold, manual_ann):
     predicted = 0
     total = 0
 
-    # print 'precision\trecall\t#highlighted\t#predicted\tpaper'
+    print 'precision\trecall\t#highlighted\t#predicted\tpaper'
     for p in container:
         should += p['hts']
         correct += p['correct']
         predicted += p['predicted']
         total += p['max_sid'] if 'max_sid' in p else 0
-        # print '{:.2f}\t{:.2f}\t{}\t{}\t{}'.format(1.0 * p['correct'] / p['predicted'] if p['predicted'] > 0 else 0,
-        #                               1.0 * p['correct'] / p['hts'],
-        #                               p['hts'], p['predicted'], p['paper'])
+        print '{:.2f}\t{:.2f}\t{}\t{}\t{}'.format(1.0 * p['correct'] / p['predicted'] if p['predicted'] > 0 else 0,
+                                      1.0 * p['correct'] / p['hts'],
+                                      p['hts'], p['predicted'], p['paper'])
 
     if predicted == 0:
         print '{}\t-\t-\t-'.format(threshold)
