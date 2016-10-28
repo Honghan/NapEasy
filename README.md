@@ -1,4 +1,7 @@
 # Automated PDF highlighting tool to support faster curation of case studies and reviews on Parkinson's and Alzheimer's disease
+## Prerequisite 
+Follow this [wiki page](https://github.com/Honghan/psychometric_neuroatonomy/wiki) to install required libraries  
+
 ## Usages
 The usages are separated into three parts so that the user might pick up the needed functionality or combination of functionailites according to their own situation.
 
