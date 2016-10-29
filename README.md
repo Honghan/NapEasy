@@ -1,5 +1,4 @@
-# Automated PDF highlighting tool 
-## - support faster curation of case studies and reviews on Parkinson's and Alzheimer's disease
+# Automated PDF highlighting tool - support faster curation of case studies and reviews on Parkinson's and Alzheimer's disease
 ## Prerequisite 
 Follow this [wiki page](https://github.com/Honghan/psychometric_neuroatonomy/wiki) to install required libraries  
 
