@@ -15,6 +15,7 @@ from nltk.corpus import stopwords
 from nltk.stem.wordnet import WordNetLemmatizer
 import auto_highlighter as ah
 import ann_analysor as aa
+import traceback
 
 # ncbi etuils url
 ncbi_service_url = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?' \
@@ -94,6 +95,7 @@ def multi_thread_do(thread_obj, q, func, *args):
                 func(p, *args)
         except Exception, e:
             print u'error doing {0} on {1} \n{2}'.format(func, p, str(e))
+            traceback.print_exc()
         q.task_done()
 
 
@@ -114,18 +116,18 @@ def convert_ann_for_training(ann_file, non_hts, hts, out_path):
     p, fn = split(ann_file)
     for ann in anns:
         co = {
-                'src': fn,
-                'sid': ann['sid'],
+                # 'src': fn,
+                # 'sid': ann['sid'],
                 'text': ann['text'],
-                'struct': '' if 'struct' not in ann else ann['struct'],
-                'sapienta': '' if 'CoreSc' not in ann else ann['CoreSc'],
-                'entities': '' if 'ncbo' not in ann else ' '.join( list(set([a['annotation']['text'].lower() for a in ann['ncbo']])) )
+                # 'struct': '' if 'struct' not in ann else ann['struct'],
+                # 'sapienta': '' if 'CoreSc' not in ann else ann['CoreSc'],
+                # 'entities': '' if 'ncbo' not in ann else ' '.join( list(set([a['annotation']['text'].lower() for a in ann['ncbo']])) )
               }
         if 'marked' in ann:
-            co['marked'] = ann['marked']
+            # co['marked'] = ann['marked']
             hts.append(co)
         else:
-            co['marked'] = ''
+            # co['marked'] = ''
             non_hts.append(co)
     print('{} done'.format(ann_file))
 
@@ -148,6 +150,11 @@ def save_text_file(text, file_path):
         wf.write(text)
 
 
+def append_text_file(text, file_path):
+    with codecs.open(file_path, 'a', encoding='utf-8') as wf:
+        wf.write(text)
+
+
 def load_json_data(file_path):
     data = None
     with codecs.open(file_path, encoding='utf-8') as rf:
@@ -163,16 +170,16 @@ def load_text_file(file_path):
 
 
 def save_sentences(non_hts, hts, output_path):
-    training_testing_ratio = 0.6
+    training_testing_ratio = 1
     total_num = min(len(hts), len(non_hts))
     trainin_len = int(training_testing_ratio * total_num)
-    save_json_array(non_hts, join(output_path, 'full_non_hts.json'))
-    save_json_array(hts, join(output_path, 'full_hts.json'))
+    save_json_array(non_hts, join(output_path, 'non_hts.json'))
+    save_json_array(hts, join(output_path, 'hts.json'))
 
-    save_json_array(non_hts[:trainin_len], join(output_path, 'non_hts.json'))
-    save_json_array(hts[:trainin_len], join(output_path, 'hts.json'))
-    save_json_array(non_hts[trainin_len:total_num], join(output_path + "/test", 'non_hts.json'))
-    save_json_array(hts[trainin_len:total_num], join(output_path + "/test", 'hts.json'))
+    # save_json_array(non_hts[:trainin_len], join(output_path, 'non_hts.json'))
+    # save_json_array(hts[:trainin_len], join(output_path, 'hts.json'))
+    # save_json_array(non_hts[trainin_len:total_num], join(output_path + "/test", 'non_hts.json'))
+    # save_json_array(hts[trainin_len:total_num], join(output_path + "/test", 'hts.json'))
 
     # split training data into equally sized groups
     # num_group = 3
@@ -404,39 +411,39 @@ def semantic_fix_scores(score_file, sp_patterns, sp_cats):
     print '%s done.' % score_file
 
 
-def semantic_fix_scores_confidence(score_file, sp_patterns, sp_cats, hter):
+def semantic_fix_scores_confidence(score_file, sp_patterns, sp_cats, hter, score_path):
     print 'working on %s...' % score_file
     scores = load_json_data(score_file)
     for s in scores:
         p = s['pattern']
-        if 'sp_index' in p and p['sp_index'] != -1:
+        if 'sp_index' in p and p['sp_index'] == -1:
             sp = aa.SubjectPredicate(p['sub'], p['pred'])
             if sp in hter.sp:
                 p['sp_index'] = hter.sp[sp]['index']
                 p['confidence'] = 2
                 print sp, p['sp_index']
-
-            continue
-            m, mp, m_idx = match_sp_type(sp_patterns, sp_cats, p['sub'], p['pred'])
-            if m is not None:
-                p['sp_index'] = m_idx
-                p['confidence'] = m
-                print s['sid'], p['sub'], p['pred'], mp
+            else:
+                m, mp, m_idx = match_sp_type(sp_patterns, sp_cats, p['sub'], p['pred'])
+                if m is not None:
+                    p['sp_index'] = m_idx
+                    p['confidence'] = m
+                    print s['sid'], p['sub'], p['pred'], mp
     save_json_array(scores, score_file)
     print '%s done.' % score_file
 
 
-def semantic_fix_all_scores():
+def semantic_fix_all_scores(socre_folder_path, cb=None):
     hter = ah.HighLighter.get_instance()
     sp_patterns = load_json_data('./resources/sub_pred.txt')
     sp_cats = load_json_data('./resources/sub_pred_categories.json')
-    multi_thread_process_files('./20-test-papers/summaries/', '', 1, semantic_fix_scores_confidence,
-                                     args=[sp_patterns, sp_cats, hter],
-                                     file_filter_func=lambda fn: fn.endswith('_scores.json'))
+    multi_thread_process_files(socre_folder_path, '', 1, semantic_fix_scores_confidence,
+                                     args=[sp_patterns, sp_cats, hter, socre_folder_path],
+                                     file_filter_func=lambda fn: fn.endswith('_scores.json'),
+                               callback_func=cb)
 
 
 def main():
-    # ann_to_training('./anns_v2', './training')
+    # ann_to_training('./local_exp/anns_v2', './training')
     # sents = [
     #     'The control group was comprised of 15 elderly community dwelling individuals of comparable age and educational background',
     #     'This resulted in data of 172 participants to be included in the present study.'
@@ -451,7 +458,7 @@ def main():
     # sp_cats = load_json_data('./resources/sub_pred_categories.json')
     # print match_sp_type(sp_patterns, sp_cats, ['conclusions'], ['drawn'])
     # semantic_fix_scores('./30-test-papers/summaries/10561930_annotated_ann_scores.json', sp_patterns, sp_cats)
-    semantic_fix_all_scores()
+    semantic_fix_all_scores('./local_exp/42-extra-papers/summaries/')
 
 if __name__ == "__main__":
     main()

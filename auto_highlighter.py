@@ -253,8 +253,10 @@ class HighLighter:
 
             # scores = score_dict[str(i+1)] if score_dict is not None and sid is not None else \
             #     self.compute_language_patterns(sent, doc_id=src, sid=sid)
+            t_key = str(i + 1)
             scores = self.compute_language_patterns(sent, doc_id=src, sid=sid,
-                                                    cur_score_obj=score_dict[str(i + 1)])
+                                                    cur_score_obj=score_dict[t_key]
+                                                    if score_dict is not None and t_key in score_dict else None)
             # scores = self.score(sent, doc_id=src, sid=sid)
             scores['sid'] = str(i+1)
             i += 1
@@ -546,8 +548,8 @@ def score_paper_threshold(score_file, container, out_file, hter, threshold,
         sid2ann[ann['sid']] = ann
 
     # skip papers with no highlights
-    if len(hts) == 0:
-        return
+    # if len(hts) == 0:
+    #     return
 
     if ma is not None:
         hts += [str(sid) for sid in ma['also_correct']]
@@ -611,20 +613,20 @@ def score_paper_threshold(score_file, container, out_file, hter, threshold,
             s *= type_boost * 10
             prediction.append([score['sid'], s, sent_type])
 
-            # if score['sid'] in hts or s > threshold:
-            sentence_level_details.append(
-                u'[{}]\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}'.format(
-                    score['sid'],
-                    'H' if score['sid'] in hts else '-',
-                    'P' if s > threshold else '-',
-                    sent_type,
-                    '{}/{}'.format(s, type_boost),
-                    '{}/{}'.format(s_sp, confidence),
-                    '{}/{}'.format(score_ret['cds'], score['pattern']['cds'] if 'cds' in score['pattern'] else ''),
-                    '{}/{}'.format(score_ret['nes'], score['pattern']['nes'] if 'nes' in score['pattern'] else ''),
-                    anns[i]['text'].replace('\n', '').replace('\t', '')
+            if score['sid'] in hts or s > threshold:
+                sentence_level_details.append(
+                    u'[{}]\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}'.format(
+                        score['sid'],
+                        'H' if score['sid'] in hts else '-',
+                        'P' if s > threshold else '-',
+                        sent_type,
+                        '{}/{}'.format(s, type_boost),
+                        '{}/{}'.format(s_sp, confidence),
+                        '{}/{}'.format(score_ret['cds'], score['pattern']['cds'] if 'cds' in score['pattern'] else ''),
+                        '{}/{}'.format(score_ret['nes'], score['pattern']['nes'] if 'nes' in score['pattern'] else ''),
+                        anns[i]['text'].replace('\n', '').replace('\t', '')
+                    )
                 )
-            )
         else:
             if score['sid'] in hts:
                 sentence_level_details.append(
@@ -638,9 +640,8 @@ def score_paper_threshold(score_file, container, out_file, hter, threshold,
                         '-',
                         '-',
                         anns[i]['text'].replace('\n', '').replace('\t', '')
-                    )
                 )
-
+                )
     prediction = sort_by_threshold(prediction, threshold,
                             cmp=lambda p1, p2 : 1 if p2[1] > p1[1] else 0 if p2[1] == p1[1] else -1)
 
