@@ -169,7 +169,11 @@ def do_summary_job(job_path, jobid):
     if not exists(score_path):
         makedirs(score_path)
     update_job_progress(job_path, jobid, status_code.SCORING, 'scoring sentences...')
-    ah.summarise_all_papers(job_path, score_path, callback=(do_highlighting if no_semantic_fix else do_semantic_fixing))
+    # ah.summarise_all_papers(job_path, score_path, callback=(do_highlighting if no_semantic_fix else do_semantic_fixing))
+    ah.multiple_processing_summarise_papers(job_path,
+                                            score_path,
+                                            callback=(do_highlighting if no_semantic_fix
+                                                      else do_semantic_fixing))
 
 
 def do_semantic_fixing(score_path):
