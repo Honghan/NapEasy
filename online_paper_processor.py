@@ -14,7 +14,7 @@ import time
 
 europepmc_full_text_url = 'http://www.ebi.ac.uk/europepmc/webservices/rest/{}/fullTextXML'
 napeasy_api_url = 'http://napeasy.org/napeasy_api/api'
-napeasy_key = ''
+napeasy_key = 'CORE-SGDP-KCL'
 working_path = './local_exp/jobs/'
 num_processes = 5
 no_semantic_fix = False
