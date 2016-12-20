@@ -16,6 +16,7 @@ from nltk.stem.wordnet import WordNetLemmatizer
 import auto_highlighter as ah
 import ann_analysor as aa
 import traceback
+import multiprocessing
 
 # ncbi etuils url
 ncbi_service_url = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?' \
@@ -97,6 +98,75 @@ def multi_thread_do(thread_obj, q, func, *args):
             print u'error doing {0} on {1} \n{2}'.format(func, p, str(e))
             traceback.print_exc()
         q.task_done()
+
+
+# begin: multiple processing functions
+def multi_process_tasking(lst, num_processes, process_func,
+                          args=None, callback_func=None, process_wise_objs=None):
+    num_items = len(lst)
+    item_queue = multiprocessing.JoinableQueue(num_items)
+    # print('putting list into queue...')
+    for item in lst:
+        item_queue.put_nowait(item)
+    thread_num = min(num_items, num_processes)
+    arr = [process_func] if args is None else [process_func] + args
+    arr.insert(0, item_queue)
+    # print('queue filled, threading...')
+    for i in range(thread_num):
+        tarr = arr[:]
+        process_obj = None
+        if process_wise_objs is not None and isinstance(process_wise_objs, list):
+            process_obj = process_wise_objs[i]
+        tarr.insert(0, process_obj)
+        t = multiprocessing.Process(target=multi_process_do, args=tuple(tarr))
+        t.daemon = True
+        t.start()
+
+    # print('waiting jobs to finish')
+    item_queue.join()
+    # print('{0} files {1}'.format(num_pdfs, proc_desc))
+    if callback_func is not None:
+        callback_func(*tuple(args))
+
+
+def multi_processing_process_files(dir_path, file_extension, num_processes, process_func,
+                                   proc_desc='processed', args=None, multi=None,
+                                   file_filter_func=None, callback_func=None,
+                                   process_wise_objs=None):
+    onlyfiles = [f for f in listdir(dir_path) if isfile(join(dir_path, f))]
+    num_pdfs = 0
+    files = None if multi is None else []
+    lst = []
+    for f in onlyfiles:
+        if f.endswith('.' + file_extension) if file_filter_func is None \
+                else file_filter_func(f):
+            if multi is None:
+                lst.append(join(dir_path, f))
+            else:
+                files.append(join(dir_path, f))
+                if len(files) >= multi:
+                    lst.append(files)
+                    files = []
+            num_pdfs += 1
+    if files is not None and len(files) > 0:
+        lst.append(files)
+    multi_process_tasking(lst, num_processes, process_func, args,
+                          callback_func=callback_func, process_wise_objs=process_wise_objs)
+
+
+def multi_process_do(process_obj, q, func, *args):
+    while True:
+        p = q.get()
+        try:
+            if process_obj is not None:
+                func(process_obj, p, *args)
+            else:
+                func(p, *args)
+        except Exception, e:
+            print u'error doing {0} on {1} \n{2}'.format(func, p, str(e))
+            traceback.print_exc()
+        q.task_done()
+# end: multiple processing functions
 
 
 def relation_patterns(s):
@@ -436,10 +506,14 @@ def semantic_fix_all_scores(socre_folder_path, cb=None):
     hter = ah.HighLighter.get_instance()
     sp_patterns = load_json_data('./resources/sub_pred.txt')
     sp_cats = load_json_data('./resources/sub_pred_categories.json')
-    multi_thread_process_files(socre_folder_path, '', 1, semantic_fix_scores_confidence,
-                                     args=[sp_patterns, sp_cats, hter, socre_folder_path],
-                                     file_filter_func=lambda fn: fn.endswith('_scores.json'),
-                               callback_func=cb)
+    # multi_thread_process_files(socre_folder_path, '', 1, semantic_fix_scores_confidence,
+    #                                  args=[sp_patterns, sp_cats, hter, socre_folder_path],
+    #                                  file_filter_func=lambda fn: fn.endswith('_scores.json'),
+    #                            callback_func=cb)
+    multi_processing_process_files(socre_folder_path, '', 5, semantic_fix_scores_confidence,
+                                   args=[sp_patterns, sp_cats, hter, socre_folder_path],
+                                   file_filter_func=lambda fn: fn.endswith('_scores.json'),
+                                   callback_func=cb)
 
 
 def main():
