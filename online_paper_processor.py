@@ -10,6 +10,7 @@ import json
 import smtplib
 from multiprocessing import Process
 import time
+import traceback
 
 
 europepmc_full_text_url = 'http://www.ebi.ac.uk/europepmc/webservices/rest/{}/fullTextXML'
@@ -41,6 +42,7 @@ class status_code:
 
     ERROR_FS = 501 # file system error
     ERROR_HT_PREPROCESSING= 502 # highlight preprocessing error
+    ERROR_PMCID_NOT_FOUND = 503 # full text not avaialble
 
 
 def sent_email_notification(email, title, msg_body):
@@ -75,16 +77,20 @@ def post_data(url, postobj, authobj=None):
 
 
 def get_pmc_paper_fulltext(pmcid):
+    s = ''
     full_xml = requests.get(europepmc_full_text_url.format(pmcid)).content
-    root = et.fromstring(full_xml)
-    # print iter_element_text(root)
-    telem = root.find('.//article-title')
-    title = ''
-    if telem is not None:
-        title = ''.join(telem.itertext())
-        title += '.\n'
-    elem = root.find('body')
-    s = title + iterate_get_text(elem)
+    try:
+        root = et.fromstring(full_xml)
+        # print iter_element_text(root)
+        telem = root.find('.//article-title')
+        title = ''
+        if telem is not None:
+            title = ''.join(telem.itertext())
+            title += '.\n'
+        elem = root.find('body')
+        s = title + iterate_get_text(elem)
+    except Exception, e:
+        traceback.print_exc()
     return s
 
 
@@ -120,13 +126,16 @@ def process_pmc_paper(pmcid, job_path, job_id):
         update_paper_fulltext(pmcid, utils.load_json_data(ann_file))
         return
     t = get_pmc_paper_fulltext(pmcid)
-    sent_detector = nltk.data.load('tokenizers/punkt/english.pickle')
-    sents = sent_detector.tokenize(t.strip())
-    if job_path is not None:
-        fulltext = [{'text': sents[i], 'sid': str(i+1)} for i in range(len(sents))]
-        utils.save_json_array(fulltext,
-                              ann_file)
-        update_paper_fulltext(pmcid, fulltext)
+    if t is None or len(t) == 0:
+        utils.append_text_file(pmcid, join(job_path, 'not_available.txt'))
+    else:
+        sent_detector = nltk.data.load('tokenizers/punkt/english.pickle')
+        sents = sent_detector.tokenize(t.strip())
+        if job_path is not None:
+            fulltext = [{'text': sents[i], 'sid': str(i+1)} for i in range(len(sents))]
+            utils.save_json_array(fulltext,
+                                  ann_file)
+            update_paper_fulltext(pmcid, fulltext)
 
 
 def update_job_progress(job_path, jobid, s_code, message, result=None):
@@ -136,7 +145,7 @@ def update_job_progress(job_path, jobid, s_code, message, result=None):
     utils.append_text_file(json.dumps(report) + '\n', join(job_path, 'status.json'))
     print post_data(napeasy_api_url, {'r': 'updateJobStatus', 'key': napeasy_key, 'data': json.dumps(report)})
     if s_code in \
-            [status_code.DONE, status_code.ERROR_FS, status_code.ERROR_HT_PREPROCESSING] \
+            [status_code.DONE, status_code.ERROR_FS, status_code.ERROR_HT_PREPROCESSING, status_code.ERROR_PMCID_NOT_FOUND] \
             and exists(join(job_path, 'email.txt')):
         lines = utils.load_text_file(join(job_path, 'email.txt'))
         user_email = lines[0]
