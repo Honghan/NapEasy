@@ -112,6 +112,7 @@ def multi_process_tasking(lst, num_processes, process_func,
     arr = [process_func] if args is None else [process_func] + args
     arr.insert(0, item_queue)
     # print('queue filled, threading...')
+    processes = []
     for i in range(thread_num):
         tarr = arr[:]
         process_obj = None
@@ -121,9 +122,12 @@ def multi_process_tasking(lst, num_processes, process_func,
         t = multiprocessing.Process(target=multi_process_do, args=tuple(tarr))
         t.daemon = True
         t.start()
+        processes.append(t)
 
     # print('waiting jobs to finish')
     item_queue.join()
+    for t in processes:
+        t.terminate()
     # print('{0} files {1}'.format(num_pdfs, proc_desc))
     if callback_func is not None:
         callback_func(*tuple(args))
