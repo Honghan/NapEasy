@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>NapEasy - Publication Highlighting Service</title>
+    <link href="js/lib/sweetalert2.min.css" rel="stylesheet" />
+    <link href="js/bubble.css" rel="stylesheet" />
+    <link href="js/tab.css" rel="stylesheet" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script src="js/lib/jquery.json-2.3.js"></script>
+    <script src="js/lib/sweetalert2.min.js"></script>
+    <script src="js/lib/js.cookies.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/ht.js?v=0.123"></script>
+</head>
+<div class="header">
+    <div class="menu"> <a href="/">home</a> </div>
+    <div class="title">NapEasy Highlight Job</div>
+    <div id="stausPanel">
+        <span id="jobId"></span>
+        -
+        <span id="status"></span>
+    </div>
+
+</div>
+<div id="visPanel">
+
+    <hr/>
+    <div class="pageControl">
+        <span class="clsPageLink">prev</span>
+        <span class="pageInfo"></span>
+        <span class="clsPageLink">next</span>
+    </div>
+    <div class="title pageTitle"></div>
+    <div class="clsDisplay">
+        <b>Display options:</b><br/>
+        <input id="hideNormal" type="checkbox" class="btnHideNormal"/> <label for="hideNormal">Hide normal sentences</label> <br/>
+        <input id="blur" type="checkbox" class="btnBlur"/> <label for="blur">Blur normal sentences</label> <br/>
+        <input id="httype" type="checkbox" class="btnType"/> <label for="httype">Show highlight type</label>
+        <p/>
+        <b>Download:</b><br/> <span class="download">XML</span> <span class="download">JSON</span> <span class="download">Text</span>
+    </div>
+    <div class="clsFullText"></div>
+
+</div>
+<p class="sep">&nbsp;</p>
+<div class="endofpage">NapEasy 2016 | Contact: honghan.wu AT gmail.com | <a href="https://github.com/KHP-Informatics/psychometric_neuroatonomy">Github</a></div>
+<div style="display: none">
+    <form action="" method="post" target="_blank" id="_dform">
+        <input type="hidden" value="" name="format" id="dformat"/>
+        <input type="hidden" value="" name="data" id="ddata"/>
+    </form>
+</div>
+</body>
+</html>

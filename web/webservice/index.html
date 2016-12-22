@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="cache-control" content="max-age=0" />
+    <meta http-equiv="cache-control" content="no-cache" />
+    <meta http-equiv="cache-control" content="no-store" />
+    <meta http-equiv="expires" content="0" />
+    <meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT" />
+    <meta http-equiv="pragma" content="no-cache" />
+    <meta charset="UTF-8">
+    <title>NapEasy - Publication Highlighting Service</title>
+    <link href="js/lib/sweetalert2.min.css" rel="stylesheet" />
+    <link href="js/tab.css?v=3" rel="stylesheet" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script src="js/lib/jquery.json-2.3.js"></script>
+    <script src="js/lib/sweetalert2.min.js"></script>
+    <script src="js/api.js?v=2.1"></script>
+    <script src="js/main.js?v=1.36"></script>
+</head>
+<body>
+
+<div class="title">
+    NapEasy: Neat Automated Publication highlighting made EASY
+</div>
+<div class="text">The NapEasy web server automatically highlights important sentences in publications available through the
+    <a href="https://www.ncbi.nlm.nih.gov/pmc/tools/openftlist/" target="_blank">PubMed Central (PMC) Open Access dataset</a>.
+    The highlights are concise and aim to represent the main characteristics of the study described in the publication.
+    While the workflow is similar to generating a summary, the sentences highlighted may not necessarily be the best to
+    represent the content of the paper as the aim is to select those sentences, describing best the study. NapEasy is designed
+    to help facilitate and speedup the curation processes for faster knowledge acquisition.
+    <div id="helpSwitch" class="btnHelp">[+] Show Help</div>
+    <div id="help">
+        <div class="tiptitle">How to use <span class="btnHelp btnHideHelp">[-]</span> </div>
+        The only input NapEasy needs is a list of comma separated PMCIDs. Note that PMIDs (PubMed identifiers) are different to PMCIDs.
+        Should you only have PMIDs to hand, an easy conversion tool is available <a href="https://www.ncbi.nlm.nih.gov/pmc/pmctopmid/" target="_blank">
+            online</a>.
+        <p/>
+        There are two options to use NapEasy:
+        <ol>1) If you happen to have PMC IDs of papers you want to highlight, just click the "<b>Use PMC IDs</b>" tab below, enter the relevant PMC IDs and submit.</ol>
+        <ol>2) Otherwise, just simply use the "<b>Search PMC</b>" functionality below to look up and select papers based on keyword search; the selected papers can then immediately be submitted for highlighting.</ol>
+            In its current implementation, the service will not provide highlight results on the fly. Instead, a unique job id
+        and URI for the job will be generated on submission (e.g., <a href="http://napeasy.org/ht.html?b201e1c9-5dcb-425a-8ddc-a5c4ce03ad0f" target="_blank">sample job URI</a>), which will allow you to check the result later
+        (so, please make a note of it if you don't want to provide an email address).
+        If you do provide your email address during the submission process, you will receive a notification email from napeasy.noreply@gmail.com when your highlighting job has finished. (Normally, a one paper job finishes within 20-30 minutes; more than one paper will take longer.) The highlighted sentences can then be downloaded in three different formats (XML, JSON, and plain text) for further analysis.
+    </div>
+</div>
+<ul class="tabrow">
+    <li linkdiv="searchUI" class="selected"><a href="#">Search PMC</a></li>
+    <li linkdiv="pmcidUI"><a href="#">Use PMC IDs</a></li>
+</ul>
+
+<div id="pmcidUI" class="panel">
+    <textarea id="pmcidText" placeholder="Comma separated (up to 10) PMC IDs, e.g., PMC5063010,PMC4936267 "></textarea>
+    <div class="sampleCtn">For example: <span class="sample pmcidSample">PMC5063010,PMC4936267</span></div>
+    <div class="btnContainer"><span class="btn btnPMCSubmit">submit</span></div>
+</div>
+
+<div id="searchUI" class="panel">
+    <input type="text" id="termSearchInput" placeholder="keywords, e.g., parkinson's"/>
+    <div class="sampleCtn">For example: <span class="sample keyworkSample">parkinson's</span></div>
+    <div class="btnContainer"><span class="btn btnSearch">search</span> <span class="btn btnSubmitChecked">submit</span></div>
+
+    <div id="paperList"></div>
+</div>
+<p class="sep">&nbsp;</p>
+<div class="endofpage">NapEasy 2016 | Contact: honghan.wu AT gmail.com | <a href="https://github.com/KHP-Informatics/psychometric_neuroatonomy">Github</a></div>
+</body>
+</html>
