@@ -165,9 +165,13 @@ def update_paper_summ(pmcid, summ):
 
 
 def update_score_path_summ(score_path):
+    # regenerate sum because of new score file after semantic fixing
+    hter = ah.HighLighter.get_instance()
     sum_files = utils.filter_path_file(score_path, 'sum')
     for s in sum_files:
         pmcid = s[:s.rfind('_')]
+        print join(score_path[:score_path.rfind('/summ')], pmcid + '_ann.json')
+        ah.summ(hter, join(score_path[:score_path.rfind('/summ')], pmcid + '_ann.json'), score_path)
         update_paper_summ(pmcid, utils.load_json_data(join(score_path, s)))
         print 'paper %s summary uploaded' % pmcid
 
