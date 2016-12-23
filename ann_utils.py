@@ -173,6 +173,12 @@ def multi_process_do(process_obj, q, func, *args):
 # end: multiple processing functions
 
 
+def filter_path_file(dir_path, file_extension=None, file_filter_func=None):
+    return [f for f in listdir(dir_path)
+            if isfile(join(dir_path, f))
+            and (f.endswith('.' + file_extension) if file_filter_func is None else file_filter_func(f))]
+
+
 def relation_patterns(s):
     text = nltk.word_tokenize(s)
     pr = nltk.pos_tag(text)
