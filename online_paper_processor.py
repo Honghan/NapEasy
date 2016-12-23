@@ -3,7 +3,7 @@ import xml.etree.ElementTree as et
 import nltk.data
 import ann_utils as utils
 from os.path import join, isdir, exists
-from os import makedirs, getpid
+from os import makedirs, getpid, listdir
 import auto_highlighter as ah
 import datetime
 import json
@@ -15,7 +15,7 @@ import traceback
 
 europepmc_full_text_url = 'http://www.ebi.ac.uk/europepmc/webservices/rest/{}/fullTextXML'
 napeasy_api_url = 'http://napeasy.org/napeasy_api/api'
-napeasy_key = 'CORE-SGDP-KCL'
+napeasy_key = ''
 working_path = './local_exp/jobs/'
 num_processes = 5
 no_semantic_fix = False
@@ -156,9 +156,30 @@ def update_job_progress(job_path, jobid, s_code, message, result=None):
         print 'email notificaiton sent to %s' % user_email
 
 
-
 def update_paper_fulltext(pmcid, fulltext):
     print post_data(napeasy_api_url, {'r': 'updatePaperFulltext', 'pmcid': pmcid, 'key': napeasy_key, 'fullText': json.dumps(fulltext)})
+
+
+def update_paper_summ(pmcid, summ):
+    print post_data(napeasy_api_url, {'r': 'updatePaperSumm', 'pmcid': pmcid, 'key': napeasy_key, 'summ': json.dumps(summ)})
+
+
+def update_score_path_summ(score_path):
+    sum_files = utils.filter_path_file(score_path, 'sum')
+    for s in sum_files:
+        pmcid = s[:s.rfind('_')]
+        update_paper_summ(pmcid, utils.load_json_data(join(score_path, s)))
+        print 'paper %s summary uploaded' % pmcid
+
+
+def iterate_job_to_update_summ(job_path):
+    sum_folders = [f + '/summ' for f in listdir(job_path)
+                   if isdir(join(job_path, f))
+                   and isdir(join(job_path, f + '/summ'))]
+    for sf in sum_folders:
+        folder = join(job_path, sf)
+        update_score_path_summ(folder)
+        print '%s done' % folder
 
 
 def get_job_path_id_from_score_path(score_path):
@@ -197,6 +218,7 @@ def do_highlighting_after_fixing(sp_patterns, sp_cats, hter, score_path):
 
 def do_highlighting(score_path):
     job_path, job_id = get_job_path_id_from_score_path(score_path)
+    update_score_path_summ(score_path)
     update_job_progress(job_path, job_id, status_code.HIGHLIGHTING, 'highlighting...')
     threshold = .4
     ret_container = []
@@ -259,4 +281,5 @@ if __name__ == "__main__":
     # working_path = './local_exp/jobs/'
     # do_user_job('j001', working_path, ['PMC5116532'])
     # process_pmc_paper('PMC5116532', './local_exp/jobs/j001')
-    multi_processing_job()
+    # multi_processing_job()
+    iterate_job_to_update_summ('')
