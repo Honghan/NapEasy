@@ -152,7 +152,7 @@ def process_pmc_paper(pmcid, job_path, job_id):
 def get_email_addr(job_path):
     if exists(join(job_path, 'email.txt')):
         lines = utils.load_text_file(join(job_path, 'email.txt'))
-        return lines[0]
+        return lines[0] if lines[0] != 'napeasy.noreply@gmail.com' else None
     else:
         return None
 
