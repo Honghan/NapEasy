@@ -32,6 +32,17 @@ NapEasy team
 http://napeasy.org
 """
 
+job_init_email_template = """Dear {user},
+
+Napeasy.org is processing your highlight job (id: {jobid}). The progress will be updated at http://napeasy.org/ht.html?{jobid}.
+
+You will receive a notification email when it's done. If you have any questions, please contact honghan.wu@gmail.com.
+
+Yours sincerely,
+NapEasy team
+http://napeasy.org
+"""
+
 
 class status_code:
     DONE = 200
@@ -138,19 +149,35 @@ def process_pmc_paper(pmcid, job_path, job_id):
             update_paper_fulltext(pmcid, fulltext)
 
 
+def get_email_addr(job_path):
+    if exists(join(job_path, 'email.txt')):
+        lines = utils.load_text_file(join(job_path, 'email.txt'))
+        return lines[0]
+    else:
+        return None
+
+
 def update_job_progress(job_path, jobid, s_code, message, result=None):
     report = {'jobid': jobid, 'status': s_code, 'message': message, 'time': str(datetime.datetime.now()),
               'result': result}
     # save status locally
     utils.append_text_file(json.dumps(report) + '\n', join(job_path, 'status.json'))
     print post_data(napeasy_api_url, {'r': 'updateJobStatus', 'key': napeasy_key, 'data': json.dumps(report)})
+    # sent an email when the job started
+    if s_code == status_code.INITIATED:
+        user_email = get_email_addr(job_path)
+        if user_email is not None:
+            sent_email_notification(user_email,
+                                    '[napeasy update] Your highlight job started at napeasy.org',
+                                    job_init_email_template.format(**{"user": user_email,
+                                                                          "jobid": jobid}))
+    # notification email when the job finishes.
     if s_code in \
             [status_code.DONE, status_code.ERROR_FS, status_code.ERROR_HT_PREPROCESSING, status_code.ERROR_PMCID_NOT_FOUND] \
             and exists(join(job_path, 'email.txt')):
-        lines = utils.load_text_file(join(job_path, 'email.txt'))
-        user_email = lines[0]
+        user_email = get_email_addr(job_path)
         sent_email_notification(user_email,
-                                '[napeasy update] Your highlight job at napeasy.org',
+                                '[napeasy update] Your highlight job finished',
                                 notification_email_template.format(**{"user": user_email,
                                                                       "jobid": jobid}))
         print 'email notificaiton sent to %s' % user_email
@@ -246,7 +273,7 @@ def do_user_job(job_id, working_path, pmcids, user_email=None):
     if len(pmcids) == 0:
         update_job_progress(job_path, job_id, status_code.DONE, 'Job Done')
     else:
-        update_job_progress(job_path, job_id, status_code.INITIATED, 'job started, downloading papers...')
+        (job_path, job_id, status_code.INITIATED, 'job started, downloading papers...')
         utils.multi_thread_tasking(pmcids, min(5, len(pmcids)), process_pmc_paper,
                                    args=[job_path, job_id],
                                    callback_func=do_summary_job)
