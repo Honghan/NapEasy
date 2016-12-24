@@ -270,7 +270,7 @@ def do_user_job(job_id, working_path, pmcids, user_email=None):
             makedirs(job_path)
     if user_email is not None:
         utils.save_text_file(user_email, join(job_path, 'email.txt'))
-    if len(pmcids) == 0:
+    if len(pmcids) == 0 or (len(pmcids) == 1 and len(pmcids[0]) == 0):
         update_job_progress(job_path, job_id, status_code.DONE, 'Job Done')
     else:
         (job_path, job_id, status_code.INITIATED, 'job started, downloading papers...')
