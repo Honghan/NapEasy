@@ -273,7 +273,7 @@ def do_user_job(job_id, working_path, pmcids, user_email=None):
     if len(pmcids) == 0 or (len(pmcids) == 1 and len(pmcids[0]) == 0):
         update_job_progress(job_path, job_id, status_code.DONE, 'Job Done')
     else:
-        (job_path, job_id, status_code.INITIATED, 'job started, downloading papers...')
+        update_job_progress(job_path, job_id, status_code.INITIATED, 'job started, downloading papers...')
         utils.multi_thread_tasking(pmcids, min(5, len(pmcids)), process_pmc_paper,
                                    args=[job_path, job_id],
                                    callback_func=do_summary_job)
