@@ -176,11 +176,12 @@ def update_job_progress(job_path, jobid, s_code, message, result=None):
             [status_code.DONE, status_code.ERROR_FS, status_code.ERROR_HT_PREPROCESSING, status_code.ERROR_PMCID_NOT_FOUND] \
             and exists(join(job_path, 'email.txt')):
         user_email = get_email_addr(job_path)
-        sent_email_notification(user_email,
-                                '[napeasy update] Your highlight job finished',
-                                notification_email_template.format(**{"user": user_email,
-                                                                      "jobid": jobid}))
-        print 'email notificaiton sent to %s' % user_email
+        if user_email is not None:
+            sent_email_notification(user_email,
+                                    '[napeasy update] Your highlight job finished',
+                                    notification_email_template.format(**{"user": user_email,
+                                                                          "jobid": jobid}))
+            print 'email notificaiton sent to %s' % user_email
 
 
 def update_paper_fulltext(pmcid, fulltext):
