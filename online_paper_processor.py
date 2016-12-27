@@ -241,7 +241,8 @@ def do_summary_job(job_path, jobid):
 def do_semantic_fixing(score_path):
     job_path, job_id = get_job_path_id_from_score_path(score_path)
     update_job_progress(job_path, job_id, status_code.SEMANTIC_FIXING, 'semantically matching language patterns...')
-    utils.semantic_fix_all_scores(score_path, cb=do_highlighting_after_fixing)
+    # utils.semantic_fix_all_scores(score_path, cb=do_highlighting_after_fixing)
+    utils.multi_processing_semantic_fix_all_scores(score_path, cb=lambda score_dir: do_highlighting(score_dir))
 
 
 def do_highlighting_after_fixing(sp_patterns, sp_cats, hter, score_path):
