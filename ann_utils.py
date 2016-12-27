@@ -573,13 +573,13 @@ def multi_processing_semantic_fix_all_scores(score_folder_path, cb=None):
         scores = load_json_data(score_file)
         for s in scores:
             p = s['pattern']
-            if 'sp_index' in p and p['sp_index'] == -1:
+            if 'sp_index' in p:
                 sp = aa.SubjectPredicate(p['sub'], p['pred'])
                 if sp in hter.sp:
                     p['sp_index'] = hter.sp[sp]['index']
                     p['confidence'] = 2
                     print sp, p['sp_index']
-                else:
+                elif 'sp_index' in p and p['sp_index'] == -1:
                     sentence_job_list.append({'paper_id':score_file, 'sid': s['sid'], 'sub': p['sub'], 'pred':p['pred']})
                     job_size += 1
         print '%s pulled.' % score_file
