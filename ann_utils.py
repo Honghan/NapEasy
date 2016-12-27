@@ -442,7 +442,7 @@ def phrase_similarity(p1, p2, pos='n'):
     return m
 
 
-def match_sp_type(sp_patterns, sp_cats, subs, preds):
+def match_sp_type(sp_patterns, sp_cats, subs, preds, paper_id=None, sid=None, result_container=None):
     idx2score = {}
     p2score = {}
     for p in sp_cats:
@@ -474,6 +474,8 @@ def match_sp_type(sp_patterns, sp_cats, subs, preds):
             m_idx = p2score[p]['idx']
     if m < 0.5:
         return None, None, None
+    if result_container is not None:
+        result_container.put({'sim': m, 'pattern': mp, 'index': m_idx, 'sid': sid, 'paper_id': paper_id})
     return m, mp, m_idx
 
 
@@ -526,6 +528,66 @@ def semantic_fix_all_scores(socre_folder_path, cb=None):
                                    callback_func=cb)
 
 
+# multiple-processing the semantic fixing on a batch of sentences
+def semantic_fix_worker(job, sp_patterns, sp_cats, container):
+    match_sp_type(sp_patterns, sp_cats, job['sub'], job['pred'],
+                  paper_id=job['paper_id'], sid=job['sid'], result_container=container)
+
+
+def semantic_fix_finish(sp_patterns, sp_cats, container):
+    paper_to_matched = {}
+    while not container.empty():
+        m = container.get_nowait()
+        if m['paper_id'] not in paper_to_matched:
+            paper_to_matched[m['paper_id']] = {}
+        paper_to_matched[m['paper_id']][m['sid']] = m
+
+    for score_file in paper_to_matched:
+        print 'putting results back to %s...' % score_file
+        scores = load_json_data(score_file)
+        matched_patterns = paper_to_matched[score_file]
+        for s in scores:
+            if s['sid'] in matched_patterns:
+                m = matched_patterns[s['sid']]
+                p = s['pattern']
+                p['sp_index'] = m['index']
+                p['confidence'] = m['sim']
+                print s['sid'], p['sub'], p['pred'], m['pattern']
+        save_json_array(scores, score_file)
+        print '%s done.' % score_file
+    print 'all semantically fixed'
+
+
+def multi_processing_semantic_fix_all_scores(score_folder_path):
+    hter = ah.HighLighter.get_instance()
+    sp_patterns = load_json_data('./resources/sub_pred.txt')
+    sp_cats = load_json_data('./resources/sub_pred_categories.json')
+    sentence_job_list = []
+    files = filter_path_file(score_folder_path, file_filter_func=lambda fn: fn.endswith('_scores.json'))
+    job_size = 0
+    for f in files:
+        score_file = join(score_folder_path, f)
+        print 'pulling from %s...' % score_file
+        scores = load_json_data(score_file)
+        for s in scores:
+            p = s['pattern']
+            if 'sp_index' in p and p['sp_index'] == -1:
+                sp = aa.SubjectPredicate(p['sub'], p['pred'])
+                if sp in hter.sp:
+                    p['sp_index'] = hter.sp[sp]['index']
+                    p['confidence'] = 2
+                    print sp, p['sp_index']
+                else:
+                    sentence_job_list.append({'paper_id':score_file, 'sid': s['sid'], 'sub': p['sub'], 'pred':p['pred']})
+                    job_size += 1
+        print '%s pulled.' % score_file
+        save_json_array(scores, score_file)
+    results = multiprocessing.Queue(job_size)
+    multi_process_tasking(sentence_job_list, 3, semantic_fix_worker, args=[sp_patterns, sp_cats, results],
+                          callback_func=semantic_fix_finish)
+# end of multiple-processing the semantic fixing on a batch of sentences
+
+
 def main():
     # ann_to_training('./local_exp/anns_v2', './training')
     # sents = [
@@ -542,7 +604,8 @@ def main():
     # sp_cats = load_json_data('./resources/sub_pred_categories.json')
     # print match_sp_type(sp_patterns, sp_cats, ['conclusions'], ['drawn'])
     # semantic_fix_scores('./30-test-papers/summaries/10561930_annotated_ann_scores.json', sp_patterns, sp_cats)
-    semantic_fix_all_scores('./local_exp/42-extra-papers/summaries/')
+    # semantic_fix_all_scores('./local_exp/42-extra-papers/summaries/')
+    multi_processing_semantic_fix_all_scores('/Users/jackey.wu/Documents/working/KCL/psychometricTests_neuroanatomy/local_exp/test_mp_sem_fix')
 
 if __name__ == "__main__":
     main()
