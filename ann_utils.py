@@ -529,12 +529,12 @@ def semantic_fix_all_scores(socre_folder_path, cb=None):
 
 
 # multiple-processing the semantic fixing on a batch of sentences
-def semantic_fix_worker(job, sp_patterns, sp_cats, container):
+def semantic_fix_worker(job, sp_patterns, sp_cats, container, score_folder_path, cb):
     match_sp_type(sp_patterns, sp_cats, job['sub'], job['pred'],
                   paper_id=job['paper_id'], sid=job['sid'], result_container=container)
 
 
-def semantic_fix_finish(sp_patterns, sp_cats, container):
+def semantic_fix_finish(sp_patterns, sp_cats, container, score_folder_path, cb):
     paper_to_matched = {}
     while not container.empty():
         m = container.get_nowait()
@@ -556,9 +556,11 @@ def semantic_fix_finish(sp_patterns, sp_cats, container):
         save_json_array(scores, score_file)
         print '%s done.' % score_file
     print 'all semantically fixed'
+    if cb is not None:
+        cb(score_folder_path)
 
 
-def multi_processing_semantic_fix_all_scores(score_folder_path):
+def multi_processing_semantic_fix_all_scores(score_folder_path, cb=None):
     hter = ah.HighLighter.get_instance()
     sp_patterns = load_json_data('./resources/sub_pred.txt')
     sp_cats = load_json_data('./resources/sub_pred_categories.json')
@@ -583,7 +585,8 @@ def multi_processing_semantic_fix_all_scores(score_folder_path):
         print '%s pulled.' % score_file
         save_json_array(scores, score_file)
     results = multiprocessing.Queue(job_size)
-    multi_process_tasking(sentence_job_list, 3, semantic_fix_worker, args=[sp_patterns, sp_cats, results],
+    multi_process_tasking(sentence_job_list, 3, semantic_fix_worker,
+                          args=[sp_patterns, sp_cats, results, score_folder_path, cb],
                           callback_func=semantic_fix_finish)
 # end of multiple-processing the semantic fixing on a batch of sentences
 
