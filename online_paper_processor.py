@@ -284,18 +284,22 @@ def do_user_job(job_id, working_path, pmcids, user_email=None):
 def do_job():
     idle_times = 0
     while True:
-        s = requests.get(napeasy_api_url + '?key=' + napeasy_key + '&r=retrieveAJob').content
-        ret_data = json.loads(s)
-        if ret_data['data'] is not None:
-            idle_times = 0
-            job = json.loads(ret_data['data'])
-            print job
-            do_user_job(job['jobid'], working_path, job['pmcids'].split(','), user_email=job['email'])
-        else:
-            idle_times += 1
-            if idle_times % 10 == 0:
-                print '..%s..' % getpid()
+        try:
+            s = requests.get(napeasy_api_url + '?key=' + napeasy_key + '&r=retrieveAJob').content
+            ret_data = json.loads(s)
+            if ret_data['data'] is not None:
                 idle_times = 0
+                job = json.loads(ret_data['data'])
+                print job
+                do_user_job(job['jobid'], working_path, job['pmcids'].split(','), user_email=job['email'])
+            else:
+                idle_times += 1
+                if idle_times % 10 == 0:
+                    #print '..%s..' % getpid()
+                    idle_times = 0
+        except:
+            print 'retrieving/working on job failed'
+            traceback.print_exc()
         time.sleep(5)
 
 
