@@ -342,8 +342,8 @@ def append_abstract_label(xml_file):
 def append_abstract_label_for_all(xml_path):
     util.multi_thread_process_files(xml_path, 'xml', 10, append_abstract_label)
 
-def main(path):
-    # path = './anns_v2/'
+def main():
+    path = './local_exp/42-extra-papers/'
     num_threads = 30
     util.multi_thread_process_files(path, 'xml', num_threads, ann_article)
 
@@ -354,5 +354,5 @@ def main(path):
     # append_abstract_label_for_all('./20-test-papers/')
 
 if __name__ == "__main__":
-    main(sys.argv[1])
+    main()
 

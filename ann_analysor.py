@@ -493,7 +493,8 @@ def visualise_categorised_geometric(geo_feature_file, fn):
     # cat_trace = {}
 
     for paper in gms:
-        j = paper['journal']
+        # j = paper['journal']
+        j = 'all'
         journal2cat[j] = {} if j not in journal2cat else journal2cat[j]
         cat_trace = journal2cat[j]
         journal2papers[j] = [j, 1] if j not in journal2papers else [j, 1 + journal2papers[j][1]]
@@ -502,18 +503,21 @@ def visualise_categorised_geometric(geo_feature_file, fn):
         for y in sects:
             for x in sects[y]:
                 cat = sid_cat[x]
+                if cat in ['cardinal nouns', 'named entities', 'general']:
+                    continue
                 if cat not in cat_trace:
                     cat_trace[cat] = {'x':[], 'y':[]}
                 trace = cat_trace[cat]
                 trace['x'].append(1.0 * int(x) / int(paper['total']))
-                trace['y'].append(y)
+                label_y = y.replace('deo:', '').replace('DoCO:', '').replace('BodyMatter', 'Others').replace('FrontMatter', 'Others')
+                trace['y'].append(label_y)
 
     sorted_journals = sorted([journal2papers[j] for j in journal2papers], cmp=lambda jp1, jp2 : jp2[1] - jp1[1])
     print sorted_journals
     print len(sorted_journals)
 
-    selected_j = sorted_journals[1][0]
-
+    # selected_j = sorted_journals[1][0]
+    selected_j = 'all'
     cat_trace = journal2cat[selected_j] # skip the no-journal paper group
     traces = []
     for cat in cat_trace:
@@ -525,10 +529,16 @@ def visualise_categorised_geometric(geo_feature_file, fn):
             ))
     # print traces
     layout = go.Layout(
-        title=selected_j + ' - language pattern breakdown'
+        title= 'highlights over spatial dimensions', # selected_j + ' - language pattern breakdown',
+        yaxis=dict(
+            categoryorder = 'array',
+            categoryarray = ['Introduction', 'Methods', 'Results', 'Discussion', 'Others']
+        )
     )
     fig = go.Figure(data=traces, layout=layout)
-    # py.plot(fig, filename=fn + ' - ' + selected_j)
+    # py.plot(fig, filename=fn) # + ' - ' + selected_j)
+    py.image.save_as({'data': traces, 'layout': layout}, './results/spatial.pdf')
+
 
 
 def get_general_highlights():
@@ -825,7 +835,7 @@ def visualise_lp_ranged_stats(stat_file, cat, title, skips=None, score_output_fi
 
 
 def plot_ly_login():
-    tools.set_credentials_file(username='silverash', api_key='w58w2j7j2k')
+    tools.set_credentials_file(username='honghan.wu', api_key='gy90jemd3t')
 
 
 # doing paper-wise language pattern distribution and highlighted sentence distribution analysis
@@ -1074,7 +1084,7 @@ def compute_sp_ne_stat(score_files_path):
 # basic stats of the corpus
 def paper_stat(ann_file, container):
     path, fn = utils.split(ann_file)
-    sums = utils.load_json_data(utils.join('./summaries/', fn[:fn.rfind('.')] + '.sum'))
+    sums = utils.load_json_data(utils.join('./20-test-papers/summaries/', fn[:fn.rfind('.')] + '.sum'))
     anns = utils.load_json_data(ann_file)
     total_ht = 0
     for ann in anns:
@@ -1113,4 +1123,6 @@ def clean_ann_files(ann_files_path):
 
 
 if __name__ == "__main__":
-    clean_ann_files('./10-manual-checked/')
+    # corpus_simple_stat('./20-test-papers/')
+    plot_ly_login()
+    visualise_categorised_geometric('./training/geo_features.json', 'ht_geometric_features_categorised')

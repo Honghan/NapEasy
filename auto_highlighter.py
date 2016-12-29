@@ -253,8 +253,10 @@ class HighLighter:
 
             # scores = score_dict[str(i+1)] if score_dict is not None and sid is not None else \
             #     self.compute_language_patterns(sent, doc_id=src, sid=sid)
+            t_key = str(i + 1)
             scores = self.compute_language_patterns(sent, doc_id=src, sid=sid,
-                                                    cur_score_obj=score_dict[str(i + 1)])
+                                                    cur_score_obj=score_dict[t_key]
+                                                    if score_dict is not None and t_key in score_dict else None)
             # scores = self.score(sent, doc_id=src, sid=sid)
             scores['sid'] = str(i+1)
             i += 1
@@ -273,6 +275,57 @@ class HighLighter:
             summary[cat] = HighLighter.pick_top_k(summary[cat], 100) if cat == 'findings' \
                 else HighLighter.pick_top_k(summary[cat], num_sents_per_cat)
         print json.dumps(summary)
+        return summary, scores_list
+
+    @staticmethod
+    def summarise_sentence(hter, sentence_obj, src, sids, score_dict, scores_list, score_file, sum_file):
+        sent = sentence_obj['sent']
+        index = sentence_obj['index']
+        sid = None if sids is None else sids[index]
+        sent = sent.replace('\n', '').strip()
+
+        t_key = str(index + 1)
+        scores = hter.compute_language_patterns(sent, doc_id=src, sid=sid,
+                                                cur_score_obj=score_dict[t_key]
+                                                if score_dict is not None and t_key in score_dict else None)
+        # scores = self.score(sent, doc_id=src, sid=sid)
+        scores['sid'] = str(index+1)
+        scores_list.append({'scores': scores, 'sent': sent, 'cat': hter.get_sentence_cat(scores)})
+
+    @staticmethod
+    def multithread_summ(sentences, num_threads, score_file, sum_file, src=None, sids=None, score_dict=None):
+        hters = []
+        for i in range(num_threads):
+            hters.append(HighLighter.get_instance())
+        ctn = []
+        utils.multi_thread_tasking([{"sent": sentences[i], "index": i} for i in range(len(sentences))],
+                                   num_threads, HighLighter.summarise_sentence,
+                                   args=[src, sids, score_dict, ctn, score_file, sum_file],
+                                   thread_wise_objs=hters,
+                                   callback_func=HighLighter.finish_multithread_summ)
+
+    @staticmethod
+    def finish_multithread_summ(src, sids, score_dict, scores_list, score_file, sum_file):
+        threshold = 1
+        summary = {}
+        for s in scores_list:
+            scores = s['scores']
+            sent = s['sent']
+            cat = s['cat']
+            if scores['total'] < threshold:
+                continue
+            summary[cat] = [(sent, scores)] if cat not in summary else summary[cat] + [(sent, scores)]
+        if 'goal' in summary and 'method' in summary and 'general' in summary:
+            summary.pop('general', None)
+
+        num_sents_per_cat = 2
+        for cat in summary:
+            summary[cat] = HighLighter.pick_top_k(summary[cat], 100) if cat == 'findings' \
+                else HighLighter.pick_top_k(summary[cat], num_sents_per_cat)
+        print json.dumps(summary)
+
+        utils.save_json_array([so['scores'] for so in scores_list], score_file)
+        utils.save_json_array(summary, sum_file)
         return summary, scores_list
 
     @staticmethod
@@ -454,6 +507,37 @@ def summarise_all_papers(ann_path, summ_path, callback=None):
                                      callback_func=callback)
 
 
+# section: multiprocessing summarise all papers
+def summ_mt(ann_file, out_path):
+    # test run nltk
+    aa.extract_cd_nouns_nes('good 12 cn', {}, {})
+
+    anns = utils.load_json_data(ann_file)
+    p, fn = split(ann_file)
+    score_file = join(out_path, fn[:fn.rfind('.')] + '_scores.json')
+    sid_to_score = {}
+    if isfile(score_file):
+        stored_scores = utils.load_json_data(score_file)
+        i = 1
+        for score in stored_scores:
+            sid_to_score[score['sid']] = score
+            i += 1
+    sum_file = join(out_path, fn[:fn.rfind('.')] + '.sum')
+    HighLighter.multithread_summ([s['text'] for s in anns], 6, score_file, sum_file,
+                                 src=ann_file, sids=[s['sid'] for s in anns],
+                                 score_dict=sid_to_score)
+
+
+def multiple_processing_summarise_papers(ann_path, summ_path, callback=None):
+    process_num = 3
+    utils.multi_processing_process_files(ann_path, '', process_num, summ_mt,
+                                         args=[summ_path],
+                                         file_filter_func=lambda f: f.endswith('_ann.json'),
+                                         callback_func=callback)
+
+# end of section: multiprocessing summarise all papers
+
+
 def sort_complement(list1, list2, threshold, cmp=None):
     l = sorted(list1, cmp=cmp)
     if len(l) >= threshold:
@@ -546,8 +630,8 @@ def score_paper_threshold(score_file, container, out_file, hter, threshold,
         sid2ann[ann['sid']] = ann
 
     # skip papers with no highlights
-    if len(hts) == 0:
-        return
+    # if len(hts) == 0:
+    #     return
 
     if ma is not None:
         hts += [str(sid) for sid in ma['also_correct']]
@@ -611,20 +695,20 @@ def score_paper_threshold(score_file, container, out_file, hter, threshold,
             s *= type_boost * 10
             prediction.append([score['sid'], s, sent_type])
 
-            # if score['sid'] in hts or s > threshold:
-            sentence_level_details.append(
-                u'[{}]\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}'.format(
-                    score['sid'],
-                    'H' if score['sid'] in hts else '-',
-                    'P' if s > threshold else '-',
-                    sent_type,
-                    '{}/{}'.format(s, type_boost),
-                    '{}/{}'.format(s_sp, confidence),
-                    '{}/{}'.format(score_ret['cds'], score['pattern']['cds'] if 'cds' in score['pattern'] else ''),
-                    '{}/{}'.format(score_ret['nes'], score['pattern']['nes'] if 'nes' in score['pattern'] else ''),
-                    anns[i]['text'].replace('\n', '').replace('\t', '')
+            if score['sid'] in hts or s > threshold:
+                sentence_level_details.append(
+                    u'[{}]\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}'.format(
+                        score['sid'],
+                        'H' if score['sid'] in hts else '-',
+                        'P' if s > threshold else '-',
+                        sent_type,
+                        '{}/{}'.format(s, type_boost),
+                        '{}/{}'.format(s_sp, confidence),
+                        '{}/{}'.format(score_ret['cds'], score['pattern']['cds'] if 'cds' in score['pattern'] else ''),
+                        '{}/{}'.format(score_ret['nes'], score['pattern']['nes'] if 'nes' in score['pattern'] else ''),
+                        anns[i]['text'].replace('\n', '').replace('\t', '')
+                    )
                 )
-            )
         else:
             if score['sid'] in hts:
                 sentence_level_details.append(
@@ -638,9 +722,8 @@ def score_paper_threshold(score_file, container, out_file, hter, threshold,
                         '-',
                         '-',
                         anns[i]['text'].replace('\n', '').replace('\t', '')
-                    )
                 )
-
+                )
     prediction = sort_by_threshold(prediction, threshold,
                             cmp=lambda p1, p2 : 1 if p2[1] > p1[1] else 0 if p2[1] == p1[1] else -1)
 

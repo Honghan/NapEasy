@@ -15,6 +15,8 @@ from nltk.corpus import stopwords
 from nltk.stem.wordnet import WordNetLemmatizer
 import auto_highlighter as ah
 import ann_analysor as aa
+import traceback
+import multiprocessing
 
 # ncbi etuils url
 ncbi_service_url = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?' \
@@ -94,7 +96,87 @@ def multi_thread_do(thread_obj, q, func, *args):
                 func(p, *args)
         except Exception, e:
             print u'error doing {0} on {1} \n{2}'.format(func, p, str(e))
+            traceback.print_exc()
         q.task_done()
+
+
+# begin: multiple processing functions
+def multi_process_tasking(lst, num_processes, process_func,
+                          args=None, callback_func=None, process_wise_objs=None):
+    num_items = len(lst)
+    item_queue = multiprocessing.JoinableQueue(num_items)
+    # print('putting list into queue...')
+    for item in lst:
+        item_queue.put_nowait(item)
+    thread_num = min(num_items, num_processes)
+    arr = [process_func] if args is None else [process_func] + args
+    arr.insert(0, item_queue)
+    # print('queue filled, threading...')
+    processes = []
+    for i in range(thread_num):
+        tarr = arr[:]
+        process_obj = None
+        if process_wise_objs is not None and isinstance(process_wise_objs, list):
+            process_obj = process_wise_objs[i]
+        tarr.insert(0, process_obj)
+        t = multiprocessing.Process(target=multi_process_do, args=tuple(tarr))
+        t.daemon = True
+        t.start()
+        processes.append(t)
+
+    # print('waiting jobs to finish')
+    item_queue.join()
+    for t in processes:
+        t.terminate()
+    # print('{0} files {1}'.format(num_pdfs, proc_desc))
+    if callback_func is not None:
+        callback_func(*tuple(args))
+
+
+def multi_processing_process_files(dir_path, file_extension, num_processes, process_func,
+                                   proc_desc='processed', args=None, multi=None,
+                                   file_filter_func=None, callback_func=None,
+                                   process_wise_objs=None):
+    onlyfiles = [f for f in listdir(dir_path) if isfile(join(dir_path, f))]
+    num_pdfs = 0
+    files = None if multi is None else []
+    lst = []
+    for f in onlyfiles:
+        if f.endswith('.' + file_extension) if file_filter_func is None \
+                else file_filter_func(f):
+            if multi is None:
+                lst.append(join(dir_path, f))
+            else:
+                files.append(join(dir_path, f))
+                if len(files) >= multi:
+                    lst.append(files)
+                    files = []
+            num_pdfs += 1
+    if files is not None and len(files) > 0:
+        lst.append(files)
+    multi_process_tasking(lst, num_processes, process_func, args,
+                          callback_func=callback_func, process_wise_objs=process_wise_objs)
+
+
+def multi_process_do(process_obj, q, func, *args):
+    while True:
+        p = q.get()
+        try:
+            if process_obj is not None:
+                func(process_obj, p, *args)
+            else:
+                func(p, *args)
+        except Exception, e:
+            print u'error doing {0} on {1} \n{2}'.format(func, p, str(e))
+            traceback.print_exc()
+        q.task_done()
+# end: multiple processing functions
+
+
+def filter_path_file(dir_path, file_extension=None, file_filter_func=None):
+    return [f for f in listdir(dir_path)
+            if isfile(join(dir_path, f))
+            and (f.endswith('.' + file_extension) if file_filter_func is None else file_filter_func(f))]
 
 
 def relation_patterns(s):
@@ -114,18 +196,18 @@ def convert_ann_for_training(ann_file, non_hts, hts, out_path):
     p, fn = split(ann_file)
     for ann in anns:
         co = {
-                'src': fn,
-                'sid': ann['sid'],
+                # 'src': fn,
+                # 'sid': ann['sid'],
                 'text': ann['text'],
-                'struct': '' if 'struct' not in ann else ann['struct'],
-                'sapienta': '' if 'CoreSc' not in ann else ann['CoreSc'],
-                'entities': '' if 'ncbo' not in ann else ' '.join( list(set([a['annotation']['text'].lower() for a in ann['ncbo']])) )
+                # 'struct': '' if 'struct' not in ann else ann['struct'],
+                # 'sapienta': '' if 'CoreSc' not in ann else ann['CoreSc'],
+                # 'entities': '' if 'ncbo' not in ann else ' '.join( list(set([a['annotation']['text'].lower() for a in ann['ncbo']])) )
               }
         if 'marked' in ann:
-            co['marked'] = ann['marked']
+            # co['marked'] = ann['marked']
             hts.append(co)
         else:
-            co['marked'] = ''
+            # co['marked'] = ''
             non_hts.append(co)
     print('{} done'.format(ann_file))
 
@@ -148,6 +230,11 @@ def save_text_file(text, file_path):
         wf.write(text)
 
 
+def append_text_file(text, file_path):
+    with codecs.open(file_path, 'a', encoding='utf-8') as wf:
+        wf.write(text)
+
+
 def load_json_data(file_path):
     data = None
     with codecs.open(file_path, encoding='utf-8') as rf:
@@ -163,16 +250,16 @@ def load_text_file(file_path):
 
 
 def save_sentences(non_hts, hts, output_path):
-    training_testing_ratio = 0.6
+    training_testing_ratio = 1
     total_num = min(len(hts), len(non_hts))
     trainin_len = int(training_testing_ratio * total_num)
-    save_json_array(non_hts, join(output_path, 'full_non_hts.json'))
-    save_json_array(hts, join(output_path, 'full_hts.json'))
+    save_json_array(non_hts, join(output_path, 'non_hts.json'))
+    save_json_array(hts, join(output_path, 'hts.json'))
 
-    save_json_array(non_hts[:trainin_len], join(output_path, 'non_hts.json'))
-    save_json_array(hts[:trainin_len], join(output_path, 'hts.json'))
-    save_json_array(non_hts[trainin_len:total_num], join(output_path + "/test", 'non_hts.json'))
-    save_json_array(hts[trainin_len:total_num], join(output_path + "/test", 'hts.json'))
+    # save_json_array(non_hts[:trainin_len], join(output_path, 'non_hts.json'))
+    # save_json_array(hts[:trainin_len], join(output_path, 'hts.json'))
+    # save_json_array(non_hts[trainin_len:total_num], join(output_path + "/test", 'non_hts.json'))
+    # save_json_array(hts[trainin_len:total_num], join(output_path + "/test", 'hts.json'))
 
     # split training data into equally sized groups
     # num_group = 3
@@ -355,7 +442,7 @@ def phrase_similarity(p1, p2, pos='n'):
     return m
 
 
-def match_sp_type(sp_patterns, sp_cats, subs, preds):
+def match_sp_type(sp_patterns, sp_cats, subs, preds, paper_id=None, sid=None, result_container=None):
     idx2score = {}
     p2score = {}
     for p in sp_cats:
@@ -387,6 +474,8 @@ def match_sp_type(sp_patterns, sp_cats, subs, preds):
             m_idx = p2score[p]['idx']
     if m < 0.5:
         return None, None, None
+    if result_container is not None:
+        result_container.put({'sim': m, 'pattern': mp, 'index': m_idx, 'sid': sid, 'paper_id': paper_id})
     return m, mp, m_idx
 
 
@@ -404,39 +493,106 @@ def semantic_fix_scores(score_file, sp_patterns, sp_cats):
     print '%s done.' % score_file
 
 
-def semantic_fix_scores_confidence(score_file, sp_patterns, sp_cats, hter):
+def semantic_fix_scores_confidence(score_file, sp_patterns, sp_cats, hter, score_path):
     print 'working on %s...' % score_file
     scores = load_json_data(score_file)
     for s in scores:
         p = s['pattern']
-        if 'sp_index' in p and p['sp_index'] != -1:
+        if 'sp_index' in p and p['sp_index'] == -1:
             sp = aa.SubjectPredicate(p['sub'], p['pred'])
             if sp in hter.sp:
                 p['sp_index'] = hter.sp[sp]['index']
                 p['confidence'] = 2
                 print sp, p['sp_index']
-
-            continue
-            m, mp, m_idx = match_sp_type(sp_patterns, sp_cats, p['sub'], p['pred'])
-            if m is not None:
-                p['sp_index'] = m_idx
-                p['confidence'] = m
-                print s['sid'], p['sub'], p['pred'], mp
+            else:
+                m, mp, m_idx = match_sp_type(sp_patterns, sp_cats, p['sub'], p['pred'])
+                if m is not None:
+                    p['sp_index'] = m_idx
+                    p['confidence'] = m
+                    print s['sid'], p['sub'], p['pred'], mp
     save_json_array(scores, score_file)
     print '%s done.' % score_file
 
 
-def semantic_fix_all_scores():
+def semantic_fix_all_scores(socre_folder_path, cb=None):
     hter = ah.HighLighter.get_instance()
     sp_patterns = load_json_data('./resources/sub_pred.txt')
     sp_cats = load_json_data('./resources/sub_pred_categories.json')
-    multi_thread_process_files('./20-test-papers/summaries/', '', 1, semantic_fix_scores_confidence,
-                                     args=[sp_patterns, sp_cats, hter],
-                                     file_filter_func=lambda fn: fn.endswith('_scores.json'))
+    # multi_thread_process_files(socre_folder_path, '', 1, semantic_fix_scores_confidence,
+    #                                  args=[sp_patterns, sp_cats, hter, socre_folder_path],
+    #                                  file_filter_func=lambda fn: fn.endswith('_scores.json'),
+    #                            callback_func=cb)
+    multi_processing_process_files(socre_folder_path, '', 5, semantic_fix_scores_confidence,
+                                   args=[sp_patterns, sp_cats, hter, socre_folder_path],
+                                   file_filter_func=lambda fn: fn.endswith('_scores.json'),
+                                   callback_func=cb)
+
+
+# multiple-processing the semantic fixing on a batch of sentences
+def semantic_fix_worker(job, sp_patterns, sp_cats, container, score_folder_path, cb):
+    match_sp_type(sp_patterns, sp_cats, job['sub'], job['pred'],
+                  paper_id=job['paper_id'], sid=job['sid'], result_container=container)
+
+
+def semantic_fix_finish(sp_patterns, sp_cats, container, score_folder_path, cb):
+    paper_to_matched = {}
+    while not container.empty():
+        m = container.get_nowait()
+        if m['paper_id'] not in paper_to_matched:
+            paper_to_matched[m['paper_id']] = {}
+        paper_to_matched[m['paper_id']][m['sid']] = m
+
+    for score_file in paper_to_matched:
+        print 'putting results back to %s...' % score_file
+        scores = load_json_data(score_file)
+        matched_patterns = paper_to_matched[score_file]
+        for s in scores:
+            if s['sid'] in matched_patterns:
+                m = matched_patterns[s['sid']]
+                p = s['pattern']
+                p['sp_index'] = m['index']
+                p['confidence'] = m['sim']
+                print s['sid'], p['sub'], p['pred'], m['pattern']
+        save_json_array(scores, score_file)
+        print '%s done.' % score_file
+    print 'all semantically fixed'
+    if cb is not None:
+        cb(score_folder_path)
+
+
+def multi_processing_semantic_fix_all_scores(score_folder_path, cb=None):
+    hter = ah.HighLighter.get_instance()
+    sp_patterns = load_json_data('./resources/sub_pred.txt')
+    sp_cats = load_json_data('./resources/sub_pred_categories.json')
+    sentence_job_list = []
+    files = filter_path_file(score_folder_path, file_filter_func=lambda fn: fn.endswith('_scores.json'))
+    job_size = 0
+    for f in files:
+        score_file = join(score_folder_path, f)
+        print 'pulling from %s...' % score_file
+        scores = load_json_data(score_file)
+        for s in scores:
+            p = s['pattern']
+            if 'sp_index' in p:
+                sp = aa.SubjectPredicate(p['sub'], p['pred'])
+                if sp in hter.sp:
+                    p['sp_index'] = hter.sp[sp]['index']
+                    p['confidence'] = 2
+                    print sp, p['sp_index']
+                elif 'sp_index' in p and p['sp_index'] == -1:
+                    sentence_job_list.append({'paper_id':score_file, 'sid': s['sid'], 'sub': p['sub'], 'pred':p['pred']})
+                    job_size += 1
+        print '%s pulled.' % score_file
+        save_json_array(scores, score_file)
+    results = multiprocessing.Queue(job_size)
+    multi_process_tasking(sentence_job_list, 3, semantic_fix_worker,
+                          args=[sp_patterns, sp_cats, results, score_folder_path, cb],
+                          callback_func=semantic_fix_finish)
+# end of multiple-processing the semantic fixing on a batch of sentences
 
 
 def main():
-    # ann_to_training('./anns_v2', './training')
+    # ann_to_training('./local_exp/anns_v2', './training')
     # sents = [
     #     'The control group was comprised of 15 elderly community dwelling individuals of comparable age and educational background',
     #     'This resulted in data of 172 participants to be included in the present study.'
@@ -451,7 +607,8 @@ def main():
     # sp_cats = load_json_data('./resources/sub_pred_categories.json')
     # print match_sp_type(sp_patterns, sp_cats, ['conclusions'], ['drawn'])
     # semantic_fix_scores('./30-test-papers/summaries/10561930_annotated_ann_scores.json', sp_patterns, sp_cats)
-    semantic_fix_all_scores()
+    # semantic_fix_all_scores('./local_exp/42-extra-papers/summaries/')
+    multi_processing_semantic_fix_all_scores('/Users/jackey.wu/Documents/working/KCL/psychometricTests_neuroanatomy/local_exp/test_mp_sem_fix')
 
 if __name__ == "__main__":
     main()
