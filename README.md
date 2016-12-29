@@ -1,5 +1,5 @@
 # NapEasy
-NapEasy is an automated PDF highlighting tool designed to support faster curation of case studies and reviews on Parkinson's and Alzheimer's disease. Now, it has been deployed as a web server at [http://napeasy.org](http://napeasy.org), which allows the user to highlight selected papers from the PubMed Central (PMC) Open Access dataset. Visit the [website](http://napeasy.org) for detail. You can also check the following instructions for getting the tool running on your own environment.
+NapEasy is an automated PDF highlighting tool designed to support faster curation of case studies and reviews on Parkinson's and Alzheimer's disease. Now, it has been deployed as a web server at [http://napeasy.org](http://napeasy.org), which allows the user to highlight selected papers from the PubMed Central (PMC) Open Access dataset. Visit the [website](http://napeasy.org) for detail. You can also check the following instructions for getting the tool running in your own environment.
 
 ## Prerequisite 
 Follow this [wiki page](https://github.com/Honghan/NapEasy/wiki) to install required libraries  
