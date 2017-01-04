@@ -40,6 +40,15 @@ if (typeof qbb == "undefined"){
                 qbb.inf.callAPI(sendObject, searchCB);
             },
 
+            getPaperSumm: function(pmcid, searchCB){
+                var apiName = "getPaperSumm";
+                var sendObject={
+                    r:apiName,
+                    pmcid: pmcid
+                };
+                qbb.inf.callAPI(sendObject, searchCB);
+            },
+
 			callAPI: function(sendObject, cb, error){
 				qbb.inf.ajax.doPost(sendObject, function(s){
 					var ret = s;

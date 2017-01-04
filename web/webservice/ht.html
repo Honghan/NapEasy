@@ -8,10 +8,21 @@
     <link href="js/tab.css" rel="stylesheet" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
     <script src="js/lib/jquery.json-2.3.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.3.5/bluebird.min.js"></script>
     <script src="js/lib/sweetalert2.min.js"></script>
     <script src="js/lib/js.cookies.js"></script>
-    <script src="js/api.js"></script>
-    <script src="js/ht.js?v=0.123"></script>
+    <script src="js/api.js?v=0.1"></script>
+    <script src="js/ht.js?v=0.25"></script>
+    <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-89733845-1', 'auto');
+        ga('send', 'pageview');
+
+    </script>
 </head>
 <div class="header">
     <div class="menu"> <a href="/">home</a> </div>
@@ -31,12 +42,15 @@
         <span class="pageInfo"></span>
         <span class="clsPageLink">next</span>
     </div>
-    <div class="title pageTitle"></div>
+    <div class="title"><span class="pmcidCtn"></span><span class="pageTitle"></span></div>
     <div class="clsDisplay">
         <b>Display options:</b><br/>
         <input id="hideNormal" type="checkbox" class="btnHideNormal"/> <label for="hideNormal">Hide normal sentences</label> <br/>
-        <input id="blur" type="checkbox" class="btnBlur"/> <label for="blur">Blur normal sentences</label> <br/>
-        <input id="httype" type="checkbox" class="btnType"/> <label for="httype">Show highlight type</label>
+        <input id="blur" type="checkbox" checked class="btnBlur"/> <label for="blur">Blur normal sentences</label> <br/>
+        <input id="httype" type="checkbox" checked class="btnType"/> <label for="httype">Show highlight type</label>
+        <p/>
+        <b>Highlight option:</b><br/>
+        <input id="threshold" type="checkbox" class="btnThreshold"/> <label for="threshold" title="sentences scored than a threshold">Highly Scored Only</label>
         <p/>
         <b>Download:</b><br/> <span class="download">XML</span> <span class="download">JSON</span> <span class="download">Text</span>
     </div>
@@ -44,7 +58,7 @@
 
 </div>
 <p class="sep">&nbsp;</p>
-<div class="endofpage">NapEasy 2016 | Contact: honghan.wu AT gmail.com | <a href="https://github.com/KHP-Informatics/psychometric_neuroatonomy">Github</a></div>
+<div class="endofpage">NapEasy 2016-2017 | <a href="https://github.com/KHP-Informatics/psychometric_neuroatonomy">Github</a></div>
 <div style="display: none">
     <form action="" method="post" target="_blank" id="_dform">
         <input type="hidden" value="" name="format" id="dformat"/>

@@ -6,8 +6,7 @@
     line-height: 44px;
     height: 46px;
     overflow: hidden;
-    font-size: 20px;
-    font-family: verdana;
+    font-size: 120%;
     position: relative;
 }
 .tabrow li {
@@ -83,12 +82,12 @@
     background-image: -ms-linear-gradient(top, #3498db, #2980b9);
     background-image: -o-linear-gradient(top, #3498db, #2980b9);
     background-image: linear-gradient(to bottom, #3498db, #2980b9);
-    -webkit-border-radius: 28;
-    -moz-border-radius: 28;
+    -webkit-border-radius: 28px;
+    -moz-border-radius: 28px;
     border-radius: 28px;
     font-family: Arial;
     color: #ffffff;
-    font-size: 20px;
+    font-size: 90%;
     padding: 10px 20px 10px 20px;
     text-decoration: none;
     cursor:pointer;
@@ -103,7 +102,6 @@
 }
 
 #papers {
-    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
     border-collapse: collapse;
     width: 100%;
 }
@@ -123,6 +121,7 @@
     padding-bottom: 12px;
     text-align: left;
     background-color: #4CAF50;
+
     color: white;
 }
 
@@ -131,52 +130,87 @@
 textarea{
     width: 680px;
     height: 200px;
-    padding:5px;font-size: 20px;color:#666;
+    padding:5px;font-size: 100%;color:#666;
 }
-input[type=text]{width: 600px;height: 60px;padding:5px;font-size: 20px;color:#666;}
+input[type=text]{width: 600px;height: 60px;padding:5px;font-size: 100%;color:#666;}
 .btnContainer{margin:20px;}
 
-.title {margin:20px;text-align: center;font-size: 23px;color:#333;font-weight: bold;}
-.panel{margin-left:50px;margin-right:50px;font-size:18px;display:none;text-align: center}
-.text{text-align: justify;font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;font-size:15px;
-    margin-left: 30px;margin-right: 30px; line-height: 22px;}
+.title {padding-bottom:20px;margin: auto;text-align: center;font-size: 120%;color:#333;width: 900px;}
+.panel{margin-left:50px;margin-right:50px;font-size:90%;display:none;text-align: center}
+.text{text-align: justify;font-size:110%;
+    margin-left: 30px;margin-right: 30px;}
+.headtext{padding-top:3px;font-size: 90%;text-align:justify;}
 .btnSubmitChecked{display: none}
 .btnNext{color:blue;text-decoration: underline;cursor:pointer;margin-left:10px;font-style:italic;}
-.pageCtrl{margin:10px;text-align: center;font-size:22px;}
+.pageCtrl{margin:10px;text-align: center;font-size:120%;}
 
 .clsFullText {overflow: auto;}
-.clsFullText div.normal{display:table-row;font-size: 16px; line-height: 22px;background-color: #eee; margin: 6px; }
+.clsFullText div.normal{display:table-row;font-size: 100%; line-height: 22px;background-color: #eee; margin: 6px; }
 .clsFullText div.marked {background-color: lightyellow;}
 .blur {color: transparent;text-shadow: 0 0 5px #000;}
 .clsSid{color:#999;display:table-cell;margin-left:3px;}
-.pageControl{text-align: center;margin: 12px;font-size: 23px;}
+.pageControl{text-align: center;margin: 12px;font-size: 120%;}
 .clsFullText .clsSentText.clsHT {border: solid #dd5555 2px;color: black; background-color: lightyellow;
     text-shadow: 0 0 0px #000;}
 .clsPageLink {margin-left:20px;margin-right:20px;color:blue;text-decoration: underline;cursor: pointer;}
 
 #visPanel {display: none; position: relative; top:150px;left:0px;}
-#stausPanel{margin: 10px;font-size: 20px;text-align: center;}
+#stausPanel{margin: 10px;font-size: 90%;text-align: center;}
 #stausPanel div {font-style: italic;}
 #jobId{}
 
 .pop{display: inline-block;margin:0px}
-.clsDisplay{float:right;font-size: 16px;margin:20px;}
+.clsDisplay{float:right;font-size: 90%;margin:20px;}
 .clsDisplay .download {margin: 6px;cursor: pointer;border-bottom:1px solid #c55500;
     text-decoration:none;
     color:#c55500;}
 .download:hover{border-bottom:1px solid #730800;
     color:#730800;}
 .menu{margin:10px; }
-.menu a{font-size: 20px;}
+.menu a{font-size: 90%;}
 .header{margin:0px;  position: fixed; top:0px;left:0px;width: 100%;background-color: white;z-index: 100;}
-.tiptitle{font-size: 22px;font-weight: bold;margin-top:10px;margin-bottom:10px;color:#333;}
+.tiptitle{font-size: 100%;font-weight: bold;margin-top:10px;margin-bottom:10px;color:#333;}
 ol {margin:6px;}
 .endofpage {color:#888;width:100%;text-align: center;position: fixed;bottom: 0px;padding:6px;margin-top: 50px;background-color: white;}
 .sep {line-height: 170px;display: block;}
 .btnHelp{cursor: pointer;padding:3px;color:#c55500;}
 .btnHelp:hover{color:#730800;}
-#help{display: none}
+#help{text-align: justify;}
 .clsType{display: table-cell;width:120px;vertical-align:middle;text-align:center;margin:3px;font-style: italic;color:coral;margin:3px;}
 .clsSentText {display:table-cell;margin:1px;}
-.sampleCtn{font-style: italic; margin: 10px;}
+.sampleCtn{font-style: italic; margin: 10px;font-size: 100%;}
 .sample{color:green;border-bottom: 1px dashed lightblue;cursor: pointer;}
+.feature {color:#c55500;font-style: italic;}
+.about{text-align: justify;}
+.affnote{border-top:1px dashed #ccc;font-size: 70%;font-style: italic;margin-top: 20px;}
+
+#logo {
+    float: left;
+    font-family: 'Open Sans', sans-serif;
+    color: #565;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-size: 60px;
+    font-weight: 800;
+    letter-spacing: -3px;
+    line-height: 1;
+    text-shadow: #EDEDED 3px 2px 0;
+    position: relative;
+    margin-right: 30px;
+}
+#logo:after {
+    content:"napeasy";
+    position: absolute;
+    left: 5px;
+    top: 6px;
+}
+#logo:after {
+    background-image: -webkit-linear-gradient(left top, transparent 0%, transparent 25%, #565 25%, #565 50%, transparent 50%, transparent 75%, #565 75%);
+    background-size: 4px 4px;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    z-index: -5;
+    display: block;
+    text-shadow: none;
+}
+body{font-size:16px;}

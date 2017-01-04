@@ -10,59 +10,152 @@
     <meta charset="UTF-8">
     <title>NapEasy - Publication Highlighting Service</title>
     <link href="js/lib/sweetalert2.min.css" rel="stylesheet" />
-    <link href="js/tab.css?v=3" rel="stylesheet" />
+    <link href="js/tab.css?v=9.1" rel="stylesheet" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
     <script src="js/lib/jquery.json-2.3.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.3.5/bluebird.min.js"></script>
     <script src="js/lib/sweetalert2.min.js"></script>
+    <script src="js/lib/js.cookies.js"></script>
     <script src="js/api.js?v=2.1"></script>
-    <script src="js/main.js?v=1.36"></script>
+    <script src="js/main.js?v=1.38"></script>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/github.min.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/highlight.min.js"></script>
+    <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-89733845-1', 'auto');
+        ga('send', 'pageview');
+
+    </script>
 </head>
 <body>
 
 <div class="title">
-    NapEasy: Neat Automated Publication highlighting made EASY
-</div>
-<div class="text">The NapEasy web server automatically highlights important sentences in publications available through the
-    <a href="https://www.ncbi.nlm.nih.gov/pmc/tools/openftlist/" target="_blank">PubMed Central (PMC) Open Access dataset</a>.
-    The highlights are concise and aim to represent the main characteristics of the study described in the publication.
-    While the workflow is similar to generating a summary, the sentences highlighted may not necessarily be the best to
-    represent the content of the paper as the aim is to select those sentences, describing best the study. NapEasy is designed
-    to help facilitate and speedup the curation processes for faster knowledge acquisition.
-    <div id="helpSwitch" class="btnHelp">[+] Show Help</div>
-    <div id="help">
-        <div class="tiptitle">How to use <span class="btnHelp btnHideHelp">[-]</span> </div>
-        The only input NapEasy needs is a list of comma separated PMCIDs. Note that PMIDs (PubMed identifiers) are different to PMCIDs.
-        Should you only have PMIDs to hand, an easy conversion tool is available <a href="https://www.ncbi.nlm.nih.gov/pmc/pmctopmid/" target="_blank">
-            online</a>.
-        <p/>
-        There are two options to use NapEasy:
-        <ol>1) If you happen to have PMC IDs of papers you want to highlight, just click the "<b>Use PMC IDs</b>" tab below, enter the relevant PMC IDs and submit.</ol>
-        <ol>2) Otherwise, just simply use the "<b>Search PMC</b>" functionality below to look up and select papers based on keyword search; the selected papers can then immediately be submitted for highlighting.</ol>
-            In its current implementation, the service will not provide highlight results on the fly. Instead, a unique job id
-        and URI for the job will be generated on submission (e.g., <a href="http://napeasy.org/ht.html?b201e1c9-5dcb-425a-8ddc-a5c4ce03ad0f" target="_blank">sample job URI</a>), which will allow you to check the result later
-        (so, please make a note of it if you don't want to provide an email address).
-        If you do provide your email address during the submission process, you will receive a notification email from napeasy.noreply@gmail.com when your highlighting job has finished. (Normally, a one paper job finishes within 20-30 minutes; more than one paper will take longer.) The highlighted sentences can then be downloaded in three different formats (XML, JSON, and plain text) for further analysis.
+    <span id="logo">NapEasy</span>
+    <div class="headtext">A free and open source web application that <span class="feature">highlights important sentences </span> of any publication whose full text is available in the
+        <a href="https://www.ncbi.nlm.nih.gov/pmc/tools/openftlist/" target="_blank">PubMed Central (PMC)</a> to <span class="feature"> facilitate and speed up knowledge curation</span> from the scientific literature.
     </div>
 </div>
 <ul class="tabrow">
     <li linkdiv="searchUI" class="selected"><a href="#">Search PMC</a></li>
     <li linkdiv="pmcidUI"><a href="#">Use PMC IDs</a></li>
+    <li linkdiv="helpUI"><a href="#">Help</a></li>
+    <li linkdiv="aboutUI"><a href="#">About</a></li>
 </ul>
 
 <div id="pmcidUI" class="panel">
+    <div class="sampleCtn"><b>Submit PMCIDs</b>, highlights of these research(es) will be generated for you</div>
     <textarea id="pmcidText" placeholder="Comma separated (up to 10) PMC IDs, e.g., PMC5063010,PMC4936267 "></textarea>
     <div class="sampleCtn">For example: <span class="sample pmcidSample">PMC5063010,PMC4936267</span></div>
     <div class="btnContainer"><span class="btn btnPMCSubmit">submit</span></div>
 </div>
 
 <div id="searchUI" class="panel">
+    <div class="sampleCtn"><b>Search, Select and Submit</b>, highlights of selected research(es) will be generated for you</div>
     <input type="text" id="termSearchInput" placeholder="keywords, e.g., parkinson's"/>
-    <div class="sampleCtn">For example: <span class="sample keyworkSample">parkinson's</span></div>
+    <div class="sampleCtn">For example: <span class="sample keyworkSample">parkinson's</span> (based on <a href="https://europepmc.org/RestfulWebService" target="_blank">Europe PMC web service)</a></div>
     <div class="btnContainer"><span class="btn btnSearch">search</span> <span class="btn btnSubmitChecked">submit</span></div>
 
     <div id="paperList"></div>
 </div>
+
+<div id="helpUI" class="panel">
+    <div id="help" class="text">
+        <h2>How to use</h2>
+        The only input NapEasy needs is a list of comma separated PMCIDs. Note that PMIDs (PubMed identifiers) are different to PMCIDs.
+        Should you only have PMIDs to hand, an easy conversion tool is available <a href="https://www.ncbi.nlm.nih.gov/pmc/pmctopmid/" target="_blank">
+        online</a>.
+        <p/>
+        There are two options to use NapEasy:
+        <ol>1) If you happen to have PMC IDs of papers you want to highlight, just click the "<b>Use PMC IDs</b>" tab, enter the relevant PMC IDs and submit.</ol>
+        <ol>2) Otherwise, just simply use the "<b>Search PMC</b>" functionality to look up and select papers based on keyword search; the selected papers can then immediately be submitted for highlighting.</ol>
+        In its current implementation, the service will not provide highlight results on the fly. Instead, a unique job id
+        and URI for the job will be generated on submission (e.g., <a href="http://napeasy.org/ht.html?b201e1c9-5dcb-425a-8ddc-a5c4ce03ad0f" target="_blank">http://napeasy.org/ht.html?b201e1c9-5dcb-425a-8ddc-a5c4ce03ad0f</a>), which will allow you to check the result later
+        (so, please make a note of it if you don't want to provide an email address).
+        If you do provide your email address during the submission process, you will receive a notification email from napeasy.noreply@gmail.com when your highlighting job has finished.
+        (Normally, a one paper job finishes within 10-30 minutes depending on the number of sentences; more than one paper will take longer.)
+
+
+        <h2>Highlight Result</h2>
+        When the job finishes, the result can be visualised directly by following the job result URI generated at the submission (e.g., <a href="http://napeasy.org/ht.html?b201e1c9-5dcb-425a-8ddc-a5c4ce03ad0f" target="_blank">sample job result</a>).
+        In addition, from the same webpage, the highlighted sentences can then be downloaded in three different formats (XML, JSON, and plain text) for further analysis.
+        The data structure of the downloaded result is explained as follows.
+        <h3>Result Data Structure</h3>
+Essentially, for a given job, the result contains a list of highlighted sentences for each paper within the job.
+        Here, we elaborate the result data structure using <a href="http://napeasy.org/ht.html?b201e1c9-5dcb-425a-8ddc-a5c4ce03ad0f" target="_blank">a sample job</a>.
+        Although we use the JSON format (see below) here, the
+        structure applies to XML and text formats as well.
+        <p/>
+        At the top level, a result contains two attributes
+        - <i>jobid</i> (a GUID identifying the job) and
+        <i>papers</i> (an array, of whom each element is the highlight result of each paper).
+        In this case, we only have one paper in this job. So, the <i>papers</i> contains just one element.
+        <p/>
+        For each paper, the result is an object containing three attributes:<br/>
+        - <i>pmcid</i>: the PMCID of the paper <br/>
+        - <i>total_sentences</i>: the total number of sentences in the paper<br/>
+        - <i>highlights</i>: an array of highlighted sentences <br/>
+        <p/>
+        Each highlighted sentence is an object having four attributes:<br/>
+        - <i>sid</i>: the sentence ID (an integer sequence number from 1 for the first sentence) <br/>
+        - <i>text</i>: the text content of the sentence <br/>
+        - <i>type</i>: the type of the sentence, which can be one of or a combination of three basic types (goal, findings, method) <br/>
+        - <i>score</i>: a double valued score indicating the importance of the sentence (from 0 to 10). The higher the value; the more important the sentence is. <br/>
+        <pre><code class="json">
+{
+  "jobid": "b201e1c9-5dcb-425a-8ddc-a5c4ce03ad0f",
+  "papers": [
+    {
+      "pmcid": "PMC5089825",
+      "total_sentences": 262,
+      "highlights": [
+        {
+          "sid": "27",
+          "text": "Anti-NMDAR encephalitis is the most common autoimmune encephalitis described so far,  9 with >900 cases identified worldwide since its first description in 2007.",
+          "type": "findings-method",
+          "score": 2.045864771554322
+        },
+        ...
+      ]
+    }
+  ]
+}
+        </code></pre>
+    </div>
+</div>
+
+<div id="aboutUI" class="panel">
+    <div class="about text">
+        NapEasy highlights important sentences in open access publications in the
+        <a href="https://www.ncbi.nlm.nih.gov/pmc/tools/openftlist/" target="_blank">PubMed Central</a>.
+        Instead of picking sentences best representing the paper content like most text summarisation tools do, NapEasy highlights
+        aim to represent <span class="feature">the main characteristics of the study</span> described in a publication, which are especially sought after in tasks of curating knowledge
+        from the scientific literature.
+        <p/>
+        NapEasy was initiated as a collaboration between <a href="http://www.kcl.ac.uk/" target="_blank">King's College London</a> and
+        <a href="https://www.ucl.ac.uk/" target="_blank">University College London</a>, which
+        was to develop a text mining tool for facilitating the curation of a knowledge base of Parkinson's and Alzheimer's diseases
+        from the scientific literature (a recent development of <a href="http://apinatomy.org/home" target="_blank">ApiNATOMY</a> project).
+        Inspired by the success of NapEasy's application in the case study, the team decided
+        to make the tool available to and, hopefully, benefit a wider community by deploying it as a web server. <p/>
+        This website is free and open to all users and there is no login requirement. The tool is open source and the Github repo is
+        <a href="https://github.com/KHP-Informatics/NapEasy" target="_blank">https://github.com/KHP-Informatics/NapEasy</a>. We are also keen to hear
+        your comments and suggestions: honghan.wu AT kcl.ac.uk.
+        <h2>People</h2>
+        <div>Honghan Wu<sup>1</sup></div>
+        <div>Anika Oellrich<sup>1</sup></div>
+        <div>Christine Girges<sup>2</sup></div>
+        <div>Bernard de Bono<sup>2</sup></div>
+        <div>Tim JP Hubbard<sup>1</sup></div>
+        <div>Richard JB Dobson<sup>1,2</sup></div>
+        <p class="affnote"><sup>1</sup>King's College London <br/><sup>2</sup>University Colledge London</p>
+    </div>
+</div>
+
 <p class="sep">&nbsp;</p>
-<div class="endofpage">NapEasy 2016 | Contact: honghan.wu AT gmail.com | <a href="https://github.com/KHP-Informatics/psychometric_neuroatonomy">Github</a></div>
+<div class="endofpage">NapEasy 2016-2017 | <a href="https://github.com/KHP-Informatics/psychometric_neuroatonomy">Github</a></div>
 </body>
 </html>

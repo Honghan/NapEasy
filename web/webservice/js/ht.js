@@ -55,7 +55,6 @@
 
     function loadFullText(pmid){
         qbb.inf.getPaperFullText(pmid, function(s){
-            console.log(s);
             if (s) {
                 renderFullText($.parseJSON(s));
             }else
@@ -73,8 +72,8 @@
         $('.pageInfo').html( (_curDocIdx + 1) + '/' + _htResults.length + ' papers');
     }
 
-    function renderPrediction(){
-        var paper = _htResults[_curDocIdx];
+    function renderPrediction(paper){
+        $('.clsHT').removeClass('clsHT');
         for (var i=0;i<paper.highlights.length;i++){
             if (paper.highlights[i].length > 2 && paper.highlights[i][2].length > 0)
                 $('.clsType.s' + paper.highlights[i][0]).html(paper.highlights[i][2])
@@ -82,6 +81,7 @@
             $('div[sid="' + paper.highlights[i][0] + '"]').addClass('clsHT');
             $('div[sid="' + paper.highlights[i][0] + '"] .clsSentText').addClass('clsHT');
         }
+
         if (!$('.btnType').prop('checked'))
             $('.clsType').hide();
         if ($('.btnHideNormal').prop('checked')){
@@ -89,6 +89,26 @@
             $('.clsHT').show();
         }
         $('#visPanel').show();
+    }
+
+    function loadTypedHighlights(pp){
+        swal('complementary highlighting...');
+        qbb.inf.getPaperSumm(pp.pmcid, function (s) {
+            swal.close();
+            var so = $.parseJSON(s);
+            console.log(s);
+            var paper = {'pmcid': pp.pmcid, 'highlights': []}
+            for (var t in so){
+                for (var i=0;i<so[t].length;i++){
+                    paper.highlights.push([
+                        so[t][i][1]['sid'],
+                        so[t][i][1]['total'],
+                        t
+                    ]);
+                }
+            }
+            renderPrediction(paper);
+        });
     }
 
     function renderFullText(sents){
@@ -115,16 +135,26 @@
                     + '</div>';
         }
         $('.clsFullText').html(s);
+        renderCurrentHighlights();
+    }
+
+    function renderCurrentHighlights(){
         $('.clsFullText').scrollTop(0);
-        renderPrediction();
+        var paper = _htResults[_curDocIdx];
+        $('.pmcidCtn').html("[{0}]".format(paper.pmcid));
+        if (paper.highlights.length<=2 && !$('.btnThreshold').prop('checked')){
+            loadTypedHighlights(paper);
+        }else {
+            renderPrediction(paper);
+        }
     }
 
     function checkJobStatus(){
         if (qbb.inf.isValidJobId(_jobID)) {
             swal('checking...');
             qbb.inf.getJobDetail(_jobID, function(s){
-                console.log(s);
                 if (s){
+                    console.log(s);
                     swal.close();
                     var jo = $.parseJSON(s);
                     $('#jobId').html('Job ID: ' + _jobID);
@@ -239,10 +269,10 @@
 
 	$(document).ready(function(){
 	    _jobID = window.location.href.slice(window.location.href.indexOf('?') + 1);
-	    console.log(Cookies.get('blurCheck'));
         $('.btnBlur').prop('checked', Cookies.get('blurCheck')=="true");
         $('.btnType').prop('checked', Cookies.get('typeCheck')=="true");
         $('.btnHideNormal').prop('checked', Cookies.get('hideNormalCheck')=="true");
+        $('.btnThreshold').prop('checked', Cookies.get('threshold')=="true");
         checkJobStatus();
 
         // loadHighlighted();
@@ -272,6 +302,12 @@
             $('.clsHT').show();
 
             Cookies.set('hideNormalCheck', $(this).prop('checked'), { expires: 365 });
+        });
+
+        $('.btnThreshold').click(function(){
+            renderCurrentHighlights();
+
+            Cookies.set('threshold', $(this).prop('checked'), { expires: 365 });
         });
 
         $('.download').click(function(){

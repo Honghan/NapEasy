@@ -126,11 +126,13 @@
                 title: 'Email(optional)?',
                 text: 'Email for notification',
                 input: 'email',
+                inputValue: Cookies.get('userEmail') ? Cookies.get('userEmail') : '',
                 showCancelButton: true,
                 cancelButtonText: 'go without email'
             }).then(function (email) {
                 user = email;
                 doSubmitJob(user, pmids);
+                Cookies.set('userEmail', email, { expires: 365 });
             }, function (dismiss) {
                 // dismiss can be 'cancel', 'overlay',
                 // 'close', and 'timer'
@@ -170,6 +172,10 @@
 
 	$(document).ready(function(){
         setupTab();
+
+        $('pre code').each(function(i, block) {
+            hljs.highlightBlock(block);
+        });
 
         $('.btnPMCSubmit').click(function () {
             submitPMCIDs($('#pmcidText').val());
