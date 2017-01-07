@@ -1,4 +1,4 @@
-configuration	**	**	**	**	**
+development	**	**	**	**	**
 precision	recall	f measure	#highlighted	#predicted	paper
 0.41	0.82	0.55	11	22	./anns_v2/Ahn et al., (2011) - The cortical neuroanatomy of neuropsychological deficits in MCI and AD_annotated_ann.json
 0.40	0.33	0.36	6	5	./anns_v2/Allert et al., (2011) - Role of dysphagia in evaluating PD for STN-DBS._annotated_ann.json
