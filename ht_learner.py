@@ -1,5 +1,6 @@
 import ann_utils as utils
-from os.path import join, isfile
+from os.path import join, isfile, split
+import re
 from os import listdir
 from time import time
 from sklearn import metrics
@@ -10,18 +11,28 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.ensemble import RandomForestClassifier
 
 
-def load_ht_data(ann_file_path):
+def load_ht_data(ann_file_path, manual_ann=None):
     score_files = [join(ann_file_path, f) for f in listdir(ann_file_path) if isfile(join(ann_file_path, f))
                    and f.endswith('_annotated_ann.json')]
     sents = []
     for sf in score_files:
-        sents += [{'text': so['text'], 'class': 'ht' if 'marked' in so else 'nht'}
+        ma = None
+        if manual_ann is not None:
+            fpath, fn = split(sf)
+            m = re.match(r'(\d+)_annotated_ann\.json', fn)
+            if m is not None:
+                paperid = m.group(1)
+                if paperid in manual_ann:
+                    ma = manual_ann[paperid]
+        sents += [{'text': so['text'], 'class':
+            ('ht' if ma is None or u'should_skip' not in ma or int(so['sid']) not in ma[u'should_skip'] else 'nht')
+            if 'marked' in so else ('nht' if ma is None or u'also_correct' not in ma or int(so['sid']) not in ma[u'also_correct'] else 'ht')}
                   for so in (sos for sos in utils.load_json_data(sf))]
     return sents
     print 'total #sents %s \n top 1 is %s' % (len(sents), sents[0])
 
 
-def vect_data(train_file_path, test_file_path):
+def vect_data(train_file_path, test_file_path, manual_correctoed_file=None):
     sents = load_ht_data(train_file_path)
     do_balanced_training = False
     if not do_balanced_training:
@@ -45,7 +56,8 @@ def vect_data(train_file_path, test_file_path):
                 if count_nht >= count_ht:
                     break
 
-    test_sents = load_ht_data(test_file_path)
+    ma = utils.load_json_data(manual_correctoed_file) if manual_correctoed_file is not None else None
+    test_sents = load_ht_data(test_file_path, ma)
     test_text_list = [sent['text'] for sent in test_sents]
     test_labels = [sent['class'] for sent in test_sents]
 
@@ -85,9 +97,10 @@ def benchmark(clf, train_data, train_labels, test_data, test_labels):
 
 def main():
     train_data_path = './local_exp/anns_v2/'
-    test_data_path = './local_exp/20-test-papers'
+    test_data_path = './local_exp/42+20/'
+    manual_corrected = './results/manual_annotations_combined.json'
     print 'loading data...'
-    (train_data, train_labels, test_data, test_labels) = vect_data(train_data_path, test_data_path)
+    (train_data, train_labels, test_data, test_labels) = vect_data(train_data_path, test_data_path, manual_corrected)
     print 'data loaded. learning...'
     results = []
     for clf, name in (
