@@ -11,9 +11,14 @@ folder_200_papers = './summaries/'
 folder_18_papers = './20-test-papers/summaries/'
 folder_10_manual_checked = './10-manual-checked/summaries/'
 folder_42_extra_papers = './local_exp/42-extra-papers/summaries/'
+folder_42_20_papers = './local_exp/42+20/summaries/'
+folder_extra_checked = './local_exp/extra_manual_curated/summaries/'
+folder_combined_checked = './local_exp/manual_curated_combined/summaries/'
 
 # manual checked result file
 manual_file = './results/manual_annotations.json'
+extra_manual_file = './results/manual_annotations_extra_corrected.json'
+combined_manual_file = './results/manual_annotations_combined.json'
 
 
 def dump_file_results(files, out_file, threshold=0.4):
@@ -66,27 +71,39 @@ def pp_score_exp(container, out_file, hter, threshold, manual_ann):
     predicted = 0
     total = 0
 
-    # print 'precision\trecall\tf measure\t#highlighted\t#predicted\tpaper'
+    print 'precision\trecall\tf measure\t#highlighted\t#predicted\tpaper'
+    precision_sum = 0
+    recall_sum = 0
+    num_total = 0
     for p in container:
+        if p['hts'] == 0:
+            continue
         should += p['hts']
         correct += p['correct']
         predicted += p['predicted']
         total += p['max_sid'] if 'max_sid' in p else 0
         p_precision = 1.0 * p['correct'] / p['predicted'] if p['predicted'] > 0 else 0
         p_recall = 1.0 * p['correct'] / p['hts']
-        # print '{:.2f}\t{:.2f}\t{:.2f}\t{}\t{}\t{}'.format(
-        #     p_precision,
-        #     p_recall,
-        #     2 * p_precision * p_recall / (p_recall + p_precision) if (p_recall + p_precision) > 0 else 0,
-        #     p['hts'], p['predicted'], p['paper'])
+        precision_sum += p_precision
+        recall_sum += p_recall
+        num_total += 1
+        print '{:.2f}\t{:.2f}\t{:.2f}\t{}\t{}\t{}'.format(
+            p_precision,
+            p_recall,
+            2 * p_precision * p_recall / (p_recall + p_precision) if (p_recall + p_precision) > 0 else 0,
+            p['hts'], p['predicted'], p['paper'])
 
+    avg_precision = precision_sum / num_total
+    avg_recall = recall_sum / num_total
+    print 'macro-average P/R/F1: %s %s %s; #total sentences: %s; #predicted: %s' % \
+          (avg_precision, avg_recall, (2 * avg_precision * avg_recall/(avg_recall + avg_precision)), total, predicted)
     if predicted == 0:
         print '{}\t-\t-\t-'.format(threshold)
     else:
         precision = 1.0 * correct / predicted
         recall = 1.0 * correct / should
-        # print '\nmicro-average result'
-        # print 'threshold\tprecision\trecall\t#fallout\t#f measure'
+        print '\nmicro-average result'
+        print 'threshold\tprecision\trecall\t#fallout\t#f measure'
         print '{}\t{}\t{}\t{}\t{}'.format(threshold, precision, recall,
                                           '-' if total == 0 else (1.0 * predicted - correct)/(total - correct),
                                           2 * precision * recall / (precision + recall))
@@ -112,7 +129,7 @@ def exp_given_threshold(corpus_path, threshold, manual_ann=None):
 
 def exp_iterating_threshold(corpus_path, manual_ann=None):
     print 'precision\trecall\tfall out\t#f measure'
-    for i in np.arange(0.00, 5, 0.0500):
+    for i in np.arange(0.00, 1, 0.1000):
         score_exp(corpus_path, '', i, manual_ann)
 
 
@@ -146,15 +163,19 @@ def output_pagewise_results():
     print 'all done'
 
 if __name__ == "__main__":
-    output_pagewise_results()
-    # if len(sys.argv) == 4 and sys.argv[1] == 'ht':
-    #     highlight_papers(sys.argv[2], sys.argv[3])
-    # else:
-    #     # exp_iterating_threshold(folder_18_papers)
-    #     # exp_iterating_threshold(folder_10_manual_checked, get_manual_checked_result())
-    #     # exp_iterating_threshold(folder_200_papers)
-    #     # exp_given_threshold(folder_200_papers, .4)
-    #     # exp_given_threshold(folder_18_papers, .4)
-    #     # exp_given_threshold(folder_10_manual_checked, .4, get_manual_checked_result())
-    #     exp_iterating_threshold(folder_42_extra_papers)
-    #     # exp_given_threshold(folder_42_extra_papers, .4)
+    # output_pagewise_results()
+    if len(sys.argv) == 4 and sys.argv[1] == 'ht':
+        highlight_papers(sys.argv[2], sys.argv[3])
+    else:
+        # exp_iterating_threshold(folder_18_papers)
+        # exp_iterating_threshold(folder_10_manual_checked, get_manual_checked_result())
+        # exp_iterating_threshold(folder_200_papers)
+        # exp_given_threshold(folder_200_papers, .4)
+        # exp_given_threshold(folder_18_papers, .4)
+        # exp_given_threshold(folder_10_manual_checked, .4, get_manual_checked_result())
+        # exp_iterating_threshold(folder_18_papers)
+        # exp_given_threshold(folder_42_20_papers, .4)
+        # exp_iterating_threshold(folder_extra_checked, utils.load_json_data(extra_manual_file))
+        exp_given_threshold(folder_42_20_papers, .4)
+        # exp_given_threshold(folder_42_extra_papers, .4)
+        # exp_given_threshold(folder_combined_checked, .4, utils.load_json_data(combined_manual_file))
